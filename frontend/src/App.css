@@ -7,14 +7,16 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  min-height: 100vh;
+
   padding: 2rem;
 }
 main {
   flex-grow: 1;
   margin: auto;
 }
+/* SKA TAS BORT SENARE */
 div {
   border: 2px dotted purple;
+  padding: 1rem;
   margin: 1rem;
 }

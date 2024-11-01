@@ -8,7 +8,7 @@ function App() {
     <>
       <NavBar />
       <main>
-        <h1>TRAVEL BLOG!!</h1>
+        <h1>TRAVEL BLOG</h1>
         <BlogsList />
       </main>
       <Footer />

@@ -16,6 +16,12 @@ const client = new Client({
 });
 client.connect();
 
+app.get("/", (req, res) => {
+  res.send(
+    "Hej! Det är hemsida. Kolla din GET resultat med http://localhost:3000/api/tabelname. Jag letade efter längre trots att allt var på gång :D "
+  );
+});
+
 // GET - comments
 app.get("/api/comments", async (req, res) => {
   try {
@@ -29,9 +35,9 @@ app.get("/api/comments", async (req, res) => {
         `;
     const { rows } = await client.query(query);
     res.json(rows);
+    console.log(rows);
   } catch (error) {
     console.error("Error fetching comments:", error);
-    res.status(500).json({ error: "Fel vid hämtning av kommentarer" });
   }
 });
 

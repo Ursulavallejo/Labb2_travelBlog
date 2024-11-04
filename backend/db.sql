@@ -1,5 +1,36 @@
-CREATE TABLE user >> ID, name, email, password
+CREATE TABLE users >> ID_PK, name, surname, email, password, nickname
 
-CREATE TABLE blog  >>> land_name , image_blog ,text_blog, FK_user, FK_comment?, date, author
 
-CREATE TABLE comments >> Text_comment, FK_user , FK_blog, date, author
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE blog (
+    blog_id SERIAL PRIMARY KEY,
+    land_name VARCHAR(100) NOT NULL,
+    image_blog TEXT,
+    text_blog TEXT NOT NULL,
+    fk_user INT REFERENCES "user" (id) ON DELETE CASCADE,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    author VARCHAR(50)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE comments >>ID_PK, Text_comment, FK_userID , FK_blog, date,

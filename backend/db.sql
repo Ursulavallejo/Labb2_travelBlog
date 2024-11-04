@@ -1,6 +1,11 @@
-CREATE TABLE users >> ID_PK, name, surname, email, password, nickname
-
-
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    username VARCHAR(250) NOT NULL UNIQUE,
+    email VARCHAR(200) NOT NULL UNIQUE,
+    pass_word VARCHAR(100) NOT NULL
+)
 
 
 

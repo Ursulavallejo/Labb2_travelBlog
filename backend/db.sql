@@ -5,15 +5,13 @@ CREATE TABLE users (
     username VARCHAR(250) NOT NULL UNIQUE,
     email VARCHAR(200) NOT NULL UNIQUE,
     pass_word VARCHAR(100) NOT NULL
-)
+);
 
 INSERT INTO users (first_name, last_name, username, email, pass_word)
-VALUES ('Pedram', 'Hejazi Kenari', 'PHK', 'PHK@ITHS.com', 'hemligt123');
+VALUES ('Pedram', 'Hejazi Kenari', 'PHK', 'PHK@ITHS.com', 'hemligt123'),
 ('John', 'Doe', 'JD', 'john.doe@example.com', 'password123'),
 ('Jane', 'Smith', 'JS', 'jane.smith@example.com', 'password456'),
 ('Alex', 'Writer', 'AW', 'alex.writer@example.com', 'password789');
-
-
 
 CREATE TABLE blogs (
     blog_id serial PRIMARY KEY,
@@ -32,9 +30,6 @@ VALUES
 ('Italien', 'https://example.com/italien.jpg', 'Utforska italienska maträtter.',  'Mat i Italien', 3, 'Jane Smith'),
 ('Norge', 'https://example.com/norge.jpg', 'Norges bästa naturupplevelser.', 'Naturupplevelser i Norge', 4, 'Alex Writer');
 
-
-
-
 CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,
     text_comment TEXT NOT NULL,
@@ -44,8 +39,8 @@ CREATE TABLE comments (
     username VARCHAR(50) NOT NULL
 );
 
-INSERT INTO comments (Text_comment, FK_user, FK_blog, username)
+INSERT INTO comments (Text_comment, FK_users, FK_blogs, username)
 VALUES
-('Fantastisk artikel!', 1, 1, 'john_doe'),
-('Väldigt hjälpsamt, tack!', 2, 2, 'jane_smith'),
-('Kan du ge fler exempel?', 3, 3, 'alex_writer');
+('Fantastisk artikel!', 2, 1, 'john_doe'),
+('Väldigt hjälpsamt, tack!', 3, 2, 'jane_smith'),
+('Kan du ge fler exempel?', 4, 3, 'alex_writer');

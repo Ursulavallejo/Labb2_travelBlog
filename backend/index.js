@@ -16,7 +16,24 @@ const client = new Client({
 });
 client.connect();
 
-// GET
+// GET - comments
+app.get("/api/comments", async (req, res) => {
+  try {
+    const query = `
+            SELECT comments.comment_id, comments.text_comment, comments.date,
+                   users.username, blogs.land_name
+            FROM comments
+            JOIN users ON comments.FK_users = users.user_id
+            JOIN blogs ON comments.FK_blogs = blogs.blog_id
+            ORDER BY comments.date DESC
+        `;
+    const { rows } = await client.query(query);
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    res.status(500).json({ error: "Fel vid hämtning av kommentarer" });
+  }
+});
 
 //
 

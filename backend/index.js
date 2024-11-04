@@ -1,12 +1,34 @@
-const express = require('express')
+const path = require("path");
 
-const app = express(),
-  port = process.env.PORT || 3000
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const { Client } = require("pg");
 
-app.get('/', (_request, response) => {
-  response.send({ hello: 'World' })
-})
+const app = express();
+app.use(express.json());
+app.use(cors());
 
+dotenv.config();
+
+const client = new Client({
+  connectionString: process.env.PGURI,
+});
+client.connect();
+
+// GET
+
+//
+
+//
+
+//
+
+//
+
+// Serve frontend files
+app.use(express.static(path.join(path.resolve(), "dist")));
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Redo på http://localhost:${port}/`)
-})
+  console.log(`Server kör på http://localhost:${port}`);
+});

@@ -12,7 +12,7 @@ CREATE TABLE users >> ID_PK, name, surname, email, password, nickname
 
 
 CREATE TABLE blogs (
-    blog_id SERIAL PRIMARY KEY,
+    blog_id serial PRIMARY KEY,
     land_name VARCHAR(100) NOT NULL,
     image_blog TEXT,
     text_blog TEXT NOT NULL,

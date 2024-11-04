@@ -28,9 +28,9 @@ CREATE TABLE blogs (
 
 INSERT INTO blogs (land_name, image_blog, title_blog, text_blog, FK_users, author)
 VALUES
-('Sverige', 'https://example.com/sverige.jpg', 'Sverige Reseguide', 'En guide till Sveriges bästa resmål.', 1, 'John Doe'),
-('Italien', 'https://example.com/italien.jpg', 'Utforska italienska maträtter.',  'Mat i Italien', 2, 'Jane Smith'),
-('Norge', 'https://example.com/norge.jpg', 'Norges bästa naturupplevelser.', 'Naturupplevelser i Norge', 3, 'Alex Writer');
+('Sverige', 'https://example.com/sverige.jpg', 'Sverige Reseguide', 'En guide till Sveriges bästa resmål.', 2, 'John Doe'),
+('Italien', 'https://example.com/italien.jpg', 'Utforska italienska maträtter.',  'Mat i Italien', 3, 'Jane Smith'),
+('Norge', 'https://example.com/norge.jpg', 'Norges bästa naturupplevelser.', 'Naturupplevelser i Norge', 4, 'Alex Writer');
 
 
 

@@ -24,8 +24,8 @@ CREATE TABLE blogs (
 CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,
     text_comment TEXT NOT NULL,
-    FK_user INTEGER REFERENCES users(id),
-    FK_blog INTEGER REFERENCES blogs(id),
+    FK_user INT REFERENCES users(id),
+    FK_blog INT REFERENCES blogs(id),
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     username VARCHAR(50) NOT NULL
 );

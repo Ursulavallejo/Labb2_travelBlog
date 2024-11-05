@@ -1,8 +1,17 @@
 export default function Register() {
+  function registerForm(e) {
+    e.preventDefault();
+    document.getElementById("register").reset();
+  }
   return (
     //////////// form to post customer data to  store in DB ////////
     <div id="containerReg">
-      <form className="d-flex flex-column" action="">
+      <form
+        id="register"
+        className="d-flex flex-column"
+        action=""
+        onSubmit={registerForm}
+      >
         <label htmlFor="username">Ange användarenamn:</label>
         <input
           id="username"

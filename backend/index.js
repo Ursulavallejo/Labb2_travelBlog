@@ -22,6 +22,62 @@ app.get("/", (req, res) => {
   );
 });
 
+// refresher, GET users
+app.get("/users", async (req, res) => {
+  try {
+    const query = `
+  SELECT * FROM users ORDER BY user_id ASC
+  `;
+    const { rows } = await client.query(query);
+    res.json(rows);
+    res.send({ succes: "true", users: rows });
+  } catch (error) {
+    res.status(400).send({ eeror: error });
+  }
+});
+
+// POST user
+app.post("/users/register", async (req, res) => {
+  const { first_name, last_name, username, email, pass_word } = req.body;
+  const query = `
+  INSERT INTO users (first_name, last_name, username, email, pass_word) VALUES ($1 ,$2, $3, $4, $5)
+  `;
+  const values = [first_name, last_name, username, email, pass_word];
+  try {
+    await client.query(query, values);
+    res.send("Registeration successful!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to submit!");
+  }
+});
+
+// POST user and compare user login request with DB
+app.post("/users/login", async (req, res) => {
+  let email = req.body.email;
+  let password = req.body.pass_word;
+
+  if (email && password) {
+    const query = `
+    SELECT * FROM users WHERE email = $1 AND password = $2
+    `;
+    const values = [email, password];
+    try {
+      const results = await client.query(query, values);
+      if (results.rows.length > 0) {
+        res.status(200).send("Login successful!");
+      } else {
+        res.status(401).send("Invalid email or password");
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Failed to submit!");
+    }
+  } else {
+    res.status(400).send("Missing email or password!");
+  }
+});
+
 // GET - comments
 app.get("/api/comments", async (req, res) => {
   try {

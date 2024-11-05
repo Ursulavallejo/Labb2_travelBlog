@@ -3,7 +3,7 @@ export default function NavBar() {
     <nav className='navbar navbar-light bg-light'>
       <a className='navbar-brand' href='#'>
         <img
-          src='../../public/travel.svg'
+          src='/travel.svg'
           width='30'
           height='30'
           className='d-inline-block align-top'

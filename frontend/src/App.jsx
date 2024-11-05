@@ -6,8 +6,11 @@ function App() {
       {/* NAVBar and FOOTER goes on HOME VIEW */}
       <main>
         <h1>
-          HERE WE NEED A ROUTER !! WE WE GO IN WE NEED TO SEE LOGIN after HOME
-          VIEW : Maybe a temporal button to move from Login to Home view?
+          HERE WE NEED A ROUTER !! WHEN The user arrive to the page need TO SEE
+          LOGIN after create a usser or login GO to HOMEVIEW : Maybe we need a
+          temporal button to move from Login to Home view? That way we can see
+          all pages we need .... and afterward remove it when the fucnion to log
+          in is ready?
         </h1>
 
         <p>

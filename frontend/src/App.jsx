@@ -3,31 +3,29 @@ import {
   // Link,
   Outlet,
   RouterProvider,
-} from 'react-router-dom'
-import Home from './pages/HomeView'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import './App.css'
+} from "react-router-dom";
+import Home from "./pages/HomeView";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import "./App.css";
 
 function App() {
   const router = createHashRouter([
     {
       children: [
-        { element: <Home />, path: '/blogs' },
-        { element: <Login />, path: '/' },
-        { element: <Register />, path: '/register' },
+        { element: <Home />, path: "/blogs" },
+        { element: <Login />, path: "/" },
+        { element: <Register />, path: "/register" },
       ],
       element: (
         <>
-          <main>
-            <Outlet />
-          </main>
+          <Outlet />
         </>
       ),
     },
-  ])
+  ]);
 
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} />;
 }
 // return (
 //   <>
@@ -56,4 +54,4 @@ function App() {
   ) */
 }
 
-export default App
+export default App;

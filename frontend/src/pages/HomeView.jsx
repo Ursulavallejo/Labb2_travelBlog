@@ -1,6 +1,6 @@
-import NavBar from '../components/NavBar'
-import Footer from '../components/Footer'
-import BlogsList from '../components/BlogsList'
+import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
+import BlogsList from "../components/BlogsList";
 
 export default function HomeView() {
   return (
@@ -12,5 +12,5 @@ export default function HomeView() {
       </main>
       <Footer />
     </>
-  )
+  );
 }

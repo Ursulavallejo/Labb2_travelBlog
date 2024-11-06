@@ -16,12 +16,6 @@ const client = new Client({
 });
 client.connect();
 
-app.get("/", (req, res) => {
-  res.send(
-    "Hej! Det är hemsida. Kolla din GET resultat med http://localhost:3000/api/tabelname. Jag letade efter längre trots att allt var på gång :D "
-  );
-});
-
 // refresher, GET users
 app.get("/users", async (req, res) => {
   try {
@@ -32,6 +26,7 @@ app.get("/users", async (req, res) => {
     res.json(rows);
     res.send({ succes: "true", users: rows });
   } catch (error) {
+    console.error("Error fetching users:", error);
     res.status(400).send({ error: error });
   }
 });
@@ -43,9 +38,10 @@ app.post("/users/register", async (req, res) => {
   INSERT INTO users (first_name, last_name, username, email, pass_word) VALUES ($1 ,$2, $3, $4, $5)
   `;
   const values = [first_name, last_name, username, email, pass_word];
+
   try {
     await client.query(query, values);
-    res.send("Registeration successful!");
+    res.status(201).send("Registration successful!");
   } catch (error) {
     console.error(error);
     res.status(500).send("Failed to submit!");
@@ -115,7 +111,7 @@ app.get("/api/blogs", async (req, res) => {
   }
 });
 
-// GET - comments
+// GET - alla comments
 app.get("/api/comments", async (req, res) => {
   try {
     const query = `
@@ -128,19 +124,105 @@ app.get("/api/comments", async (req, res) => {
         `;
     const { rows } = await client.query(query);
     res.json(rows);
-    console.log(rows);
+    // console.log(rows);
   } catch (error) {
     console.error("Error fetching comments:", error);
+    res.status(500).json({ error: "Server error fetching comment." });
   }
 });
 
-//
+//GET - a comment by Id
+app.get("/api/comments/:id", async (req, res) => {
+  const { id } = req.params;
 
-//
+  try {
+    const query = `
+      SELECT comments.comment_id, comments.text_comment, comments.date,
+             users.username, blogs.land_name
+      FROM comments
+      JOIN users ON comments.FK_users = users.user_id
+      JOIN blogs ON comments.FK_blogs = blogs.blog_id
+      WHERE comments.comment_id = $1;
+    `;
+    const { rows } = await client.query(query, [id]);
 
-//
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
 
-//
+    res.json(rows[0]);
+  } catch (error) {
+    console.error("Error fetching comment:", error);
+  }
+});
+
+//POST- comments
+app.post("/api/comments", async (req, res) => {
+  const { text_comment, FK_users, FK_blogs, username } = req.body;
+
+  try {
+    const query = `
+      INSERT INTO comments (text_comment, FK_users, FK_blogs, username)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    const values = [text_comment, FK_users, FK_blogs, username];
+    const { rows } = await client.query(query, values);
+    res.status(201).json(rows[0]);
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ error: "Server error adding comment." });
+  }
+});
+
+//PUT- comments
+app.put("/api/comments/:id", async (req, res) => {
+  const { id } = req.params;
+  const { text_comment } = req.body;
+
+  try {
+    const query = `
+      UPDATE comments
+      SET text_comment = $1, date = CURRENT_TIMESTAMP
+      WHERE comment_id = $2
+      RETURNING *;
+    `;
+    const values = [text_comment, id];
+    const { rows } = await client.query(query, values);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.error("Error updating comment:", error);
+    res.status(500).json({ error: "Server error updating comment." });
+  }
+});
+
+// DELETE -comments
+app.delete("/api/comments/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const query = `
+      DELETE FROM comments
+      WHERE comment_id = $1
+      RETURNING *;
+    `;
+    const { rows } = await client.query(query, [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    res.json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    res.status(500).json({ error: "Server error deleting comment." });
+  }
+});
 
 // Serve frontend files
 app.use(express.static(path.join(path.resolve(), "dist")));

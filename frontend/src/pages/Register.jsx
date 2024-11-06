@@ -48,11 +48,73 @@ export default function Register() {
             placeholder="Password..."
             required
           />
+          <label htmlFor="samtycke">
+            <input
+              type="checkbox"
+              id="samtycke"
+              name="samtycke"
+              value="ok"
+              required
+            />
+            Jag samtycker till att mina personuppgifter hanteras enligt
+            integritetspolicyn och GDPR.{" "}
+          </label>
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2">
             Bekräfta
           </button>
         </form>
+
+        <div
+          className="modal fade"
+          id="samtyckeModal"
+          tabIndex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h1 className="modal-title fs-5" id="exampleModalLabel">
+                  Hur vi hanterar dina uppgifter
+                </h1>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                Genom att använda vår tjänst godkänner du att vi samlar in,
+                behandlar och lagrar dina personuppgifter i enlighet med GDPR.
+                Vi hanterar dina uppgifter för att kunna erbjuda en säker och
+                personlig upplevelse samt för att uppfylla våra åtaganden
+                gentemot dig. Dina uppgifter används endast för de ändamål som
+                du har samtyckt till, och du kan när som helst återkalla ditt
+                samtycke. För mer information om hur vi skyddar din integritet
+                och behandlar dina personuppgifter, vänligen läs vår
+                integritetspolicy.
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Stäng
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <button
+        className="w-50 mx-auto mt-3 rounded-2"
+        data-bs-toggle="modal"
+        data-bs-target="#samtyckeModal"
+      >
+        läs mer om samtycke
+      </button>
     </div>
   );
 }

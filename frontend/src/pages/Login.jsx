@@ -21,7 +21,13 @@ export default function Login() {
           onSubmit={loginForm}
         >
           <label htmlFor="email">Ange email:</label>
-          <input id="email" name="email" type="text" placeholder="Email..." />
+          <input
+            id="email"
+            name="email"
+            type="text"
+            placeholder="Email..."
+            required
+          />
           <label htmlFor="password" className="mt-3">
             Ange lösenord:
           </label>
@@ -30,6 +36,7 @@ export default function Login() {
             name="password"
             type="password"
             placeholder="Password..."
+            required
           />
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2">
             Logga in

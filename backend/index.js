@@ -111,6 +111,34 @@ app.get('/api/blogs', async (req, res) => {
   }
 })
 
+// POST - Create a new blog post
+app.post('/api/blogs', async (req, res) => {
+  const { title_blog, author, text_blog, image_blog, land_name, date } =
+    req.body
+
+  const query = `
+    INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
+    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+  `
+  const values = [
+    title_blog,
+    author,
+    text_blog,
+    image_blog,
+    land_name,
+    date,
+    /* FK_users */ 1,
+  ] // Change the value of the user depend of the user is logedIn
+
+  try {
+    const result = await client.query(query, values)
+    res.status(201).json(result.rows[0])
+  } catch (error) {
+    console.error('Error creating post:', error)
+    res.status(500).json({ error: 'Error creating post' })
+  }
+})
+
 // GET - alla comments
 app.get('/api/comments', async (req, res) => {
   try {

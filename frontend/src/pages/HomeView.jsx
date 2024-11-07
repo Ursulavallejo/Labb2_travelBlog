@@ -30,7 +30,11 @@ export default function HomeView() {
           <h2 className="sub-title-home">
             För dig som älskar äventyr och nya upptäckter!
           </h2>
-          <BlogsList blogs={blogs} />
+          <BlogsList
+            blogs={blogs}
+            currentUserId={blogs.user_id}
+            onDataChange={fetchData}
+          />
         </main>
       </Container>
       <Footer />

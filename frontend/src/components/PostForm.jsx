@@ -8,6 +8,9 @@ export default function PostForm({ onClose, onPostCreated, username }) {
   const [image, setImage] = useState('')
   const [country, setCountry] = useState('')
 
+  // ONLY TO TEST WORKS to DELETE
+  const userId = 1
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -18,11 +21,12 @@ export default function PostForm({ onClose, onPostCreated, username }) {
         },
         body: JSON.stringify({
           title_blog: title,
-          author: username, // Usamos el username pasado como prop
+          author: username, // use username throw prop
           text_blog: content,
           image_blog: image,
           land_name: country,
           date: new Date().toISOString(),
+          user_id: userId,
         }),
       })
       if (response.ok) {

@@ -1,34 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 import BlogCard from './BlogCard'
-// import PropTypes from 'prop-types'
 import { Card, Button, Container, Row, Col } from 'react-bootstrap'
 
-export default function BlogsList() {
-  const [blogs, setBlogs] = useState([])
+export default function BlogsList({ blogs }) {
   const [selectedBlog, setSelectedBlog] = useState(null)
-  // const [showBlogCard, setShowBlogCard] = useState(false)
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('/api/blogs')
-      const result = await response.json()
-      setBlogs(result)
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
 
   return (
     <Container>
-      <h3 className="text-center">
-        Ett fantastiskt äventyr runt om i världen genom våra resenärers ögon,
-        som delar sina historier i sina bloggar. Välkommen att uppleva detta
-        äventyr med oss...
-      </h3>
       <Row className="justify-content-center">
         {blogs.map((blog) => (
           <Col
@@ -69,4 +48,8 @@ export default function BlogsList() {
       )}
     </Container>
   )
+}
+
+BlogsList.propTypes = {
+  blogs: PropTypes.array.isRequired,
 }

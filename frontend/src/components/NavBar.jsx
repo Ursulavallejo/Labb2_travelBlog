@@ -41,7 +41,7 @@ export default function NavBar({ onPostCreated }) {
     </>
   )
 }
-// PropTypes validation
+
 NavBar.propTypes = {
   onPostCreated: PropTypes.func.isRequired,
 }

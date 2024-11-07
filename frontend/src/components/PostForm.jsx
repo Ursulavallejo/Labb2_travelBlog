@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
-export default function PostForm({ onClose, onPostCreated }) {
+export default function PostForm({ onClose, onPostCreated, username }) {
   const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
   const [content, setContent] = useState('')
   const [image, setImage] = useState('')
   const [country, setCountry] = useState('')
@@ -19,7 +18,7 @@ export default function PostForm({ onClose, onPostCreated }) {
         },
         body: JSON.stringify({
           title_blog: title,
-          author,
+          author: username, // Usamos el username pasado como prop
           text_blog: content,
           image_blog: image,
           land_name: country,
@@ -30,7 +29,7 @@ export default function PostForm({ onClose, onPostCreated }) {
         alert('Post skapad!')
         onClose()
         if (onPostCreated) {
-          onPostCreated() // Llama al callback para actualizar BlogsList
+          onPostCreated()
         }
       } else {
         alert('Något gick fel!')
@@ -48,15 +47,6 @@ export default function PostForm({ onClose, onPostCreated }) {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-      </Form.Group>
-      <Form.Group controlId="formAuthor">
-        <Form.Label>Författare</Form.Label>
-        <Form.Control
-          type="text"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
           required
         />
       </Form.Group>
@@ -98,4 +88,5 @@ export default function PostForm({ onClose, onPostCreated }) {
 PostForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   onPostCreated: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired, // Validación del username como string requerido
 }

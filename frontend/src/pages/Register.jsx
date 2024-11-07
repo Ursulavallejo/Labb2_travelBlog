@@ -1,8 +1,36 @@
 export default function Register() {
   function registerForm(e) {
     e.preventDefault();
-    document.getElementById("register").reset();
+
+    const fname = document.getElementById("fname");
+    const lname = document.getElementById("lname");
+    const username = document.getElementById("username");
+    const email = document.getElementById("emailReg");
+    const pass = document.getElementById("passwordReg");
+
+    fetch("http://localhost:8080/users/register", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        first_name: fname.value,
+        last_name: lname.value,
+        username: username.value,
+        email: email.value,
+        pass_word: pass.value,
+      }),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log(data);
+        document.getElementById("register").reset();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
+
   return (
     //////////// form to post customer data to  store in DB ////////
 
@@ -18,6 +46,26 @@ export default function Register() {
           action=""
           onSubmit={registerForm}
         >
+          <label htmlFor="fname" className="mt-3">
+            Ange förnamn:
+          </label>
+          <input
+            id="fname"
+            name="fname"
+            type="text"
+            placeholder="Förnamn..."
+            required
+          />
+          <label htmlFor="lname" className="mt-3">
+            Ange efternamn:
+          </label>
+          <input
+            id="lname"
+            name="lname"
+            type="text"
+            placeholder="Efternamn..."
+            required
+          />
           <label htmlFor="username" className="mt-3">
             Ange användarenamn:
           </label>

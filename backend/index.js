@@ -23,7 +23,6 @@ app.get("/users", async (req, res) => {
   SELECT * FROM users ORDER BY user_id ASC
   `;
     const { rows } = await client.query(query);
-    res.json(rows);
     res.send({ succes: "true", users: rows });
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -51,13 +50,13 @@ app.post("/users/register", async (req, res) => {
 // POST user and compare user login request with DB
 app.post("/users/login", async (req, res) => {
   let email = req.body.email;
-  let password = req.body.pass_word;
+  let pass_word = req.body.pass_word;
 
-  if (email && password) {
+  if (email && pass_word) {
     const query = `
-    SELECT * FROM users WHERE email = $1 AND password = $2
+    SELECT * FROM users WHERE email = $1 AND pass_word = $2
     `;
-    const values = [email, password];
+    const values = [email, pass_word];
     try {
       const results = await client.query(query, values);
       if (results.rows.length > 0) {

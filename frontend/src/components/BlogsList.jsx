@@ -1,18 +1,18 @@
-// Here all the post should be showed >>>  using Blog_Card for each post
 import { useEffect, useState } from 'react'
-// import BlogCard from './BlogCard'
+import BlogCard from './BlogCard'
 // import PropTypes from 'prop-types'
 import { Card, Button, Container, Row, Col } from 'react-bootstrap'
 
 export default function BlogsList() {
-  const [data, setData] = useState([])
+  const [blogs, setBlogs] = useState([])
+  const [selectedBlog, setSelectedBlog] = useState(null)
   // const [showBlogCard, setShowBlogCard] = useState(false)
 
   const fetchData = async () => {
     try {
       const response = await fetch('/api/blogs')
       const result = await response.json()
-      setData(result)
+      setBlogs(result)
     } catch (error) {
       console.error('Error fetching data:', error)
     }
@@ -21,45 +21,52 @@ export default function BlogsList() {
   useEffect(() => {
     fetchData()
   }, [])
-  // Vi kan använda router params för att hämta varje land. Det är en temporary lösning för att se.
+
   return (
     <Container>
-      <h2>Travel Blogs</h2>
-      <Row>
-        {data.map((blog) => (
-          <Col key={blog.blog_id} md={4} className="mb-3">
-            <Card>
+      <h3 className="text-center">
+        Ett fantastiskt äventyr runt om i världen genom våra resenärers ögon,
+        som delar sina historier i sina bloggar. Välkommen att uppleva detta
+        äventyr med oss...
+      </h3>
+      <Row className="justify-content-center">
+        {blogs.map((blog) => (
+          <Col
+            key={blog.blog_id}
+            md={6}
+            lg={4}
+            className="mb-4 d-flex align-items-stretch"
+          >
+            <Card style={{ width: '100%', minHeight: '300px' }}>
               <Card.Img
                 variant="top"
                 src={blog.image_blog}
                 alt={blog.title_blog}
+                style={{ height: '200px', objectFit: 'cover' }}
               />
-              <Card.Body>
+              <Card.Body className="d-flex flex-column">
                 <Card.Title>{blog.title_blog}</Card.Title>
                 <Card.Text>
-                  <strong>Author:</strong> {blog.author} <br />
-                  <strong>Country:</strong> {blog.land_name} <br />
+                  <strong>Author:</strong> {blog.username} <br />
                   <strong>Date:</strong>{' '}
                   {new Date(blog.date).toLocaleDateString()}
                 </Card.Text>
-                <Button variant="primary">Read More</Button>
+                <Button
+                  variant="primary"
+                  onClick={() => setSelectedBlog(blog)}
+                  className="mt-auto"
+                >
+                  Visa Bloggpost
+                </Button>
               </Card.Body>
             </Card>
           </Col>
         ))}
       </Row>
+
+      {selectedBlog && (
+        <BlogCard blog={selectedBlog} onClose={() => setSelectedBlog(null)} />
+      )}
     </Container>
-    // <>
-    //   <h2>Här visas alla blogginlägg</h2>
-    //   <p>Klicka för att visa en bloggpost</p>
-    //   data.map
-    //   <button
-    //     className="btn btn-success"
-    //     onClick={() => setShowBlogCard(!showBlogCard)}
-    //   >
-    //     {showBlogCard ? 'Dölj Bloggpost' : 'Visa Bloggpost'}
-    //   </button>
-    //   {showBlogCard && <BlogCard />}
-    // </>
   )
 }

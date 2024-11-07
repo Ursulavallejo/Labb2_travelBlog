@@ -21,8 +21,10 @@ CREATE TABLE blogs (
     text_blog TEXT NOT NULL,
     FK_users INT REFERENCES users(user_id) ON DELETE CASCADE,
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FK_author VARCHAR(50) REFERENCES users(username) ON DELETE CASCADE
+    author VARCHAR(50)
 );
+
+
 
 INSERT INTO blogs (land_name, image_blog, title_blog, text_blog, FK_users, author)
 VALUES

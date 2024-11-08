@@ -34,20 +34,22 @@ export default function CommentForm({ blogId, onCommentAdded }) {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form className=" my-2" onSubmit={handleSubmit}>
       <Form.Group controlId="formCommentText">
-        <Form.Label>Din kommentar</Form.Label>
+        <Form.Label>Din kommentar:</Form.Label>
         <Form.Control
           as="textarea"
-          rows={3}
+          rows={4}
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
           required
         />
       </Form.Group>
-      <Button variant="success" type="submit">
-        Skriva din kommentar
-      </Button>
+      <div className="d-flex justify-content-end my-4">
+        <Button variant="success" type="submit">
+          Skicka
+        </Button>
+      </div>
     </Form>
   );
 }

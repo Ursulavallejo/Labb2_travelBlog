@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import AddCommentForm from './AddCommentForm';
 import { FaTrash } from 'react-icons/fa';
@@ -8,7 +8,7 @@ import { Button } from 'react-bootstrap';
 export default function CommentModal({ blogId, username }) {
   const [comments, setComments] = useState([]);
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(`/api/comments?blogId=${blogId}`);
       const data = await response.json();
@@ -16,21 +16,20 @@ export default function CommentModal({ blogId, username }) {
     } catch (error) {
       console.error('Error fetching comments:', error);
     }
-  };
+  }, [blogId]);
 
   useEffect(() => {
     fetchComments();
-  }, [blogId]);
+  }, [blogId, fetchComments]);
 
   const handleCommentAdded = () => {
-    fetchComments(); // Refresh comments after a new one is added
+    fetchComments();
   };
 
   const handleDeleteComment = async (commentId) => {
     const isConfirmed = window.confirm(
       'Är du säker på att du vill ta bort denna kommentar?'
     );
-
     if (isConfirmed) {
       try {
         const response = await fetch(`/api/comments/${commentId}`, {
@@ -38,7 +37,6 @@ export default function CommentModal({ blogId, username }) {
         });
 
         if (response.ok) {
-          alert('Kommentar borttagen!');
           setComments((prevComments) =>
             prevComments.filter((comment) => comment.comment_id !== commentId)
           );
@@ -52,18 +50,32 @@ export default function CommentModal({ blogId, username }) {
   };
 
   return (
-    <div style={{ marginTop: '1rem' }}>
+    <div
+      className="d-flex flex-column border-top border-secondary "
+      style={{ marginTop: '3rem' }}
+    >
+      <h5
+        className="mx-auto my-2"
+        style={{ color: '#0dcaf0', fontWeight: 'bolder' }}
+      >
+        Kommentarer
+      </h5>
       {comments.length > 0 ? (
         comments.map((comment) => (
-          <div key={comment.comment_id} style={{ marginBottom: '1rem' }}>
+          <div key={comment.comment_id} style={{ margin: '1rem' }}>
             <p style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>
-                <strong>Användare:</strong> {comment.username}
+              <span className="d-flex ">
+                <strong className="me-2">Användare: </strong> {comment.username}{' '}
                 {/* {comment.username === username && ( */}
                 <Button
-                  variant="light"
-                  className="mx-2"
+                  className="d-flex align-items-center"
+                  variant="outline-dark"
                   size="sm"
+                  style={{
+                    border: 'none',
+                    padding: '0 2px',
+                    margin: '2px 4px',
+                  }}
                   onClick={() => handleDeleteComment(comment.comment_id)}
                 >
                   <FaTrash />
@@ -71,9 +83,15 @@ export default function CommentModal({ blogId, username }) {
                 {/* )} */}
                 {/* {comment.username === username && ( */}
                 <Button
-                  variant="warning"
-                  className="mx-2"
+                  className="d-flex align-items-center"
+                  variant="outline-dark"
                   size="sm"
+                  style={{
+                    border: 'none',
+                    padding: '0 2px',
+
+                    margin: '2px 4px',
+                  }}
                   onClick={() => handleDeleteComment(comment.comment_id)}
                 >
                   <FaEdit />
@@ -89,7 +107,7 @@ export default function CommentModal({ blogId, username }) {
           </div>
         ))
       ) : (
-        <p>Inga kommentarer.</p>
+        <p className="mx-auto my-2">Inga kommentarer.</p>
       )}
       <AddCommentForm
         blogId={blogId}

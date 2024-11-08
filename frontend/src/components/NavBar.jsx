@@ -13,7 +13,7 @@ export default function NavBar({ onPostCreated }) {
   return (
     <>
       <Navbar expand="lg" fixed="top" style={{ backgroundColor: '#123456' }}>
-        <Navbar.Brand href="#">
+        <Navbar.Brand href="#" className="d-flex align-items-center">
           <img
             src="/travel.svg"
             width="60"
@@ -30,11 +30,17 @@ export default function NavBar({ onPostCreated }) {
           <Button variant="outline-light m-2 " onClick={handleShow}>
             Nytt Inlägg
           </Button>
-          <Button variant="outline-light m-2 " onClick={() => {}}>
+          <Button
+            variant="outline-light m-2 d-flex align-items-center"
+            onClick={() => {}}
+          >
             <FaUser className="me-1" />
             User konto
           </Button>
-          <Button variant="secondary m-2 " onClick={() => {}}>
+          <Button
+            variant="secondary m-2 d-flex align-items-center "
+            onClick={() => {}}
+          >
             <FaSignOutAlt className="me-1" />
             Log Out
           </Button>

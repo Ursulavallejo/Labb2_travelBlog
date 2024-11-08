@@ -2,16 +2,16 @@ export default function Register() {
   function registerForm(e) {
     e.preventDefault();
 
-    const fname = document.getElementById("fname");
-    const lname = document.getElementById("lname");
-    const username = document.getElementById("username");
-    const email = document.getElementById("emailReg");
-    const pass = document.getElementById("passwordReg");
+    const fname = document.getElementById('fname');
+    const lname = document.getElementById('lname');
+    const username = document.getElementById('username');
+    const email = document.getElementById('emailReg');
+    const pass = document.getElementById('passwordReg');
 
-    fetch("http://localhost:8080/users/register", {
-      method: "POST",
+    fetch('http://localhost:8080/users/register', {
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
+        'Content-type': 'application/json',
       },
       body: JSON.stringify({
         first_name: fname.value,
@@ -24,7 +24,7 @@ export default function Register() {
       .then((resp) => resp.json())
       .then((data) => {
         console.log(data);
-        document.getElementById("register").reset();
+        document.getElementById('register').reset();
       })
       .catch((err) => {
         console.error(err);
@@ -32,13 +32,11 @@ export default function Register() {
   }
 
   return (
-    //////////// form to post customer data to  store in DB ////////
-
     <div className="d-flex flex-column justify-content-center align-items-center my-auto">
       <div
         id="containerReg"
         className="d-flex rounded-5 p-5"
-        style={{ background: "#0077B6" }}
+        style={{ background: '#0077B6' }}
       >
         <form
           id="register"
@@ -105,7 +103,7 @@ export default function Register() {
               required
             />
             Jag samtycker till att mina personuppgifter hanteras enligt
-            integritetspolicyn och GDPR.{" "}
+            integritetspolicyn och GDPR.{' '}
           </label>
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2">
             Bekräfta

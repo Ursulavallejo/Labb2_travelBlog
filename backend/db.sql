@@ -24,8 +24,6 @@ CREATE TABLE blogs (
     author VARCHAR(50)
 );
 
-
-
 INSERT INTO blogs (land_name, image_blog, title_blog, text_blog, FK_users, author)
 VALUES
 ('Sverige', 'https://images.unsplash.com/photo-1497217968520-7d8d60b7bc25?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'Utforska Stockholm: Gamla Stan och Stadens Fantastiska Arkitektur','Gamla Stan, Stockholms äldsta stadsdel, är full av historia och mystik. En rolig och annorlunda plats att besöka är Fängelsemuseet, där du kan dyka in i stadens mörka förflutna. Här får du se gamla celler och höra berättelser om de fångar som en gång suttit här. Museet erbjuder en spännande inblick i medeltidens rättssystem och stadens tidigare brottslighet. Efteråt kan du ta en promenad längs de pittoreska kullerstensgatorna och njuta av en fika på ett av de mysiga kaféerna i området.', 2, 'John Doe'),

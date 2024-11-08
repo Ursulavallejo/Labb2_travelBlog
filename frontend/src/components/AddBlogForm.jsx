@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-export default function PostForm({ onClose, onPostCreated, username }) {
+export default function AddBlogForm({ onClose, onPostCreated, username }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
@@ -30,7 +30,6 @@ export default function PostForm({ onClose, onPostCreated, username }) {
         }),
       });
       if (response.ok) {
-        alert('Post skapad!');
         onClose();
         if (onPostCreated) {
           onPostCreated();
@@ -81,15 +80,17 @@ export default function PostForm({ onClose, onPostCreated, username }) {
           required
         />
       </Form.Group>
-      <Button variant="primary" type="submit">
-        Skapa Inlägg
-      </Button>
+      <div className="d-flex justify-content-end my-2 mt-4">
+        <Button variant="success" type="submit">
+          Skapa Inlägg
+        </Button>
+      </div>
     </Form>
   );
 }
 
 // PropTypes validation
-PostForm.propTypes = {
+AddBlogForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   onPostCreated: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,

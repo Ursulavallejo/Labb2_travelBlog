@@ -1,18 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 export default function Login() {
   function loginForm(e) {
     e.preventDefault();
-    document.getElementById("login").reset();
+    document.getElementById('login').reset();
   }
 
   return (
-    //////////// form to send login data to DB ////////
     <div className="d-flex flex-column justify-content-center align-items-center my-auto">
       <div
         id="container"
         className="d-flex rounded-5 p-5"
-        style={{ background: "#0077B6" }}
+        style={{ background: '#0077B6' }}
       >
         <form
           id="login"

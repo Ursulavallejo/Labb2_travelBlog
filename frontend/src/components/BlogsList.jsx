@@ -89,5 +89,5 @@ BlogsList.propTypes = {
     })
   ).isRequired,
   currentUserId: PropTypes.number.isRequired,
-  onDataChange: PropTypes.func.isRequired, // Validación para onDataChange
+  onDataChange: PropTypes.func.isRequired,
 };

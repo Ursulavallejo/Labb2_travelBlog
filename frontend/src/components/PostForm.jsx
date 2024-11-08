@@ -92,5 +92,5 @@ export default function PostForm({ onClose, onPostCreated, username }) {
 PostForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   onPostCreated: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired, // Validación del username como string requerido
+  username: PropTypes.string.isRequired,
 };

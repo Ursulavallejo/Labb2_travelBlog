@@ -56,20 +56,20 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                   {new Date(blog.date).toLocaleDateString()}
                 </Card.Text>
                 {blog.user_id === currentUserId && (
-                  <div>
+                  <div className="btn-container">
                     <Button
                       variant="outline-dark"
-                      className="mt-2 align-self-end edit-btn"
+                      className="m-3 align-self-end "
                       onClick={() => handleUpdate(blog)}
                     >
-                      <FaEdit className="edit-icon" />
+                      <FaEdit />
                     </Button>
                     <Button
                       variant="outline-dark"
-                      className="mt-2 align-self-end delete-btn"
+                      className="m-3 align-self-end "
                       onClick={() => handleDelete(blog.blog_id)}
                     >
-                      <FaTrash className="delete-icon" />
+                      <FaTrash />
                     </Button>
                   </div>
                 )}

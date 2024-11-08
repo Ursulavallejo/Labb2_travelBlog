@@ -1,14 +1,24 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+img {
+  max-width: 100%;
+}
+
 body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #faf0e6 !important;
+  background: #7091a8 !important;
+  margin: 0;
+  padding: 0;
 }
 #root {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding: 2rem;
 }
 main {
   flex-grow: 1;
@@ -16,28 +26,81 @@ main {
 }
 
 /* BLOGS  */
-.title-home,
+.title-home {
+  font-size: 9vw;
+  line-height: 1;
+  font-weight: 600;
+  font-style: italic;
+  opacity: 0.75;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+.hero {
+  background: linear-gradient(38deg, #000428, #926e00);
+  color: #fafafa;
+  display: flex;
+  position: relative;
+  height: 60vh;
+}
+
+.hero__block1 {
+  height: 100vh;
+  width: 50%;
+}
+
+.hero__block2 {
+  height: 100vh;
+  width: 50%;
+}
+
+.hero__title {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: center;
+  padding: 3em;
+}
+
+.hero img {
+  height: 60%;
+  width: 100%;
+  background-size: cover;
+  object-position: center top;
+  display: block;
+  opacity: 0.4;
+  filter: grayscale(100%);
+}
+
 .sub-title-home {
   text-transform: uppercase;
   text-align: center;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin: 2rem 0;
+  color: #fafafa;
 }
 
-.title-home {
-  font-size: 3.5rem;
+.btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: end;
 }
 
-.delete-btn {
+/* .delete-btn .edit-btn {
   border: 2px solid black;
   background-color: white;
-  color: black;
-  padding: 0.3rem 0.6rem;
+  color: red;
+  padding: 13rem 0.6rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin: 0.5rem;
 }
-.delete-icon {
-  color: black;
+.delete-icon .edit-icon {
+  color: red;
   font-size: 1.2rem;
-}
+  padding: 1rem;
+} */

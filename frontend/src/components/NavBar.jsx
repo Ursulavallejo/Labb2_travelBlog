@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
 import AddBlogForm from './AddBlogForm';
-import { FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 
 export default function NavBar({ onPostCreated }) {
@@ -29,6 +29,10 @@ export default function NavBar({ onPostCreated }) {
         <Nav className="ms-auto">
           <Button variant="outline-light m-2 " onClick={handleShow}>
             Nytt Inlägg
+          </Button>
+          <Button variant="outline-light m-2 " onClick={() => {}}>
+            <FaUser className="me-1" />
+            User konto
           </Button>
           <Button variant="secondary m-2 " onClick={() => {}}>
             <FaSignOutAlt className="me-1" />

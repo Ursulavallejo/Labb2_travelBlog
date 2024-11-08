@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import BlogCard from './BlogCard';
 import EditBlogForm from './EditBlogForm';
 import { Card, Button, Container, Row, Col, Modal } from 'react-bootstrap';
-import { FaTrash } from 'react-icons/fa';
-import { FaEdit } from 'react-icons/fa';
+import { FaTrash, FaEdit } from 'react-icons/fa';
 
 export default function BlogsList({ blogs, currentUserId, onDataChange }) {
-  const [selectedBlog, setSelectedBlog] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [selectedBlogForReading, setSelectedBlogForReading] = useState(null);
+  const [selectedBlogForEditing, setSelectedBlogForEditing] = useState(null);
 
   const handleDelete = async (blogId) => {
     try {
@@ -26,8 +25,11 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
   };
 
   const handleUpdate = (blog) => {
-    setSelectedBlog(blog);
-    setIsEditing(true);
+    setSelectedBlogForEditing(blog);
+  };
+
+  const handleRead = (blog) => {
+    setSelectedBlogForReading(blog);
   };
 
   return (
@@ -73,7 +75,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                   </div>
                 )}
                 <Button
-                  onClick={() => setSelectedBlog(blog)}
+                  onClick={() => handleRead(blog)}
                   className="mt-auto"
                   style={{ backgroundColor: '#123456', border: 'none' }}
                 >
@@ -85,18 +87,28 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
         ))}
       </Row>
 
-      {selectedBlog && (
-        <BlogCard blog={selectedBlog} onClose={() => setSelectedBlog(null)} />
+      {/* Modal para ver el blog */}
+      {selectedBlogForReading && (
+        <BlogCard
+          blog={selectedBlogForReading}
+          onClose={() => setSelectedBlogForReading(null)}
+        />
       )}
-      {isEditing && selectedBlog && (
-        <Modal show={isEditing} onHide={() => setIsEditing(false)} centered>
+
+      {/* Modal para editar el blog */}
+      {selectedBlogForEditing && (
+        <Modal
+          show={!!selectedBlogForEditing}
+          onHide={() => setSelectedBlogForEditing(null)}
+          centered
+        >
           <Modal.Header closeButton>
             <Modal.Title>Redigera Blogg</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <EditBlogForm
-              blog={selectedBlog}
-              onClose={() => setIsEditing(false)}
+              blog={selectedBlogForEditing}
+              onClose={() => setSelectedBlogForEditing(null)}
               onUpdate={onDataChange}
               userId={currentUserId}
             />

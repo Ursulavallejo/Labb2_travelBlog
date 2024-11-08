@@ -149,13 +149,13 @@ app.delete('/api/blogs/:id', async (req, res) => {
     );
 
     if (result.rowCount > 0) {
-      res.status(200).json({ message: 'Blog eliminado correctamente' });
+      res.status(200).json({ message: 'Blogg borttagen framgångsrikt' });
     } else {
-      res.status(404).json({ message: 'Blog no encontrado' });
+      res.status(404).json({ message: 'Blogg hittades inte' });
     }
   } catch (error) {
-    console.error('Error eliminando el blog:', error);
-    res.status(500).json({ error: 'Error eliminando el blog' });
+    console.error('Fel vid borttagning av bloggen:', error);
+    res.status(500).json({ error: 'Fel vid borttagning av bloggen' });
   }
 });
 

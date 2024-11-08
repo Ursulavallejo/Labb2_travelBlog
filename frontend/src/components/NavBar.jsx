@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
 import AddBlogForm from './AddBlogForm';
+import { FaSignOutAlt } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 
 export default function NavBar({ onPostCreated }) {
@@ -11,21 +12,27 @@ export default function NavBar({ onPostCreated }) {
 
   return (
     <>
-      <Navbar bg="light" expand="lg">
+      <Navbar expand="lg" style={{ backgroundColor: '#123456' }}>
         <Navbar.Brand href="#">
           <img
             src="/travel.svg"
-            width="30"
-            height="30"
-            className="d-inline-block align-top"
+            width="60"
+            height="60"
+            className="d-inline-block align-center"
             alt="Travel Icon"
-            style={{ marginRight: '8px' }}
+            style={{ marginRight: '18px', marginLeft: '18px' }}
           />
-          Travel Blog
+          <span style={{ color: '#e27e0a', fontWeight: '600' }}>
+            Travel Blog
+          </span>
         </Navbar.Brand>
-        <Nav className="ml-auto">
-          <Button variant="primary" onClick={handleShow}>
+        <Nav className="ms-auto">
+          <Button variant="outline-light m-2 " onClick={handleShow}>
             Nytt Inlägg
+          </Button>
+          <Button variant="secondary m-2 " onClick={() => {}}>
+            <FaSignOutAlt className="me-1" />
+            Log Out
           </Button>
         </Nav>
       </Navbar>

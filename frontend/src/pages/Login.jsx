@@ -35,7 +35,6 @@ export default function Login() {
   }
 
   return (
-    //////////// form to send login data to DB ////////
     <div className="d-flex flex-column justify-content-center align-items-center my-auto">
       <div
         id="container"

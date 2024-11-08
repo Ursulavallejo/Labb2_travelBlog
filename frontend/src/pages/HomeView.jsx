@@ -24,12 +24,22 @@ export default function HomeView() {
   return (
     <>
       <NavBar onPostCreated={fetchData} />
-      <Container>
-        <main>
+      <header className="hero">
+        <div className="hero__block1">
+          <img src="http://unsplash.it/800/800" alt="RandomImage1" />
+        </div>
+        <div className="hero__block2">
+          <img src="http://unsplash.it/1000/800" alt="RandomImage2" />
+        </div>
+        <div className="hero__title">
           <h1 className="title-home">Upptäckarens dagbok</h1>
-          <h2 className="sub-title-home">
-            För dig som älskar äventyr och nya upptäckter!
-          </h2>
+        </div>
+      </header>
+      <Container>
+        <h2 className="sub-title-home">
+          För dig som älskar äventyr och nya upptäckter!
+        </h2>
+        <main>
           <BlogsList blogs={blogs} currentUserId={1} onDataChange={fetchData} />
         </main>
       </Container>

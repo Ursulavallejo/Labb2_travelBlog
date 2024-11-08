@@ -8,7 +8,7 @@ export default function Register() {
     const email = document.getElementById('emailReg');
     const pass = document.getElementById('passwordReg');
 
-    fetch('http://localhost:3000/users/register', {
+    fetch('http://localhost:8080/users/register', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -32,8 +32,6 @@ export default function Register() {
   }
 
   return (
-    //////////// form to post customer data to  store in DB ////////
-
     <div className="d-flex flex-column justify-content-center align-items-center my-auto">
       <div
         id="containerReg"

@@ -224,18 +224,12 @@ app.get('/api/comments', async (req, res) => {
     FROM comments
     JOIN users ON comments.FK_users = users.user_id
     JOIN blogs ON comments.FK_blogs = blogs.blog_id
+    WHERE comments.FK_blogs = $1 ORDER BY comments.date DESC
   `;
 
-  if (blogId) {
-    query += ` WHERE comments.FK_blogs = $1 ORDER BY comments.date DESC`;
-  }
-
   try {
-    const { rows } = blogId
-      ? await client.query(query, [blogId])
-      : await client.query(query);
+    const { rows } = await client.query(query, [blogId]);
     res.json(rows);
-    console.log(rows);
   } catch (error) {
     console.error('Error fetching comments:', error);
     res.status(500).json({ error: 'Server error fetching comment.' });
@@ -267,7 +261,7 @@ app.post('/api/comments', async (req, res) => {
   }
 });
 
-//PUT- comments
+//PUT- Update comments
 app.put('/api/comments/:id', async (req, res) => {
   const { id } = req.params;
   const { text_comment } = req.body;
@@ -280,12 +274,9 @@ app.put('/api/comments/:id', async (req, res) => {
       RETURNING *;
     `;
     const values = [text_comment, id];
-    const { rows } = await client.query(query, values);
+    const result = await client.query(query, values);
 
-    if (rows.length === 0) {
-      return res.status(404).json({ error: 'Comment not found' });
-    }
-
+    res.status(201).json(result.rows[0]);
     res.json(rows[0]);
   } catch (error) {
     console.error('Error updating comment:', error);

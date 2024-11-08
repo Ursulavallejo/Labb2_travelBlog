@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import BlogCard from './BlogCard';
-import { Card, Button, Container, Row, Col } from 'react-bootstrap';
+import EditBlogForm from './EditBlogForm';
+import { Card, Button, Container, Row, Col, Modal } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
 
 export default function BlogsList({ blogs, currentUserId, onDataChange }) {
   const [selectedBlog, setSelectedBlog] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleDelete = async (blogId) => {
     try {
@@ -13,7 +16,6 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
         method: 'DELETE',
       });
       if (response.ok) {
-        alert('Inlägg borttaget!');
         onDataChange();
       } else {
         alert('Något gick fel!');
@@ -21,6 +23,11 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
     } catch (error) {
       console.error('Error deleting post:', error);
     }
+  };
+
+  const handleUpdate = (blog) => {
+    setSelectedBlog(blog);
+    setIsEditing(true);
   };
 
   return (
@@ -43,25 +50,34 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
               <Card.Body className="d-flex flex-column">
                 <Card.Title>{blog.title_blog}</Card.Title>
                 <Card.Text>
-                  <strong>Author:</strong> {blog.username} <br />
-                  <strong>Date:</strong>{' '}
+                  <strong>Författare:</strong> {blog.author} <br />
+                  <strong>Datum:</strong>{' '}
                   {new Date(blog.date).toLocaleDateString()}
                 </Card.Text>
                 {blog.user_id === currentUserId && (
-                  <Button
-                    variant="outline-dark"
-                    className="mt-2 align-self-end delete-btn"
-                    onClick={() => handleDelete(blog.blog_id)}
-                  >
-                    <FaTrash className="delete-icon" />
-                  </Button>
+                  <div className="btn-container">
+                    <Button
+                      variant="outline-dark"
+                      className="my-3 mx-2 align-self-end "
+                      onClick={() => handleUpdate(blog)}
+                    >
+                      <FaEdit />
+                    </Button>
+                    <Button
+                      variant="outline-dark"
+                      className="my-3 mx-2 align-self-end "
+                      onClick={() => handleDelete(blog.blog_id)}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </div>
                 )}
                 <Button
-                  variant="primary"
                   onClick={() => setSelectedBlog(blog)}
                   className="mt-auto"
+                  style={{ backgroundColor: '#123456', border: 'none' }}
                 >
-                  Visa Bloggpost
+                  Läsa Bloggpost
                 </Button>
               </Card.Body>
             </Card>
@@ -71,6 +87,21 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
 
       {selectedBlog && (
         <BlogCard blog={selectedBlog} onClose={() => setSelectedBlog(null)} />
+      )}
+      {isEditing && selectedBlog && (
+        <Modal show={isEditing} onHide={() => setIsEditing(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Redigera Blogg</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EditBlogForm
+              blog={selectedBlog}
+              onClose={() => setIsEditing(false)}
+              onUpdate={onDataChange}
+              userId={currentUserId}
+            />
+          </Modal.Body>
+        </Modal>
       )}
     </Container>
   );

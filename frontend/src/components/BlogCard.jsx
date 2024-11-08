@@ -1,8 +1,16 @@
-import { Modal, Button } from 'react-bootstrap'
-import CommentModal from './CommentModal'
-import PropTypes from 'prop-types'
+import { Modal, Button } from 'react-bootstrap';
+import Comments from './Comments';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { FaCommentAlt, FaCommentSlash } from 'react-icons/fa';
 
 export default function BlogCard({ blog, onClose }) {
+  const [showComments, setShowComments] = useState(false);
+
+  const toggleComments = () => {
+    setShowComments((prev) => !prev);
+  };
+
   return (
     <Modal show={!!blog} onHide={onClose} centered>
       <Modal.Header closeButton>
@@ -13,7 +21,7 @@ export default function BlogCard({ blog, onClose }) {
           src={blog.image_blog}
           alt={blog.title_blog}
           style={{
-            width: '50%',
+            width: '60%',
             display: 'block',
             margin: '0 auto 1rem auto',
             borderRadius: '5px',
@@ -21,14 +29,24 @@ export default function BlogCard({ blog, onClose }) {
         />
         <p style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>
-            <strong>Author:</strong> {blog.author}
+            <strong>Författare:</strong> {blog.author}
           </span>
           <span style={{ fontSize: '0.8rem', color: 'gray' }}>
             {new Date(blog.date).toLocaleDateString()}
           </span>
         </p>
         <p>{blog.text_blog}</p>
-        <CommentModal />
+        {showComments && <Comments blogId={blog.blog_id} />}
+        <div className="d-flex">
+          <Button
+            variant="outline-info my-2 mx-auto"
+            className=""
+            onClick={toggleComments}
+          >
+            {showComments ? <FaCommentSlash /> : <FaCommentAlt />}{' '}
+            {showComments ? ' Dölj' : ' Visa'}
+          </Button>
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
@@ -36,7 +54,7 @@ export default function BlogCard({ blog, onClose }) {
         </Button>
       </Modal.Footer>
     </Modal>
-  )
+  );
 }
 
 // PropTypes validation
@@ -53,4 +71,4 @@ BlogCard.propTypes = {
     user_id: PropTypes.number.isRequired,
   }).isRequired,
   onClose: PropTypes.func.isRequired,
-}
+};

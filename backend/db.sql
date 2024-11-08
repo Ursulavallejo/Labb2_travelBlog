@@ -25,8 +25,6 @@ CREATE TABLE blogs (
     author VARCHAR(50)
 );
 
-
-
 INSERT INTO blogs (land_name, image_blog, title_blog, text_blog, FK_users, author)
 VALUES
 ('Sverige', 'https://images.unsplash.com/photo-1497217968520-7d8d60b7bc25?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'Utforska Stockholm: Gamla Stan och Stadens Fantastiska Arkitektur','Gamla Stan, Stockholms äldsta stadsdel, är full av historia och mystik. En rolig och annorlunda plats att besöka är Fängelsemuseet, där du kan dyka in i stadens mörka förflutna. Här får du se gamla celler och höra berättelser om de fångar som en gång suttit här. Museet erbjuder en spännande inblick i medeltidens rättssystem och stadens tidigare brottslighet. Efteråt kan du ta en promenad längs de pittoreska kullerstensgatorna och njuta av en fika på ett av de mysiga kaféerna i området.', 2, 'John Doe'),
@@ -54,8 +52,28 @@ CREATE TABLE comments (
     username VARCHAR(50) NOT NULL
 );
 
-INSERT INTO comments (Text_comment, FK_users, FK_blogs, username)
+INSERT INTO comments (text_comment, FK_users, FK_blogs, username)
 VALUES
-('Fantastisk artikel!', 2, 1, 'john_doe'),
-('Väldigt hjälpsamt, tack!', 3, 2, 'jane_smith'),
-('Kan du ge fler exempel?', 4, 3, 'alex_writer');
+-- Sverige
+('Fantastisk artikel! Jag visste inte att Gamla Stan hade så mycket historia bakom sig.', 2, 1, 'john_doe'),
+('Tack för informationen! Fängelsemuseet verkar vara ett intressant stopp.', 3, 1, 'jane_smith'),
+
+-- Italien
+('Toscana är verkligen en dröm för matälskare. Tack för tipsen!', 3, 2, 'jane_smith'),
+('Jag måste absolut prova pappa al pomodoro! Har du fler tips för Toscana?', 4, 2, 'alex_writer'),
+
+-- Norge
+('Norrskenet är på min bucket list! Tack för denna guide till Tromsø.', 4, 3, 'alex_writer'),
+('Det låter magiskt! Vilken tid på året är bäst för att se norrskenet?', 2, 3, 'john_doe'),
+
+-- Colombia
+('Cartagena verkar så färgstark! Skulle gärna smaka ceviche där.', 2, 4, 'john_doe'),
+('Fantastisk läsning. Har du några tips för andra matupplevelser i Colombia?', 3, 4, 'jane_smith'),
+
+-- Turkiet
+('Kapadokien är verkligen en plats jag vill besöka. Luftballongerna ser så häftiga ut!', 3, 5, 'jane_smith'),
+('Turkiets kultur verkar så rik. Jag vill lära mig mer om Derinkuyu.', 4, 5, 'alex_writer'),
+
+-- Japan
+('Japan verkar så unikt. Kyoto och Tokyo är definitivt på min resplan!', 4, 6, 'alex_writer'),
+('Tack för tipsen! Varma källor låter perfekt för att varva ner.', 2, 6, 'john_doe');

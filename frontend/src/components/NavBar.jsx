@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
-import PostForm from './PostForm';
+import AddBlogForm from './AddBlogForm';
+import { FaUser, FaSignOutAlt } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 
 export default function NavBar({ onPostCreated }) {
@@ -11,21 +12,37 @@ export default function NavBar({ onPostCreated }) {
 
   return (
     <>
-      <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#">
+      <Navbar expand="lg" fixed="top" style={{ backgroundColor: '#123456' }}>
+        <Navbar.Brand href="#" className="d-flex align-items-center">
           <img
             src="/travel.svg"
-            width="30"
-            height="30"
-            className="d-inline-block align-top"
+            width="60"
+            height="60"
+            className="d-inline-block align-center"
             alt="Travel Icon"
-            style={{ marginRight: '8px' }}
+            style={{ marginRight: '18px', marginLeft: '18px' }}
           />
-          Travel Blog
+          <span style={{ color: '#e27e0a', fontWeight: '600' }}>
+            Travel Blog
+          </span>
         </Navbar.Brand>
-        <Nav className="ml-auto">
-          <Button variant="primary" onClick={handleShow}>
+        <Nav className="ms-auto">
+          <Button variant="outline-light m-2 " onClick={handleShow}>
             Nytt Inlägg
+          </Button>
+          <Button
+            variant="outline-light m-2 d-flex align-items-center"
+            onClick={() => {}}
+          >
+            <FaUser className="me-1" />
+            User konto
+          </Button>
+          <Button
+            variant="secondary m-2 d-flex align-items-center "
+            onClick={() => {}}
+          >
+            <FaSignOutAlt className="me-1" />
+            Log Out
           </Button>
         </Nav>
       </Navbar>
@@ -35,7 +52,7 @@ export default function NavBar({ onPostCreated }) {
           <Modal.Title>Skapa Nytt Blogginlägg</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <PostForm onClose={handleClose} onPostCreated={onPostCreated} />
+          <AddBlogForm onClose={handleClose} onPostCreated={onPostCreated} />
         </Modal.Body>
       </Modal>
     </>

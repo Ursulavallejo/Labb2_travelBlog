@@ -1,27 +1,27 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
-import BlogCard from './BlogCard'
-import { Card, Button, Container, Row, Col } from 'react-bootstrap'
-import { FaTrash } from 'react-icons/fa'
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import BlogCard from './BlogCard';
+import { Card, Button, Container, Row, Col } from 'react-bootstrap';
+import { FaTrash } from 'react-icons/fa';
 
 export default function BlogsList({ blogs, currentUserId, onDataChange }) {
-  const [selectedBlog, setSelectedBlog] = useState(null)
+  const [selectedBlog, setSelectedBlog] = useState(null);
 
   const handleDelete = async (blogId) => {
     try {
       const response = await fetch(`/api/blogs/${blogId}`, {
         method: 'DELETE',
-      })
+      });
       if (response.ok) {
-        alert('Inlägg borttaget!')
-        onDataChange()
+        alert('Inlägg borttaget!');
+        onDataChange();
       } else {
-        alert('Något gick fel!')
+        alert('Något gick fel!');
       }
     } catch (error) {
-      console.error('Error deleting post:', error)
+      console.error('Error deleting post:', error);
     }
-  }
+  };
 
   return (
     <Container>
@@ -49,11 +49,11 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                 </Card.Text>
                 {blog.user_id === currentUserId && (
                   <Button
-                    variant="danger"
-                    className="mt-2 align-self-end"
+                    variant="outline-dark"
+                    className="mt-2 align-self-end delete-btn"
                     onClick={() => handleDelete(blog.blog_id)}
                   >
-                    <FaTrash />
+                    <FaTrash className="delete-icon" />
                   </Button>
                 )}
                 <Button
@@ -73,7 +73,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
         <BlogCard blog={selectedBlog} onClose={() => setSelectedBlog(null)} />
       )}
     </Container>
-  )
+  );
 }
 
 // PropTypes validation
@@ -90,4 +90,4 @@ BlogsList.propTypes = {
   ).isRequired,
   currentUserId: PropTypes.number.isRequired,
   onDataChange: PropTypes.func.isRequired, // Validación para onDataChange
-}
+};

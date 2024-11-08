@@ -1,25 +1,25 @@
-import { useEffect, useState } from 'react'
-import NavBar from '../components/NavBar'
-import Footer from '../components/Footer'
-import BlogsList from '../components/BlogsList'
-import { Container } from 'react-bootstrap'
+import { useEffect, useState } from 'react';
+import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
+import BlogsList from '../components/BlogsList';
+import { Container } from 'react-bootstrap';
 
 export default function HomeView() {
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogs] = useState([]);
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/blogs')
-      const result = await response.json()
-      setBlogs(result)
+      const response = await fetch('/api/blogs');
+      const result = await response.json();
+      setBlogs(result);
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error('Error fetching data:', error);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -30,14 +30,10 @@ export default function HomeView() {
           <h2 className="sub-title-home">
             För dig som älskar äventyr och nya upptäckter!
           </h2>
-          <BlogsList
-            blogs={blogs}
-            currentUserId={blogs.user_id}
-            onDataChange={fetchData}
-          />
+          <BlogsList blogs={blogs} currentUserId={1} onDataChange={fetchData} />
         </main>
       </Container>
       <Footer />
     </>
-  )
+  );
 }

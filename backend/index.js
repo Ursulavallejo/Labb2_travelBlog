@@ -138,6 +138,27 @@ app.post('/api/blogs', async (req, res) => {
   }
 });
 
+// DELETE blog by ID
+app.delete('/api/blogs/:id', async (req, res) => {
+  const blogId = req.params.id;
+
+  try {
+    const result = await client.query(
+      'DELETE FROM blogs WHERE blog_id = $1 RETURNING *',
+      [blogId]
+    );
+
+    if (result.rowCount > 0) {
+      res.status(200).json({ message: 'Blog eliminado correctamente' });
+    } else {
+      res.status(404).json({ message: 'Blog no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error eliminando el blog:', error);
+    res.status(500).json({ error: 'Error eliminando el blog' });
+  }
+});
+
 // GET - comments genom att filtrera på blogId
 app.get('/api/comments', async (req, res) => {
   const { blogId } = req.query; // Ta emot blogId som en query-param

@@ -45,8 +45,8 @@ export default function CommentForm({ blogId, onCommentAdded }) {
           required
         />
       </Form.Group>
-      <Button variant="primary" type="submit">
-        Lägg till Kommentar
+      <Button variant="success" type="submit">
+        Skriva din kommentar
       </Button>
     </Form>
   );

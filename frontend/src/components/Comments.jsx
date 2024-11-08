@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import CommentForm from './CommentForm';
+import AddCommentForm from './AddCommentForm';
 import { FaTrash } from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
+import { Button } from 'react-bootstrap';
 
 export default function CommentModal({ blogId, username }) {
   const [comments, setComments] = useState([]);
-  const [show, setShow] = useState(false);
 
-  // Fetch comments for the specific blog
   const fetchComments = async () => {
     try {
       const response = await fetch(`/api/comments?blogId=${blogId}`);
@@ -20,11 +19,8 @@ export default function CommentModal({ blogId, username }) {
   };
 
   useEffect(() => {
-    if (show) fetchComments();
-  }, [show, blogId]);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    fetchComments();
+  }, [blogId]);
 
   const handleCommentAdded = () => {
     fetchComments(); // Refresh comments after a new one is added
@@ -56,48 +52,51 @@ export default function CommentModal({ blogId, username }) {
   };
 
   return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Visa Kommentarer
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Kommentarer</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {comments.length > 0 ? (
-            comments.map((comment) => (
-              <div key={comment.comment_id}>
-                <h5>{comment.username}</h5>
-                <p>{comment.text_comment}</p>
-                <small>{new Date(comment.date).toLocaleDateString()}</small>
-                {/* {comment.username === username && ( // Check if the logged-in user is the one who wrote the comment */}
+    <div style={{ marginTop: '1rem' }}>
+      {comments.length > 0 ? (
+        comments.map((comment) => (
+          <div key={comment.comment_id} style={{ marginBottom: '1rem' }}>
+            <p style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>
+                <strong>Användare:</strong> {comment.username}
+                {/* {comment.username === username && ( */}
                 <Button
                   variant="danger"
+                  className="mx-2"
+                  size="sm"
                   onClick={() => handleDeleteComment(comment.comment_id)}
                 >
                   <FaTrash />
                 </Button>
                 {/* )} */}
-              </div>
-            ))
-          ) : (
-            <p>Inga kommentarer.</p>
-          )}
-          <CommentForm
-            blogId={blogId}
-            onCommentAdded={handleCommentAdded}
-            username={username}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handleClose}>
-            Stäng
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+                {/* {comment.username === username && ( */}
+                <Button
+                  variant="warning"
+                  className="mx-2"
+                  size="sm"
+                  onClick={() => handleDeleteComment(comment.comment_id)}
+                >
+                  <FaEdit />
+                </Button>
+                {/* )} */}
+              </span>
+
+              <span style={{ fontSize: '0.8rem', color: 'gray' }}>
+                {new Date(comment.date).toLocaleDateString()}
+              </span>
+            </p>
+            <p>{comment.text_comment}</p>
+          </div>
+        ))
+      ) : (
+        <p>Inga kommentarer.</p>
+      )}
+      <AddCommentForm
+        blogId={blogId}
+        onCommentAdded={handleCommentAdded}
+        username={username}
+      />
+    </div>
   );
 }
 

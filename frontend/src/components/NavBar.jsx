@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
-import PostForm from './PostForm';
+import AddBlogForm from './AddBlogForm';
 import PropTypes from 'prop-types';
 
 export default function NavBar({ onPostCreated }) {
@@ -35,7 +35,7 @@ export default function NavBar({ onPostCreated }) {
           <Modal.Title>Skapa Nytt Blogginlägg</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <PostForm onClose={handleClose} onPostCreated={onPostCreated} />
+          <AddBlogForm onClose={handleClose} onPostCreated={onPostCreated} />
         </Modal.Body>
       </Modal>
     </>

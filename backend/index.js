@@ -40,10 +40,10 @@ app.post('/users/register', async (req, res) => {
 
   try {
     await client.query(query, values);
-    res.status(201).send('Registration successful!');
+    res.status(201).send({ message: 'Registration successful!' });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Failed to submit!');
+    res.status(500).send({ message: 'Failed to submit!', error });
   }
 });
 
@@ -60,7 +60,7 @@ app.post('/users/login', async (req, res) => {
     try {
       const results = await client.query(query, values);
       if (results.rows.length > 0) {
-        res.status(200).send('Login successful!');
+        res.status(200).send({ message: 'Login successful!:' });
       } else {
         res.status(401).send('Invalid email or password');
       }

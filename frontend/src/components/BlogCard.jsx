@@ -1,8 +1,15 @@
-import { Modal, Button } from 'react-bootstrap'
-import CommentModal from './CommentModal'
-import PropTypes from 'prop-types'
+import { Modal, Button } from 'react-bootstrap';
+import Comments from './Comments';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 export default function BlogCard({ blog, onClose }) {
+  const [showComments, setShowComments] = useState(false);
+
+  const toggleComments = () => {
+    setShowComments((prev) => !prev);
+  };
+
   return (
     <Modal show={!!blog} onHide={onClose} centered>
       <Modal.Header closeButton>
@@ -28,15 +35,18 @@ export default function BlogCard({ blog, onClose }) {
           </span>
         </p>
         <p>{blog.text_blog}</p>
-        <CommentModal />
+        {showComments && <Comments blogId={blog.blog_id} />}
+        <Button variant="warning" className="m-2" onClick={toggleComments}>
+          {showComments ? 'Dölja Kommentarer' : 'Visa Kommentarer'}
+        </Button>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant="danger" onClick={onClose}>
           Stäng
         </Button>
       </Modal.Footer>
     </Modal>
-  )
+  );
 }
 
 // PropTypes validation
@@ -53,4 +63,4 @@ BlogCard.propTypes = {
     user_id: PropTypes.number.isRequired,
   }).isRequired,
   onClose: PropTypes.func.isRequired,
-}
+};

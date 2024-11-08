@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import BlogCard from './BlogCard';
-import { Card, Button, Container, Row, Col } from 'react-bootstrap';
+import EditBlogForm from './EditBlogForm';
+import { Card, Button, Container, Row, Col, Modal } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
 
 export default function BlogsList({ blogs, currentUserId, onDataChange }) {
   const [selectedBlog, setSelectedBlog] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleDelete = async (blogId) => {
     try {
@@ -21,6 +24,11 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
     } catch (error) {
       console.error('Error deleting post:', error);
     }
+  };
+
+  const handleUpdate = (blog) => {
+    setSelectedBlog(blog);
+    setIsEditing(true);
   };
 
   return (
@@ -48,13 +56,22 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                   {new Date(blog.date).toLocaleDateString()}
                 </Card.Text>
                 {blog.user_id === currentUserId && (
-                  <Button
-                    variant="outline-dark"
-                    className="mt-2 align-self-end delete-btn"
-                    onClick={() => handleDelete(blog.blog_id)}
-                  >
-                    <FaTrash className="delete-icon" />
-                  </Button>
+                  <div>
+                    <Button
+                      variant="outline-dark"
+                      className="mt-2 align-self-end edit-btn"
+                      onClick={() => handleUpdate(blog)}
+                    >
+                      <FaEdit className="edit-icon" />
+                    </Button>
+                    <Button
+                      variant="outline-dark"
+                      className="mt-2 align-self-end delete-btn"
+                      onClick={() => handleDelete(blog.blog_id)}
+                    >
+                      <FaTrash className="delete-icon" />
+                    </Button>
+                  </div>
                 )}
                 <Button
                   variant="primary"
@@ -71,6 +88,21 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
 
       {selectedBlog && (
         <BlogCard blog={selectedBlog} onClose={() => setSelectedBlog(null)} />
+      )}
+      {isEditing && selectedBlog && (
+        <Modal show={isEditing} onHide={() => setIsEditing(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Redigera Blogg</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EditBlogForm
+              blog={selectedBlog}
+              onClose={() => setIsEditing(false)}
+              onUpdate={onDataChange}
+              userId={currentUserId}
+            />
+          </Modal.Body>
+        </Modal>
       )}
     </Container>
   );

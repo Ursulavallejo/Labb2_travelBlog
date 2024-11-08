@@ -2,44 +2,39 @@ import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-export default function PostForm({ onClose, onPostCreated, username }) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState('');
-  const [country, setCountry] = useState('');
-
-  // ONLY TO TEST... WORKS to DELETE
-  const userId = 1;
+export default function EditForm({ blog, onClose, onUpdate, userId }) {
+  const [title, setTitle] = useState(blog.title_blog);
+  const [content, setContent] = useState(blog.text_blog);
+  const [image, setImage] = useState(blog.image_blog);
+  const [country, setCountry] = useState(blog.land_name);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await fetch('/api/blogs', {
-        method: 'POST',
+      const response = await fetch(`/api/blogs/${blog.blog_id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           title_blog: title,
-          author: username, // use username with props
           text_blog: content,
           image_blog: image,
           land_name: country,
-          date: new Date().toISOString(),
-          user_id: userId,
+          user_id: userId, // check id_user
         }),
       });
+
       if (response.ok) {
-        alert('Post skapad!');
+        alert('Blogg uppdaterad!');
+        onUpdate();
         onClose();
-        if (onPostCreated) {
-          onPostCreated();
-        }
       } else {
-        alert('Något gick fel!');
+        alert('Något gick fel vid uppdatering');
       }
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error('Error updating blog:', error);
     }
   };
 
@@ -82,15 +77,15 @@ export default function PostForm({ onClose, onPostCreated, username }) {
         />
       </Form.Group>
       <Button variant="primary" type="submit">
-        Skapa Inlägg
+        Uppdatera Blogg
       </Button>
     </Form>
   );
 }
 
-// PropTypes validation
-PostForm.propTypes = {
+EditForm.propTypes = {
+  blog: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
-  onPostCreated: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
 };

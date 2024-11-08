@@ -7,7 +7,7 @@ services:
     environment:
       - PGURI=${PGURI}
     ports:
-      - "8080:3000"
+      - '3000:3000'
   database:
     environment:
       - POSTGRES_PASSWORD=${PASSWORD}
@@ -16,7 +16,7 @@ services:
     healthcheck:
       interval: 2s
       retries: 5
-      test: "pg_isready --username=${DB_USER}"
+      test: 'pg_isready --username=${DB_USER}'
     image: postgres
     volumes:
       - ./data:/var/lib/postgresql/data

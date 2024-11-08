@@ -14,6 +14,7 @@ dotenv.config();
 const client = new Client({
   connectionString: process.env.PGURI,
 });
+
 client.connect();
 
 // refresher, GET users
@@ -30,6 +31,28 @@ app.get('/users', async (req, res) => {
   }
 });
 
+// GET users by id
+app.get('/users/:id', async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const query = `
+  SELECT * FROM users WHERE user_id = $1
+  `;
+    const values = [userId];
+    const { rows } = await client.query(query, values);
+    if (rows.length > 0) {
+      res.status(200).send({ success: 'true', user: rows[0] });
+    } else {
+      res
+        .status(404)
+        .res.send({ success: 'fail', message: 'User could not be found' });
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(400).send({ error: error });
+  }
+});
+
 // POST user
 app.post('/users/register', async (req, res) => {
   const { first_name, last_name, username, email, pass_word } = req.body;
@@ -39,8 +62,10 @@ app.post('/users/register', async (req, res) => {
   const values = [first_name, last_name, username, email, pass_word];
 
   try {
-    await client.query(query, values);
-    res.status(201).send({ message: 'Registration successful!' });
+    const results = await client.query(query, values);
+    res
+      .status(201)
+      .send({ message: 'Registration successful!', data: results.rows });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Failed to submit!', error });
@@ -60,7 +85,10 @@ app.post('/users/login', async (req, res) => {
     try {
       const results = await client.query(query, values);
       if (results.rows.length > 0) {
-        res.status(200).send({ message: 'Login successful!:' });
+        console.log('Loggat in!');
+        res
+          .status(200)
+          .send({ message: 'Login successful!', data: results.rows });
       } else {
         res.status(401).send('Invalid email or password');
       }
@@ -289,7 +317,7 @@ app.delete('/api/comments/:id', async (req, res) => {
 });
 
 // Serve frontend files
-app.use(express.static(path.join(path.resolve(), 'dist')));
+// app.use(express.static(path.join(path.resolve(), 'dist')));
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server kör på http://localhost:${port}`);

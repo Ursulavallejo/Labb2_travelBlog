@@ -1,9 +1,37 @@
-import { Link } from "react-router-dom";
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../components/Context';
 
 export default function Login() {
+  const { setID } = useContext(UserContext);
+
   function loginForm(e) {
     e.preventDefault();
-    document.getElementById("login").reset();
+
+    const email = document.getElementById('email');
+    const pass = document.getElementById('password');
+
+    fetch('http://localhost:3000/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email.value,
+        pass_word: pass.value,
+      }),
+    })
+      .then((resp) => resp.json())
+      .then((user) => {
+        const userID = user.data[0].user_id;
+        setID(userID);
+        localStorage.setItem('ID', userID);
+        alert('Loggat in!');
+        document.getElementById('login').reset();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   return (
@@ -12,7 +40,7 @@ export default function Login() {
       <div
         id="container"
         className="d-flex rounded-5 p-5"
-        style={{ background: "#0077B6" }}
+        style={{ background: '#0077B6' }}
       >
         <form
           id="login"

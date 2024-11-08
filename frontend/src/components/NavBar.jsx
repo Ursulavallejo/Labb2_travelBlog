@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { Navbar, Nav, Button, Modal } from 'react-bootstrap'
-import PostForm from './PostForm'
-import PropTypes from 'prop-types'
+import { useState } from 'react';
+import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
+import PostForm from './PostForm';
+import PropTypes from 'prop-types';
 
 export default function NavBar({ onPostCreated }) {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
 
-  const handleShow = () => setShowModal(true)
-  const handleClose = () => setShowModal(false)
+  const handleShow = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
 
   return (
     <>
@@ -39,9 +39,9 @@ export default function NavBar({ onPostCreated }) {
         </Modal.Body>
       </Modal>
     </>
-  )
+  );
 }
 
 NavBar.propTypes = {
   onPostCreated: PropTypes.func.isRequired,
-}
+};

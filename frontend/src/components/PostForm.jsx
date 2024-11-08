@@ -1,18 +1,18 @@
-import { useState } from 'react'
-import { Form, Button } from 'react-bootstrap'
-import PropTypes from 'prop-types'
+import { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 export default function PostForm({ onClose, onPostCreated, username }) {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [image, setImage] = useState('')
-  const [country, setCountry] = useState('')
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [image, setImage] = useState('');
+  const [country, setCountry] = useState('');
 
   // ONLY TO TEST WORKS to DELETE
-  const userId = 1
+  const userId = 1;
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const response = await fetch('/api/blogs', {
         method: 'POST',
@@ -21,27 +21,27 @@ export default function PostForm({ onClose, onPostCreated, username }) {
         },
         body: JSON.stringify({
           title_blog: title,
-          author: username, // use username throw prop
+          author: username, // use username with props
           text_blog: content,
           image_blog: image,
           land_name: country,
           date: new Date().toISOString(),
           user_id: userId,
         }),
-      })
+      });
       if (response.ok) {
-        alert('Post skapad!')
-        onClose()
+        alert('Post skapad!');
+        onClose();
         if (onPostCreated) {
-          onPostCreated()
+          onPostCreated();
         }
       } else {
-        alert('Något gick fel!')
+        alert('Något gick fel!');
       }
     } catch (error) {
-      console.error('Error creating post:', error)
+      console.error('Error creating post:', error);
     }
-  }
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -85,12 +85,12 @@ export default function PostForm({ onClose, onPostCreated, username }) {
         Skapa Inlägg
       </Button>
     </Form>
-  )
+  );
 }
 
 // PropTypes validation
 PostForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   onPostCreated: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired, // Validación del username como string requerido
-}
+  username: PropTypes.string.isRequired,
+};

@@ -138,6 +138,54 @@ app.post('/api/blogs', async (req, res) => {
   }
 });
 
+// PUT- Update blog by blog_id
+app.put('/api/blogs/:id', async (req, res) => {
+  const blogId = req.params.id;
+  const { title_blog, text_blog, image_blog, land_name, user_id } = req.body;
+
+  try {
+    const result = await client.query(
+      `UPDATE blogs
+       SET title_blog = $1, text_blog = $2, image_blog = $3, land_name = $4
+       WHERE blog_id = $5 AND FK_users = $6
+       RETURNING *`,
+      [title_blog, text_blog, image_blog, land_name, blogId, user_id]
+    );
+
+    if (result.rowCount > 0) {
+      res.status(200).json({ message: 'Blogg uppdaterad framgångsrikt' });
+    } else {
+      res.status(404).json({
+        message: 'Blogg hittades inte eller användaren har inte behörighet',
+      });
+    }
+  } catch (error) {
+    console.error('Fel vid uppdatering av bloggen:', error);
+    res.status(500).json({ error: 'Fel vid uppdatering av bloggen' });
+  }
+});
+
+// DELETE blog by ID
+app.delete('/api/blogs/:id', async (req, res) => {
+  const blogId = req.params.id;
+
+  try {
+    const result = await client.query(
+      'DELETE FROM blogs WHERE blog_id = $1 RETURNING *',
+      [blogId]
+    );
+
+    if (result.rowCount > 0) {
+      res.status(200).json({ message: 'Blogg borttagen framgångsrikt' });
+    } else {
+      res.status(404).json({ message: 'Blogg hittades inte' });
+    }
+  } catch (error) {
+    console.error('Fel vid borttagning av bloggen:', error);
+    res.status(500).json({ error: 'Fel vid borttagning av bloggen' });
+  }
+});
+
 // GET - comments genom att filtrera på blogId
 app.get('/api/comments', async (req, res) => {
   const { blogId } = req.query; // Ta emot blogId som en query-param

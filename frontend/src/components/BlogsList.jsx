@@ -50,7 +50,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
               <Card.Body className="d-flex flex-column">
                 <Card.Title>{blog.title_blog}</Card.Title>
                 <Card.Text>
-                  <strong>Författare:</strong> {blog.author} <br />
+                  <strong>Författare:</strong> {blog.username} <br />
                   <strong>Datum:</strong>{' '}
                   {new Date(blog.date).toLocaleDateString()}
                 </Card.Text>

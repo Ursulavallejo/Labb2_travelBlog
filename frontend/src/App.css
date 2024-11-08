@@ -41,6 +41,7 @@ main {
   display: flex;
   position: relative;
   height: 60vh;
+  margin-top: 56px;
 }
 
 .hero__block1 {

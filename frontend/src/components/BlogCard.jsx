@@ -36,12 +36,16 @@ export default function BlogCard({ blog, onClose }) {
         </p>
         <p>{blog.text_blog}</p>
         {showComments && <Comments blogId={blog.blog_id} />}
-        <Button variant="warning" className="m-2" onClick={toggleComments}>
+        <Button
+          variant="outline-info mx-auto"
+          className="m-2"
+          onClick={toggleComments}
+        >
           {showComments ? 'Dölja Kommentarer' : 'Visa Kommentarer'}
         </Button>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="danger" onClick={onClose}>
+        <Button variant="secondary" onClick={onClose}>
           Stäng
         </Button>
       </Modal.Footer>

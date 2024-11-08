@@ -12,7 +12,7 @@ export default function NavBar({ onPostCreated }) {
 
   return (
     <>
-      <Navbar expand="lg" style={{ backgroundColor: '#123456' }}>
+      <Navbar expand="lg" fixed="top" style={{ backgroundColor: '#123456' }}>
         <Navbar.Brand href="#">
           <img
             src="/travel.svg"

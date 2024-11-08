@@ -61,7 +61,7 @@ export default function CommentModal({ blogId, username }) {
                 <strong>Användare:</strong> {comment.username}
                 {/* {comment.username === username && ( */}
                 <Button
-                  variant="danger"
+                  variant="light"
                   className="mx-2"
                   size="sm"
                   onClick={() => handleDeleteComment(comment.comment_id)}

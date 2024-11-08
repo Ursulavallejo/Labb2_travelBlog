@@ -74,9 +74,10 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                   </div>
                 )}
                 <Button
-                  variant="primary"
+                  // variant="primary"
                   onClick={() => setSelectedBlog(blog)}
                   className="mt-auto"
+                  style={{ backgroundColor: '#123456', border: 'none' }}
                 >
                   Visa Bloggpost
                 </Button>

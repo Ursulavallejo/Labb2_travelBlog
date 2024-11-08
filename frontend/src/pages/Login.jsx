@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../components/Context';
+import { UserContext } from '../Context/UserContext';
 
 export default function Login() {
   const { setID } = useContext(UserContext);
@@ -11,7 +11,7 @@ export default function Login() {
     const email = document.getElementById('email');
     const pass = document.getElementById('password');
 
-    fetch('http://localhost:3000/users/login', {
+    fetch('http://localhost:8080s/users/login', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -36,6 +36,8 @@ export default function Login() {
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center my-auto">
+      <h2>Logga in</h2>
+
       <div
         id="container"
         className="d-flex rounded-5 p-5"

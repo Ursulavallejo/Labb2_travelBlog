@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../components/Context';
+import { UserContext } from '../Context/UserContext';
 
 export default function Register() {
   const { ID } = useContext(UserContext);
@@ -7,26 +7,25 @@ export default function Register() {
   const [loading, setLoad] = useState(true);
   const [profile, setProfile] = useState({});
 
-  function fetchUser() {
-    if (!ID) return;
-
-    fetch(`http://localhost:3000/users/${ID}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        setProfile({
-          fname: data.user.first_name,
-          lname: data.user.last_name,
-          username: data.user.username,
-          email: data.user.email,
-        });
-        setLoad(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
   useEffect(() => {
+    const fetchUser = () => {
+      if (!ID) return;
+
+      fetch(`http://localhost:8080/users/${ID}`)
+        .then((resp) => resp.json())
+        .then((data) => {
+          setProfile({
+            fname: data.user.first_name,
+            lname: data.user.last_name,
+            username: data.user.username,
+            email: data.user.email,
+          });
+          setLoad(false);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
     fetchUser();
   }, [ID]);
 
@@ -41,6 +40,8 @@ export default function Register() {
         />
       ) : (
         <div className="d-flex flex-column justify-content-center align-items-center my-auto">
+          <h2>Ändra dina uppgifter</h2>
+
           <div
             id="containerReg"
             className="d-flex rounded-5 p-5"

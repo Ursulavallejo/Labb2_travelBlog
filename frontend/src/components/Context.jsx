@@ -1,7 +1,6 @@
-import { createContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { UserContext } from '../Context/UserContext';
 import PropTypes from 'prop-types';
-
-export const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [ID, setID] = useState(null);

@@ -35,6 +35,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
       <Row className="justify-content-center">
         {blogs.map((blog) => (
           <Col
+            data-aos="fade-up"
             key={blog.blog_id}
             md={6}
             lg={4}

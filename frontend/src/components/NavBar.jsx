@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
 import AddBlogForm from './AddBlogForm';
 import { FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 export default function NavBar({ onPostCreated }) {
@@ -30,13 +31,15 @@ export default function NavBar({ onPostCreated }) {
           <Button variant="outline-light m-2 " onClick={handleShow}>
             Nytt Inlägg
           </Button>
-          <Button
-            variant="outline-light m-2 d-flex align-items-center"
-            onClick={() => {}}
-          >
-            <FaUser className="me-1" />
-            User konto
-          </Button>
+          <Link to={'/profile'}>
+            <Button
+              variant="outline-light m-2 d-flex align-items-center"
+              onClick={() => {}}
+            >
+              <FaUser className="me-1" />
+              User konto
+            </Button>
+          </Link>
           <Button
             variant="secondary m-2 d-flex align-items-center "
             onClick={() => {}}

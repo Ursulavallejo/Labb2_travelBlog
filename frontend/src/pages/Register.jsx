@@ -32,7 +32,8 @@ export default function Register() {
   }
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center my-auto">
+    <div className="d-flex flex-column justify-content-center align-items-center my-auto w-25 mx-auto">
+      <h2>Registrera dig</h2>
       <div
         id="containerReg"
         className="d-flex rounded-5 p-5"
@@ -40,7 +41,7 @@ export default function Register() {
       >
         <form
           id="register"
-          className="d-flex flex-column mx-auto"
+          className="d-flex flex-column mx-auto w-auto"
           action=""
           onSubmit={registerForm}
         >
@@ -94,7 +95,10 @@ export default function Register() {
             placeholder="Password..."
             required
           />
-          <label htmlFor="samtycke">
+          <div
+            className="d-flex align-items-center"
+            style={{ gap: '40px', padding: '20px 5px 0px 10px' }}
+          >
             <input
               type="checkbox"
               id="samtycke"
@@ -102,9 +106,18 @@ export default function Register() {
               value="ok"
               required
             />
-            Jag samtycker till att mina personuppgifter hanteras enligt
-            integritetspolicyn och GDPR.{' '}
-          </label>
+            <p>
+              Jag samtycker till att mina personuppgifter hanteras enligt
+              integritetspolicyn och GDPR.
+            </p>
+          </div>
+          <button
+            className="w-50 mx-auto mt-3 rounded-2"
+            data-bs-toggle="modal"
+            data-bs-target="#samtyckeModal"
+          >
+            läs mer om samtycke
+          </button>
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2">
             Bekräfta
           </button>
@@ -154,13 +167,6 @@ export default function Register() {
           </div>
         </div>
       </div>
-      <button
-        className="w-50 mx-auto mt-3 rounded-2"
-        data-bs-toggle="modal"
-        data-bs-target="#samtyckeModal"
-      >
-        läs mer om samtycke
-      </button>
     </div>
   );
 }

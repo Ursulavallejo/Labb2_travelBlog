@@ -1,12 +1,20 @@
-import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
 
 export default function Login() {
   const { setID, setUsername } = useContext(UserContext);
+  const [finish, setFinish] = useState(false);
+  const navigate = useNavigate();
 
   console.log('setID:', setID); // Verifica si setID está definido
   console.log('setUsername:', setUsername); // Verifica si setUsername está definido
+
+  useEffect(() => {
+    if (finish) {
+      navigate('/blogs');
+    }
+  }, [finish, navigate]);
 
   function loginForm(e) {
     e.preventDefault();
@@ -29,6 +37,8 @@ export default function Login() {
         const userID = user.data[0].user_id;
         const username = user.data[0].username;
 
+        console.log(userID, username);
+
         setID(userID); // Asegúrate de que setID está disponible
         setUsername(username); // Asegúrate de que setUsername está disponible
 
@@ -36,9 +46,11 @@ export default function Login() {
         localStorage.setItem('username', username);
         alert('Loggat in!');
         document.getElementById('login').reset();
+        setFinish(true);
       })
       .catch((err) => {
         console.error(err);
+        alert('Felaktig lösenord eller email!');
       });
   }
 
@@ -97,9 +109,7 @@ export default function Login() {
             required
           />
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2 blue">
-            <Link to="/blogs" className="link">
-              Logga in
-            </Link>
+            Logga in
           </button>
         </form>
         <button className="mx-auto">

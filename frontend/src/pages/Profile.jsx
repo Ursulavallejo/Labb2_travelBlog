@@ -9,7 +9,8 @@ export default function Register() {
 
   useEffect(() => {
     const fetchUser = () => {
-      if (!ID) return;
+      // if (!ID) return;
+      console.log(ID);
 
       fetch(`users/${ID}`)
         .then((resp) => resp.json())
@@ -17,6 +18,7 @@ export default function Register() {
           setProfile({
             fname: data.user.first_name,
             lname: data.user.last_name,
+            phone: data.user.phone,
             username: data.user.username,
             email: data.user.email,
           });

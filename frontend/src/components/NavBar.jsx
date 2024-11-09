@@ -1,15 +1,23 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
 import AddBlogForm from './AddBlogForm';
 import { FaUser, FaSignOutAlt } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { UserContext } from '../Context/UserContext';
 
 export default function NavBar({ onPostCreated }) {
   const [showModal, setShowModal] = useState(false);
+  const { ID } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+
+  const handleLogout = () => {
+    ID(null);
+    navigate('/');
+  };
 
   return (
     <>
@@ -42,7 +50,7 @@ export default function NavBar({ onPostCreated }) {
           </Link>
           <Button
             variant="secondary m-2 d-flex align-items-center "
-            onClick={() => {}}
+            onClick={handleLogout}
           >
             <FaSignOutAlt className="me-1" />
             Log Out

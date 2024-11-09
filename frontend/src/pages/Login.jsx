@@ -11,7 +11,7 @@ export default function Login() {
     const email = document.getElementById('email');
     const pass = document.getElementById('password');
 
-    fetch('http://localhost:8080s/users/login', {
+    fetch('http://users/login', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',

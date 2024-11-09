@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { useContext, useState } from 'react';
+import { UserContext } from '../Context/UserContext';
 import PropTypes from 'prop-types';
 
 export default function AddBlogForm({ onClose, onPostCreated, username }) {
@@ -7,9 +8,7 @@ export default function AddBlogForm({ onClose, onPostCreated, username }) {
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
   const [country, setCountry] = useState('');
-
-  // ONLY TO TEST... WORKS to DELETE
-  const userId = 1;
+  const { ID } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +25,7 @@ export default function AddBlogForm({ onClose, onPostCreated, username }) {
           image_blog: image,
           land_name: country,
           date: new Date().toISOString(),
-          user_id: userId,
+          user_id: ID,
         }),
       });
       if (response.ok) {

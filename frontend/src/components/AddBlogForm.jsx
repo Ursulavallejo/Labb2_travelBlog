@@ -1,17 +1,18 @@
-import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { useContext, useState } from 'react';
+import { UserContext } from '../Context/UserContext';
 import PropTypes from 'prop-types';
 
-export default function AddBlogForm({ onClose, onPostCreated, username }) {
+export default function AddBlogForm({ onClose, onPostCreated }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
   const [country, setCountry] = useState('');
-
-  // ONLY TO TEST... WORKS to DELETE
-  const userId = 1;
+  const { ID, username } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
+    console.log('ID', ID);
+    console.log('username', username);
     e.preventDefault();
     try {
       const response = await fetch('/api/blogs', {
@@ -21,12 +22,12 @@ export default function AddBlogForm({ onClose, onPostCreated, username }) {
         },
         body: JSON.stringify({
           title_blog: title,
-          author: username, // use username with props
+          author: username, // use username using context
           text_blog: content,
           image_blog: image,
           land_name: country,
           date: new Date().toISOString(),
-          user_id: userId,
+          user_id: ID,
         }),
       });
       if (response.ok) {
@@ -93,5 +94,4 @@ export default function AddBlogForm({ onClose, onPostCreated, username }) {
 AddBlogForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   onPostCreated: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
 };

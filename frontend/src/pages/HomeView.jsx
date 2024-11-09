@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import BlogsList from '../components/BlogsList';
 import { Container } from 'react-bootstrap';
+import { UserContext } from '../Context/UserContext';
 
 export default function HomeView() {
   const [blogs, setBlogs] = useState([]);
+  const { ID } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
@@ -40,7 +42,11 @@ export default function HomeView() {
           För dig som älskar äventyr och nya upptäckter!
         </h2>
         <main>
-          <BlogsList blogs={blogs} currentUserId={1} onDataChange={fetchData} />
+          <BlogsList
+            blogs={blogs}
+            currentUserId={ID}
+            onDataChange={fetchData}
+          />
         </main>
       </Container>
       <Footer />

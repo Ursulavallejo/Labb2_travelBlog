@@ -263,8 +263,8 @@ app.post('/api/comments', async (req, res) => {
   }
 });
 
-//PUT- Update comments
-app.put('/api/comments/:id', async (req, res) => {
+// PATCH - Update comments
+app.patch('/api/comments/:id', async (req, res) => {
   const { id } = req.params;
   const { text_comment } = req.body;
 
@@ -273,13 +273,30 @@ app.put('/api/comments/:id', async (req, res) => {
       UPDATE comments
       SET text_comment = $1, date = CURRENT_TIMESTAMP
       WHERE comment_id = $2
-      RETURNING *;
+      RETURNING comment_id, text_comment, date, fk_users;
     `;
     const values = [text_comment, id];
     const result = await client.query(query, values);
 
-    res.status(201).json(result.rows[0]);
-    res.json(rows[0]);
+    if (result.rows.length > 0) {
+      const updatedComment = result.rows[0];
+
+      // Fetch the username from the users table
+      const userQuery = `
+        SELECT username
+        FROM users
+        WHERE user_id = $1;
+      `;
+      const userResult = await client.query(userQuery, [
+        updatedComment.fk_users,
+      ]);
+      const username = userResult.rows[0].username;
+
+      // Return the updated comment along with the username
+      res.status(200).json({ ...updatedComment, username });
+    } else {
+      res.status(404).json({ error: 'Comment not found.' });
+    }
   } catch (error) {
     console.error('Error updating comment:', error);
     res.status(500).json({ error: 'Server error updating comment.' });

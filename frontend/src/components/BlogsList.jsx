@@ -53,9 +53,13 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
               <Card.Body className="d-flex flex-column">
                 <Card.Title>{blog.title_blog}</Card.Title>
                 <Card.Text>
-                  <strong>Författare:</strong> {blog.author} <br />
+                  <strong>Författare:</strong> {blog.username} <br />
                   <strong>Datum:</strong>{' '}
-                  {new Date(blog.date).toLocaleDateString()}
+                  {new Date(blog.date).toLocaleDateString('sv-SE', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })}
                 </Card.Text>
                 {blog.user_id === currentUserId && (
                   <div className="btn-container">
@@ -130,6 +134,6 @@ BlogsList.propTypes = {
       username: PropTypes.string.isRequired,
     })
   ).isRequired,
-  currentUserId: PropTypes.number.isRequired,
+  currentUserId: PropTypes.string,
   onDataChange: PropTypes.func.isRequired,
 };

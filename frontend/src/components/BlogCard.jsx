@@ -22,7 +22,7 @@ export default function BlogCard({ blog, onClose }) {
           src={blog.image_blog}
           alt={blog.title_blog}
           style={{
-            width: '60%',
+            width: '40%',
             display: 'block',
             margin: '0 auto 1rem auto',
             borderRadius: '5px',

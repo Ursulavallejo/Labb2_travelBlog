@@ -41,16 +41,16 @@ export default function NavBar({ onPostCreated }) {
           <Button variant="outline-light m-2 " onClick={handleShow}>
             Nytt Inlägg
           </Button>
-          <Link to={'/profile'}>
+          <Link to={'/profile'} className="link">
             <Button
               variant="outline-light m-2 d-flex align-items-center"
               onClick={() => {}}
             >
               <FaUser className="me-1" />
-              User konto
+              Användarkonto
             </Button>
           </Link>
-          <Link to="/" onClick={handleLogout}>
+          <Link to="/" className="link" onClick={handleLogout}>
             <Button variant="secondary m-2 d-flex align-items-center">
               <FaSignOutAlt className="me-1" />
               Log Out

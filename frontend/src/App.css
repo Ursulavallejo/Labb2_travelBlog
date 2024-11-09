@@ -26,6 +26,10 @@ main {
 }
 
 /* BLOGS  */
+/* Blogcard */
+.modal-dialog {
+  min-width: 50%;
+}
 .title-home {
   font-size: 9vw;
   line-height: 1;
@@ -249,4 +253,8 @@ main {
   font-size: 1rem;
   margin-top: 0.5rem;
   height: 30px;
+}
+
+.link {
+  text-decoration: none;
 }

@@ -17,7 +17,6 @@ export default function Comments({ blogId }) {
       const response = await fetch(`/api/comments?blogId=${blogId}`);
       const data = await response.json();
       setComments(data);
-      console.log(data);
     } catch (error) {
       console.error('Error fetching comments:', error);
     }
@@ -30,9 +29,6 @@ export default function Comments({ blogId }) {
   const handleCommentAdded = () => {
     fetchComments();
   };
-  const handleEditComment = (comment) => {
-    setCommentToEdit(comment);
-  };
 
   const handleCommentUpdated = (updatedComment) => {
     setComments((prevComments) =>
@@ -42,11 +38,17 @@ export default function Comments({ blogId }) {
           : comment
       )
     );
+    setCommentToEdit(null); // Stänger redigeringsläget
+  };
+
+  // Funktion för att avbryta redigering
+  const handleCloseEdit = () => {
     setCommentToEdit(null);
   };
 
-  const handleCloseEdit = () => {
-    setCommentToEdit(null);
+  // Funktion för att välja en kommentar för redigering
+  const handleEditComment = (comment) => {
+    setCommentToEdit(comment);
   };
   const handleDeleteComment = async (commentId) => {
     const isConfirmed = window.confirm(
@@ -88,7 +90,7 @@ export default function Comments({ blogId }) {
             <p style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span className="d-flex ">
                 <strong className="me-2">Användare: </strong> {comment.username}{' '}
-                {String(comment.fk_users) === String(ID) && (
+                {Number(comment.fk_users) === Number(ID) && (
                   <>
                     <Button
                       className="d-flex align-items-center"
@@ -118,19 +120,26 @@ export default function Comments({ blogId }) {
                     </Button>
                   </>
                 )}
-                {commentToEdit && (
+              </span>
+              <span style={{ fontSize: '0.8rem', color: 'gray' }}>
+                {new Date(comment.date).toLocaleDateString('sv-SE', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })}
+              </span>
+            </p>
+            <div className="my-4">
+              {' '}
+              {commentToEdit &&
+                commentToEdit.comment_id === comment.comment_id && (
                   <EditCommentForm
                     comment={commentToEdit}
                     onUpdate={handleCommentUpdated}
                     onCancel={handleCloseEdit}
                   />
                 )}
-              </span>
-
-              <span style={{ fontSize: '0.8rem', color: 'gray' }}>
-                {new Date(comment.date).toLocaleDateString()}
-              </span>
-            </p>
+            </div>
             <p>{comment.text_comment}</p>
           </div>
         ))

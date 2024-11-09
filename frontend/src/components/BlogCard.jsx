@@ -2,6 +2,7 @@ import { Modal, Button } from 'react-bootstrap';
 import Comments from './Comments';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+
 import { FaCommentAlt, FaCommentSlash } from 'react-icons/fa';
 
 export default function BlogCard({ blog, onClose }) {
@@ -29,7 +30,7 @@ export default function BlogCard({ blog, onClose }) {
         />
         <p style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>
-            <strong>Författare:</strong> {blog.author}
+            <strong>Författare:</strong> {blog.username}
           </span>
           <span style={{ fontSize: '0.8rem', color: 'gray' }}>
             {new Date(blog.date).toLocaleDateString()}

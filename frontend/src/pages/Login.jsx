@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
 
 export default function Login() {
-  const { setID } = useContext(UserContext);
+  const { setID, setUsername } = useContext(UserContext);
+
+  console.log('setID:', setID); // Verifica si setID está definido
+  console.log('setUsername:', setUsername); // Verifica si setUsername está definido
 
   function loginForm(e) {
     e.preventDefault();
@@ -24,8 +27,13 @@ export default function Login() {
       .then((resp) => resp.json())
       .then((user) => {
         const userID = user.data[0].user_id;
-        setID(userID);
+        const username = user.data[0].username;
+
+        setID(userID); // Asegúrate de que setID está disponible
+        setUsername(username); // Asegúrate de que setUsername está disponible
+
         localStorage.setItem('ID', userID);
+        localStorage.setItem('username', username);
         alert('Loggat in!');
         document.getElementById('login').reset();
       })
@@ -97,48 +105,5 @@ export default function Login() {
         </button>
       </div>
     </div>
-
-    // >>>>>>>   WHAT WE HAD BEFORE !! I Comment it in case you prefer the previous version <<<<<<<
-
-    // <div className="d-flex flex-column justify-content-center align-items-center my-auto">
-    //   <div
-    //     id="container"
-    //     className="d-flex rounded-5 p-5"
-    //     style={{ background: '#0077B6' }}
-    //   >
-    //     <form
-    //       id="login"
-    //       className="d-flex flex-column mx-auto"
-    //       action=""
-    //       onSubmit={loginForm}
-    //     >
-    //       <label htmlFor="email">Ange email:</label>
-    //       <input
-    //         id="email"
-    //         name="email"
-    //         type="text"
-    //         placeholder="Email..."
-    //         required
-    //       />
-    //       <label htmlFor="password" className="mt-3">
-    //         Ange lösenord:
-    //       </label>
-    //       <input
-    //         id="password"
-    //         name="password"
-    //         type="password"
-    //         placeholder="Password..."
-    //         required
-    //       />
-    //       <button type="submit" className="w-50 mx-auto mt-3 rounded-2">
-    //         Logga in
-    //       </button>
-    //     </form>
-    //   </div>
-    //   {/* temporal button */}
-    //   <button className="mx-auto">
-    //     <Link to="/blogs">TO HOME Temporal button</Link>
-    //   </button>
-    // </div>
   );
 }

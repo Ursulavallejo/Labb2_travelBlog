@@ -4,16 +4,17 @@ import PropTypes from 'prop-types';
 
 export function UserProvider({ children }) {
   const [ID, setID] = useState(null);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     const storedID = localStorage.getItem('ID');
-    if (storedID) {
-      setID(storedID);
-    }
+    const storedUsername = localStorage.getItem('username');
+    if (storedID) setID(storedID);
+    if (storedUsername) setUsername(storedUsername);
   }, []);
 
   return (
-    <UserContext.Provider value={{ ID, setID }}>
+    <UserContext.Provider value={{ ID, setID, username, setUsername }}>
       {children}
     </UserContext.Provider>
   );

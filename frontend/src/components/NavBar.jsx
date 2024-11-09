@@ -2,21 +2,23 @@ import { useState, useContext } from 'react';
 import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
 import AddBlogForm from './AddBlogForm';
 import { FaUser, FaSignOutAlt } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { UserContext } from '../Context/UserContext';
 
 export default function NavBar({ onPostCreated }) {
   const [showModal, setShowModal] = useState(false);
-  const { ID } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { setID, setUsername } = useContext(UserContext);
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 
   const handleLogout = () => {
-    ID(null);
-    navigate('/');
+    setID(null);
+    setUsername('');
+    localStorage.removeItem('ID');
+    localStorage.removeItem('username');
+    // navigate('/');
   };
 
   return (
@@ -48,13 +50,12 @@ export default function NavBar({ onPostCreated }) {
               User konto
             </Button>
           </Link>
-          <Button
-            variant="secondary m-2 d-flex align-items-center "
-            onClick={handleLogout}
-          >
-            <FaSignOutAlt className="me-1" />
-            Log Out
-          </Button>
+          <Link to="/" onClick={handleLogout}>
+            <Button variant="secondary m-2 d-flex align-items-center">
+              <FaSignOutAlt className="me-1" />
+              Log Out
+            </Button>
+          </Link>
         </Nav>
       </Navbar>
 

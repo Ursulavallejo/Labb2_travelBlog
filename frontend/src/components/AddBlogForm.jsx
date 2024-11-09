@@ -3,14 +3,16 @@ import { useContext, useState } from 'react';
 import { UserContext } from '../Context/UserContext';
 import PropTypes from 'prop-types';
 
-export default function AddBlogForm({ onClose, onPostCreated, username }) {
+export default function AddBlogForm({ onClose, onPostCreated }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
   const [country, setCountry] = useState('');
-  const { ID } = useContext(UserContext);
+  const { ID, username } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
+    console.log('ID', ID);
+    console.log('username', username);
     e.preventDefault();
     try {
       const response = await fetch('/api/blogs', {
@@ -20,7 +22,7 @@ export default function AddBlogForm({ onClose, onPostCreated, username }) {
         },
         body: JSON.stringify({
           title_blog: title,
-          author: username, // use username with props
+          author: username, // use username using context
           text_blog: content,
           image_blog: image,
           land_name: country,
@@ -92,5 +94,4 @@ export default function AddBlogForm({ onClose, onPostCreated, username }) {
 AddBlogForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   onPostCreated: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
 };

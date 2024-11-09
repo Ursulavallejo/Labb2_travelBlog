@@ -88,7 +88,6 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
         ))}
       </Row>
 
-      {/* Modal para ver el blog */}
       {selectedBlogForReading && (
         <BlogCard
           blog={selectedBlogForReading}
@@ -96,7 +95,6 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
         />
       )}
 
-      {/* Modal para editar el blog */}
       {selectedBlogForEditing && (
         <Modal
           show={!!selectedBlogForEditing}

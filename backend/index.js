@@ -140,8 +140,15 @@ app.get('/api/blogs', async (req, res) => {
 
 // POST - Create a new blog post
 app.post('/api/blogs', async (req, res) => {
-  const { title_blog, author, text_blog, image_blog, land_name, date } =
-    req.body;
+  const {
+    title_blog,
+    author,
+    text_blog,
+    image_blog,
+    land_name,
+    date,
+    user_id,
+  } = req.body;
 
   const query = `
     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
@@ -154,8 +161,9 @@ app.post('/api/blogs', async (req, res) => {
     image_blog,
     land_name,
     date,
-    /* FK_users */ 1,
-  ]; // Change the value of the user depend of the user is logedIn
+    user_id,
+    /* FK_users */
+  ];
 
   try {
     const result = await client.query(query, values);

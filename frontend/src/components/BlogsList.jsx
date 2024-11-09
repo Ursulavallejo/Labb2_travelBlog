@@ -81,7 +81,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                 )}
                 <Button
                   onClick={() => handleRead(blog)}
-                  className="mt-auto"
+                  className="mt-auto blue"
                   style={{ backgroundColor: '#123456', border: 'none' }}
                 >
                   Läsa Bloggpost

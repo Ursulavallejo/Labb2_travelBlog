@@ -80,7 +80,7 @@ export default function Comments({ blogId }) {
     >
       <h5
         className="mx-auto my-2"
-        style={{ color: '#0dcaf0', fontWeight: 'bolder' }}
+        style={{ color: '#123456', fontWeight: 'bolder' }}
       >
         Kommentarer
       </h5>

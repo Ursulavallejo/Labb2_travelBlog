@@ -96,8 +96,10 @@ export default function Login() {
             placeholder="Password..."
             required
           />
-          <button type="submit" className="w-50 mx-auto mt-3 rounded-2">
-            <Link to="/blogs">Logga in</Link>
+          <button type="submit" className="w-50 mx-auto mt-3 rounded-2 blue">
+            <Link to="/blogs" className="link">
+              Logga in
+            </Link>
           </button>
         </form>
         <button className="mx-auto">

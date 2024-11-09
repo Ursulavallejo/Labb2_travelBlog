@@ -41,7 +41,7 @@ export default function EditCommentForm({ comment, onUpdate, onCancel }) {
       <Button
         style={{ backgroundColor: '#123456', border: 'none' }}
         type="submit"
-        className="mt-2 ms-2"
+        className="mt-2 ms-2 blue"
       >
         Uppdatera
       </Button>

@@ -33,7 +33,9 @@ export default function NavBar({ onPostCreated }) {
             alt="Travel Icon"
             style={{ marginRight: '18px', marginLeft: '18px' }}
           />
-          <span style={{ color: '#e27e0a', fontWeight: '600' }}>
+          <span
+            style={{ color: '#e27e0a', fontWeight: '600', fontSize: '1.5rem' }}
+          >
             Travel Blog
           </span>
         </Navbar.Brand>

@@ -257,4 +257,8 @@ main {
 
 .link {
   text-decoration: none;
+  color: #f8f9fa;
+}
+.blue:hover {
+  background-color: #e27e0a !important;
 }

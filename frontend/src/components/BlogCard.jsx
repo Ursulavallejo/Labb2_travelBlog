@@ -40,12 +40,23 @@ export default function BlogCard({ blog, onClose }) {
         {showComments && <Comments blogId={blog.blog_id} />}
         <div className="d-flex">
           <Button
-            variant="outline-info my-2 mx-auto"
-            className=""
+            variant="outline"
+            className="my-2 mx-auto comment-button"
             onClick={toggleComments}
+            style={{
+              color: 'rgb(116, 200, 233)',
+              borderColor: 'rgb(116, 200, 233)',
+            }}
           >
-            {showComments ? <FaCommentSlash /> : <FaCommentAlt />}{' '}
-            {showComments ? ' Dölj' : ' Visa'}
+            {showComments ? (
+              <>
+                Dölj <FaCommentSlash />
+              </>
+            ) : (
+              <>
+                Visa <FaCommentAlt />
+              </>
+            )}
           </Button>
         </div>
       </Modal.Body>

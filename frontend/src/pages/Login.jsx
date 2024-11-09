@@ -11,7 +11,7 @@ export default function Login() {
     const email = document.getElementById('email');
     const pass = document.getElementById('password');
 
-    fetch('http://localhost:8080s/users/login', {
+    fetch('/users/login', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -49,8 +49,8 @@ export default function Login() {
       </div>
 
       {/* Container form logIn */}
-      <div id="container" className="login-container d-flex rounded-5 p-5">
-        <div>
+      <div id="container" className="login-container rounded-5 p-5">
+        <div className="d-flex align-items-center">
           <img
             src="/travel.svg"
             width="60"
@@ -89,7 +89,7 @@ export default function Login() {
             required
           />
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2">
-            Logga in
+            <Link to="/blogs">Logga in</Link>
           </button>
         </form>
         <button className="mx-auto">

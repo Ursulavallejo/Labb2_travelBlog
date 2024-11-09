@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { UserContext } from '../Context/UserContext';
 import { Form, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 export default function CommentForm({ blogId, onCommentAdded }) {
   const [commentText, setCommentText] = useState('');
+  const { ID } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,12 +19,10 @@ export default function CommentForm({ blogId, onCommentAdded }) {
           text_comment: commentText,
           date: new Date().toISOString(),
           FK_blogs: blogId,
-          user_id: 1, // TODO Tillfälligt
-          username: 'PHK', //TODO
+          FK_users: ID,
         }),
       });
       if (response.ok) {
-        alert('Kommentar skapad!');
         setCommentText('');
         onCommentAdded();
       } else {

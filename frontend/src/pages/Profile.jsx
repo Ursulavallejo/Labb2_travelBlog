@@ -11,7 +11,7 @@ export default function Register() {
     const fetchUser = () => {
       if (!ID) return;
 
-      fetch(`http://localhost:8080/users/${ID}`)
+      fetch(`/users/${ID}`)
         .then((resp) => resp.json())
         .then((data) => {
           setProfile({

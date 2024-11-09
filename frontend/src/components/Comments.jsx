@@ -1,18 +1,23 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useContext, useState, useEffect, useCallback } from 'react';
+import { UserContext } from '../Context/UserContext';
 import PropTypes from 'prop-types';
 import AddCommentForm from './AddCommentForm';
+import EditCommentForm from './EditCommentForm';
 import { FaTrash } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
 import { Button } from 'react-bootstrap';
 
-export default function CommentModal({ blogId, username }) {
+export default function Comments({ blogId }) {
   const [comments, setComments] = useState([]);
+  const [commentToEdit, setCommentToEdit] = useState(null);
+  const { ID } = useContext(UserContext);
 
   const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(`/api/comments?blogId=${blogId}`);
       const data = await response.json();
       setComments(data);
+      console.log(data);
     } catch (error) {
       console.error('Error fetching comments:', error);
     }
@@ -25,7 +30,24 @@ export default function CommentModal({ blogId, username }) {
   const handleCommentAdded = () => {
     fetchComments();
   };
+  const handleEditComment = (comment) => {
+    setCommentToEdit(comment);
+  };
 
+  const handleCommentUpdated = (updatedComment) => {
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.comment_id === updatedComment.comment_id
+          ? updatedComment
+          : comment
+      )
+    );
+    setCommentToEdit(null);
+  };
+
+  const handleCloseEdit = () => {
+    setCommentToEdit(null);
+  };
   const handleDeleteComment = async (commentId) => {
     const isConfirmed = window.confirm(
       'Är du säker på att du vill ta bort denna kommentar?'
@@ -66,37 +88,43 @@ export default function CommentModal({ blogId, username }) {
             <p style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span className="d-flex ">
                 <strong className="me-2">Användare: </strong> {comment.username}{' '}
-                {/* {comment.username === username && ( */}
-                <Button
-                  className="d-flex align-items-center"
-                  variant="outline-dark"
-                  size="sm"
-                  style={{
-                    border: 'none',
-                    padding: '0 2px',
-                    margin: '2px 4px',
-                  }}
-                  onClick={() => handleDeleteComment(comment.comment_id)}
-                >
-                  <FaTrash />
-                </Button>
-                {/* )} */}
-                {/* {comment.username === username && ( */}
-                <Button
-                  className="d-flex align-items-center"
-                  variant="outline-dark"
-                  size="sm"
-                  style={{
-                    border: 'none',
-                    padding: '0 2px',
-
-                    margin: '2px 4px',
-                  }}
-                  onClick={() => handleDeleteComment(comment.comment_id)}
-                >
-                  <FaEdit />
-                </Button>
-                {/* )} */}
+                {String(comment.fk_users) === String(ID) && (
+                  <>
+                    <Button
+                      className="d-flex align-items-center"
+                      variant="outline-dark"
+                      size="sm"
+                      style={{
+                        border: 'none',
+                        padding: '0 2px',
+                        margin: '2px 4px',
+                      }}
+                      onClick={() => handleEditComment(comment)}
+                    >
+                      <FaEdit />
+                    </Button>
+                    <Button
+                      className="d-flex align-items-center"
+                      variant="outline-dark"
+                      size="sm"
+                      style={{
+                        border: 'none',
+                        padding: '0 2px',
+                        margin: '2px 4px',
+                      }}
+                      onClick={() => handleDeleteComment(comment.comment_id)}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </>
+                )}
+                {commentToEdit && (
+                  <EditCommentForm
+                    comment={commentToEdit}
+                    onUpdate={handleCommentUpdated}
+                    onCancel={handleCloseEdit}
+                  />
+                )}
               </span>
 
               <span style={{ fontSize: '0.8rem', color: 'gray' }}>
@@ -109,16 +137,11 @@ export default function CommentModal({ blogId, username }) {
       ) : (
         <p className="mx-auto my-2">Inga kommentarer.</p>
       )}
-      <AddCommentForm
-        blogId={blogId}
-        onCommentAdded={handleCommentAdded}
-        username={username}
-      />
+      <AddCommentForm blogId={blogId} onCommentAdded={handleCommentAdded} />
     </div>
   );
 }
 
-CommentModal.propTypes = {
+Comments.propTypes = {
   blogId: PropTypes.number.isRequired,
-  username: PropTypes.string.isRequired,
 };

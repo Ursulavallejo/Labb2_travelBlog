@@ -220,7 +220,7 @@ app.get('/api/comments', async (req, res) => {
 
   let query = `
     SELECT comments.comment_id, comments.text_comment, comments.date,
-           users.username, blogs.land_name
+           users.username, blogs.land_name, comments.FK_users
     FROM comments
     JOIN users ON comments.FK_users = users.user_id
     JOIN blogs ON comments.FK_blogs = blogs.blog_id
@@ -238,19 +238,13 @@ app.get('/api/comments', async (req, res) => {
 
 // POST - Create a new comment
 app.post('/api/comments', async (req, res) => {
-  const { text_comment, date, FK_blogs, FK_users, username } = req.body;
+  const { text_comment, date, FK_blogs, FK_users } = req.body;
 
   const query = `
-    INSERT INTO comments (text_comment, date, FK_blogs, FK_users, username)
-    VALUES ($1, $2, $3, $4, $5) RETURNING *;
+    INSERT INTO comments (text_comment, date, FK_blogs, FK_users)
+    VALUES ($1, $2, $3, $4) RETURNING *;
   `;
-  const values = [
-    text_comment,
-    date,
-    FK_blogs,
-    FK_users || 1, //TODO Placeholder,  for logged-in user
-    username,
-  ];
+  const values = [text_comment, date, FK_blogs, FK_users];
 
   try {
     const result = await client.query(query, values);

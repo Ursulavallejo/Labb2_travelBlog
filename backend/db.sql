@@ -1,18 +1,22 @@
+DROP TABLE IF EXISTS blogs;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS comments;
+
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     username VARCHAR(250) NOT NULL UNIQUE,
-    phone INTEGER(20) NOT NULL,
     email VARCHAR(200) NOT NULL UNIQUE,
+    phone BIGINT NOT NULL ,
     pass_word VARCHAR(100) NOT NULL
 );
 
-INSERT INTO users (first_name, last_name, username, email, pass_word)
-VALUES ('Pedram', 'Hejazi Kenari', 'PHK', 0707203040, 'PHK@ITHS.com', 'hemligt123'),
-('John', 'Doe', 'JD', 'john.doe@example.com', 0710304905, 'password123'),
-('Jane', 'Smith', 'JS', 'jane.smith@example.com', 031123456, 'password456'),
-('Alex', 'Writer', 'AW', 'alex.writer@example.com', 072324646757, 'password789');
+INSERT INTO users (first_name, last_name, username, email, phone, pass_word)
+VALUES ('Pedram', 'Hejazi Kenari', 'PHK', 'PHK@ITHS.com', 0707203040, 'hemligt123'),
+('John', 'Doe', 'john_d', 'john.doe@example.com', 0710304905, 'password123'),
+('Jane', 'Smith', 'jane_s', 'jane.smith@example.com', 031123456, 'password456'),
+('Alex', 'Writer', 'alex_w', 'alex.writer@example.com', 072324646757, 'password789');
 
 CREATE TABLE blogs (
     blog_id serial PRIMARY KEY,
@@ -48,32 +52,31 @@ CREATE TABLE comments (
     text_comment TEXT NOT NULL,
     FK_users INT REFERENCES users(user_id),
     FK_blogs INT REFERENCES blogs(blog_id),
-    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    username VARCHAR(50) NOT NULL
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO comments (text_comment, FK_users, FK_blogs, username)
+INSERT INTO comments (text_comment, FK_users, FK_blogs)
 VALUES
 -- Sverige
-('Fantastisk artikel! Jag visste inte att Gamla Stan hade så mycket historia bakom sig.', 2, 1, 'john_doe'),
-('Tack för informationen! Fängelsemuseet verkar vara ett intressant stopp.', 3, 1, 'jane_smith'),
+('Fantastisk artikel! Jag visste inte att Gamla Stan hade så mycket historia bakom sig.', 2, 1 ),
+('Tack för informationen! Fängelsemuseet verkar vara ett intressant stopp.', 3, 1),
 
 -- Italien
-('Toscana är verkligen en dröm för matälskare. Tack för tipsen!', 3, 2, 'jane_smith'),
-('Jag måste absolut prova pappa al pomodoro! Har du fler tips för Toscana?', 4, 2, 'alex_writer'),
+('Toscana är verkligen en dröm för matälskare. Tack för tipsen!', 3, 2),
+('Jag måste absolut prova pappa al pomodoro! Har du fler tips för Toscana?', 4, 2),
 
 -- Norge
-('Norrskenet är på min bucket list! Tack för denna guide till Tromsø.', 4, 3, 'alex_writer'),
-('Det låter magiskt! Vilken tid på året är bäst för att se norrskenet?', 2, 3, 'john_doe'),
+('Norrskenet är på min bucket list! Tack för denna guide till Tromsø.', 4, 3),
+('Det låter magiskt! Vilken tid på året är bäst för att se norrskenet?', 2, 3),
 
 -- Colombia
-('Cartagena verkar så färgstark! Skulle gärna smaka ceviche där.', 2, 4, 'john_doe'),
-('Fantastisk läsning. Har du några tips för andra matupplevelser i Colombia?', 3, 4, 'jane_smith'),
+('Cartagena verkar så färgstark! Skulle gärna smaka ceviche där.', 2, 4),
+('Fantastisk läsning. Har du några tips för andra matupplevelser i Colombia?', 3, 4),
 
 -- Turkiet
-('Kapadokien är verkligen en plats jag vill besöka. Luftballongerna ser så häftiga ut!', 3, 5, 'jane_smith'),
-('Turkiets kultur verkar så rik. Jag vill lära mig mer om Derinkuyu.', 4, 5, 'alex_writer'),
+('Kapadokien är verkligen en plats jag vill besöka. Luftballongerna ser så häftiga ut!', 3, 5),
+('Turkiets kultur verkar så rik. Jag vill lära mig mer om Derinkuyu.', 4, 5),
 
 -- Japan
-('Japan verkar så unikt. Kyoto och Tokyo är definitivt på min resplan!', 4, 6, 'alex_writer'),
-('Tack för tipsen! Varma källor låter perfekt för att varva ner.', 2, 6, 'john_doe');
+('Japan verkar så unikt. Kyoto och Tokyo är definitivt på min resplan!', 4, 6),
+('Tack för tipsen! Varma källor låter perfekt för att varva ner.', 2, 6);

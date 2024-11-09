@@ -86,7 +86,11 @@ export default function Comments({ blogId }) {
       </h5>
       {comments.length > 0 ? (
         comments.map((comment) => (
-          <div key={comment.comment_id} style={{ margin: '1rem' }}>
+          <div
+            key={comment.comment_id}
+            style={{ margin: '0.5rem' }}
+            className="speech-bubble"
+          >
             <p style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span className="d-flex ">
                 <strong className="me-2">Användare: </strong> {comment.username}{' '}

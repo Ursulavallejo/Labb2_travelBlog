@@ -58,12 +58,11 @@ export default function Login() {
 
       {/* Container form logIn */}
       <div id="container" className="login-container rounded-5 p-5">
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center justify-content-evenly">
           <img
             src="/travel.svg"
             width="60"
             height="60"
-            className="d-inline-block align-center"
             alt="Travel Icon"
             style={{ margin: '1.2rem' }}
           />

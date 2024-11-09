@@ -259,6 +259,33 @@ main {
   text-decoration: none;
   color: #f8f9fa;
 }
+/* buttons */
 .blue:hover {
   background-color: #e27e0a !important;
+}
+/* comments */
+.speech-bubble {
+  position: relative;
+  background: rgb(186, 222, 244);
+  border-radius: 0.4em;
+  padding: 0.5rem;
+}
+
+.speech-bubble:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-right-color: rgb(186, 222, 244);
+  border-left: 0;
+  border-bottom: 0;
+  margin-top: -10px;
+  margin-left: -20px;
+}
+.comment-button:hover {
+  color: #123456 !important;
+  border-color: #123456 !important;
 }

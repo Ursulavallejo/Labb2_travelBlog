@@ -55,7 +55,7 @@ export default function NavBar({ onPostCreated }) {
           <Link to="/" className="link" onClick={handleLogout}>
             <Button variant="secondary m-2 d-flex align-items-center">
               <FaSignOutAlt className="me-1" />
-              Log Out
+              Logga Ut
             </Button>
           </Link>
         </Nav>

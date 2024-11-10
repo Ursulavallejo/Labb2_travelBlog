@@ -1,9 +1,9 @@
-const path = require('path');
-
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const { Client } = require('pg');
+const multer = require('multer'),
+  path = require('path'),
+  express = require('express'),
+  cors = require('cors'),
+  dotenv = require('dotenv'),
+  { Client } = require('pg');
 
 const app = express();
 app.use(express.json());
@@ -16,6 +16,31 @@ const client = new Client({
 });
 
 client.connect();
+//  >>> TO USE MULTER <<<<
+//  conf. multer to save images on the folder 'public/uploads'
+const storage = multer.diskStorage({
+  destination: 'public/uploads',
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // create the file name with timestap
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// stactis files
+app.use('/uploads', express.static('public/uploads'));
+
+// >>> API DATABASE CRUD <<<<
+
+// Multer upload
+
+// app.post('/upload', upload.single('image'), (req, res) => {
+//   const imagePath = `/uploads/${req.file.filename}`;
+
+//   // Save imagePath onthe dtabase with the post dta
+
+//   res.json({ message: 'Imagen subida exitosamente', imagePath });
+// });
 
 // refresher, GET users
 app.get('/users', async (req, res) => {
@@ -139,17 +164,66 @@ app.get('/api/blogs', async (req, res) => {
 });
 
 // POST - Create a new blog post
-app.post('/api/blogs', async (req, res) => {
-  const {
+// app.post('/api/blogs', async (req, res) => {
+//   const {
+//     title_blog,
+//     author,
+//     text_blog,
+//     image_blog,
+//     land_name,
+//     date,
+//     user_id,
+//   } = req.body;
+
+//   const query = `
+//     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
+//     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+//   `;
+//   const values = [
+//     title_blog,
+//     author,
+//     text_blog,
+//     image_blog,
+//     land_name,
+//     date,
+//     user_id,
+//     /* FK_users */
+//   ];
+
+//   try {
+//     const result = await client.query(query, values);
+//     res.status(201).json(result.rows[0]);
+//   } catch (error) {
+//     console.error('Error creating post:', error);
+//     res.status(500).json({ error: 'Error creating post' });
+//   }
+// });
+// Modificar el endpoint /api/blogs para usar multer y manejar datos de multipart/form-data
+app.post('/api/blogs', upload.single('image'), async (req, res) => {
+  console.log('Received request to create blog post');
+  // Extrae los datos de texto desde req.body
+  const { title_blog, author, text_blog, land_name, date, user_id } = req.body;
+
+  // La ruta de la imagen si el archivo fue cargado
+  const image_blog = req.file ? `/uploads/${req.file.filename}` : null;
+
+  console.log('Data received:', {
     title_blog,
     author,
     text_blog,
-    image_blog,
     land_name,
     date,
     user_id,
-  } = req.body;
+    image_blog,
+  });
 
+  // Validar que land_name y otros datos requeridos no sean null
+  if (!land_name) {
+    console.error('Missing land_name');
+    return res.status(400).json({ error: 'El campo land_name es obligatorio' });
+  }
+
+  // Definir la consulta SQL para insertar el post
   const query = `
     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
@@ -162,11 +236,12 @@ app.post('/api/blogs', async (req, res) => {
     land_name,
     date,
     user_id,
-    /* FK_users */
   ];
 
   try {
+    // Ejecuta la consulta en la base de datos
     const result = await client.query(query, values);
+    console.log('Blog post created:', result.rows[0]);
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Error creating post:', error);

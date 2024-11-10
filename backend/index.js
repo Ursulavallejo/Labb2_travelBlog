@@ -57,9 +57,9 @@ app.get('/users/:id', async (req, res) => {
 app.post('/users/register', async (req, res) => {
   const { first_name, last_name, username, email, pass_word } = req.body;
   const query = `
-  INSERT INTO users (first_name, last_name, username, email, pass_word) VALUES ($1 ,$2, $3, $4, $5)
+  INSERT INTO users (first_name, last_name, username, email, phone, pass_word) VALUES ($1 ,$2, $3, $4, $5, $6)
   `;
-  const values = [first_name, last_name, username, email, pass_word];
+  const values = [first_name, last_name, username, email, phone, pass_word];
 
   try {
     const results = await client.query(query, values);
@@ -98,6 +98,34 @@ app.post('/users/login', async (req, res) => {
     }
   } else {
     res.status(400).send('Missing email or password!');
+  }
+});
+
+app.patch('/users/edit/:id', async (req, res) => {
+  const userId = req.params.id;
+  const { first_name, last_name, username, phone, email } = req.body;
+  const query = `
+  UPDATE users SET
+  first_name = COALESCE(NULLIF( $1, ''), first_name),
+  last_name = COALESCE(NULLIF( $2, ''), last_name),
+  username = COALESCE(NULLIF( $3, ''), username),
+  phone = COALESCE(NULLIF( $4, ''), phone),
+  email = COALESCE(NULLIF( $5, ''), email)
+WHERE user_id = $6;
+  `;
+  const values = [first_name, last_name, username, phone, email, userId];
+
+  try {
+    const update = await client.query(query, values);
+    if (update.rowCount > 0) {
+      res.status(200).send({ success: true, data: update.rows });
+    } else {
+      res
+        .status(400)
+        .send({ success: false, message: 'Could not update user details' });
+    }
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 });
 

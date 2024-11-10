@@ -6,9 +6,10 @@ export default function Register() {
     const lname = document.getElementById('lname');
     const username = document.getElementById('username');
     const email = document.getElementById('emailReg');
+    const phone = document.getElementById('phoneReg');
     const pass = document.getElementById('passwordReg');
 
-    fetch('http://localhost:8080/users/register', {
+    fetch('/users/register', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -18,6 +19,7 @@ export default function Register() {
         last_name: lname.value,
         username: username.value,
         email: email.value,
+        phone: phone.value,
         pass_word: pass.value,
       }),
     })
@@ -83,6 +85,17 @@ export default function Register() {
             name="emailReg"
             type="text"
             placeholder="Email..."
+            required
+          />
+          <label htmlFor="phoneReg" className="mt-3">
+            Ange email:
+          </label>
+          <input
+            id="phoneReg"
+            name="phoneReg"
+            type="tel"
+            placeholder="0700000000"
+            pattern="[0-9]{10}"
             required
           />
           <label htmlFor="passwordReg" className="mt-3">

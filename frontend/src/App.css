@@ -230,6 +230,16 @@ main {
   align-items: center;
 }
 
+.profile-container {
+  position: relative;
+  z-index: 1;
+  background: #123456;
+  border: 4px solid rgb(238, 135, 8);
+  color: white;
+  padding: 0rem;
+  border-radius: 10px;
+}
+
 .login-form label {
   color: white;
 }

@@ -8,15 +8,15 @@ CREATE TABLE users (
     last_name VARCHAR(100) NOT NULL,
     username VARCHAR(250) NOT NULL UNIQUE,
     email VARCHAR(200) NOT NULL UNIQUE,
-    phone BIGINT NOT NULL ,
+    phone VARCHAR(200) NOT NULL UNIQUE,
     pass_word VARCHAR(100) NOT NULL
 );
 
 INSERT INTO users (first_name, last_name, username, email, phone, pass_word)
-VALUES ('Pedram', 'Hejazi Kenari', 'PHK', 'PHK@ITHS.com', 0707203040, 'hemligt123'),
-('John', 'Doe', 'john_d', 'john.doe@example.com', 0710304905, 'password123'),
-('Jane', 'Smith', 'jane_s', 'jane.smith@example.com', 031123456, 'password456'),
-('Alex', 'Writer', 'alex_w', 'alex.writer@example.com', 072324646757, 'password789');
+VALUES ('Pedram', 'Hejazi Kenari', 'PHK', 'PHK@ITHS.com', '0707203040', 'hemligt123'),
+('John', 'Doe', 'john_d', 'john.doe@example.com', '0710304905', 'password123'),
+('Jane', 'Smith', 'jane_s', 'jane.smith@example.com', '031123456', 'password456'),
+('Alex', 'Writer', 'alex_w', 'alex.writer@example.com', '072324646757', 'password789');
 
 CREATE TABLE blogs (
     blog_id serial PRIMARY KEY,

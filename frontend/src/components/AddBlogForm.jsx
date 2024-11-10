@@ -11,8 +11,6 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
   const { ID, username } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
-    console.log('ID', ID);
-    console.log('username', username);
     e.preventDefault();
     try {
       const response = await fetch('/api/blogs', {

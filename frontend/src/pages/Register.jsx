@@ -8,7 +8,7 @@ export default function Register() {
     const email = document.getElementById('emailReg');
     const pass = document.getElementById('passwordReg');
 
-    fetch('http://localhost:8080/users/register', {
+    fetch('/users/register', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -33,11 +33,11 @@ export default function Register() {
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center my-auto w-25 mx-auto">
-      <h2>Registrera dig</h2>
+      <h2 style={{ color: 'white' }}>Registrera dig</h2>
       <div
         id="containerReg"
         className="d-flex rounded-5 p-5"
-        style={{ background: '#0077B6' }}
+        style={{ background: '#123456' }}
       >
         <form
           id="register"
@@ -66,13 +66,13 @@ export default function Register() {
             required
           />
           <label htmlFor="username" className="mt-3">
-            Ange användarenamn:
+            Ange användarnamn:
           </label>
           <input
             id="username"
             name="username"
             type="text"
-            placeholder="Andvändare namn..."
+            placeholder="Andvändarnamn..."
             required
           />
           <label htmlFor="emailReg" className="mt-3">
@@ -92,11 +92,11 @@ export default function Register() {
             id="passwordReg"
             name="passwordReg"
             type="passwordReg"
-            placeholder="Password..."
+            placeholder="Lösenord..."
             required
           />
           <div
-            className="d-flex align-items-center"
+            className="d-flex"
             style={{ gap: '40px', padding: '20px 5px 0px 10px' }}
           >
             <input
@@ -106,19 +106,22 @@ export default function Register() {
               value="ok"
               required
             />
-            <p>
+            <p style={{ color: 'white' }}>
               Jag samtycker till att mina personuppgifter hanteras enligt
               integritetspolicyn och GDPR.
             </p>
           </div>
           <button
-            className="w-50 mx-auto mt-3 rounded-2"
+            className=" mx-auto btn btn-outline-warning"
             data-bs-toggle="modal"
             data-bs-target="#samtyckeModal"
           >
-            läs mer om samtycke
+            Läs mer om samtycke
           </button>
-          <button type="submit" className="w-50 mx-auto mt-3 rounded-2">
+          <button
+            type="submit"
+            className="w-50 mx-auto mt-3 rounded-2 btn btn-warning"
+          >
             Bekräfta
           </button>
         </form>

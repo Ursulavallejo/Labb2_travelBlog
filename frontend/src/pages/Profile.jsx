@@ -70,9 +70,7 @@ export default function Profile() {
             >
               <Form className="d-flex flex-column mx-auto">
                 <Form.Group className="mt-3">
-                  <Form.Label style={{ color: 'white' }}>
-                    Ange förnamn:
-                  </Form.Label>
+                  <Form.Label>Ange förnamn:</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Förnamn..."
@@ -83,9 +81,7 @@ export default function Profile() {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                  <Form.Label style={{ color: 'white' }}>
-                    Ange efternamn:
-                  </Form.Label>
+                  <Form.Label>Ange efternamn:</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Efternamn..."
@@ -96,9 +92,7 @@ export default function Profile() {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                  <Form.Label style={{ color: 'white' }}>
-                    Ange användarenamn:
-                  </Form.Label>
+                  <Form.Label>Ange användarnamn:</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Användarnamn..."
@@ -109,9 +103,7 @@ export default function Profile() {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                  <Form.Label style={{ color: 'white' }}>
-                    Ange email:
-                  </Form.Label>
+                  <Form.Label>Ange email:</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Email..."

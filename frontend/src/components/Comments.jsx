@@ -93,7 +93,7 @@ export default function Comments({ blogId }) {
           >
             <p style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span className="d-flex ">
-                <strong className="me-2">Användare: </strong> {comment.username}{' '}
+                <strong>{comment.username} : </strong>
                 {Number(comment.fk_users) === Number(ID) && (
                   <>
                     <Button

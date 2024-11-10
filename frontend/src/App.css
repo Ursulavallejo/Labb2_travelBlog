@@ -94,8 +94,10 @@ main {
   justify-content: end;
 }
 
-.form-label {
+.form-label,
+label {
   font-weight: bolder;
+  color: white;
 }
 
 /* LOGIN PAGE */
@@ -260,15 +262,19 @@ main {
   color: #f8f9fa;
 }
 /* buttons */
+.blue {
+  background-color: #123456 !important;
+  color: white;
+}
 .blue:hover {
   background-color: #e27e0a !important;
 }
 /* comments */
 .speech-bubble {
   position: relative;
-  background: rgb(186, 222, 244);
   border-radius: 0.4em;
   padding: 0.5rem;
+  box-shadow: #7091a8 0px 1px 3px, #7091a8 0px 1px 2px;
 }
 
 .speech-bubble:after {
@@ -279,7 +285,7 @@ main {
   width: 0;
   height: 0;
   border: 20px solid transparent;
-  border-right-color: rgb(186, 222, 244);
+  border-right-color: rgb(116, 200, 233);
   border-left: 0;
   border-bottom: 0;
   margin-top: -10px;

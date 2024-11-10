@@ -46,7 +46,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
             <Card style={{ width: '100%', minHeight: '300px' }}>
               <Card.Img
                 variant="top"
-                src={blog.image_blog}
+                src={`http://localhost:3000${blog.image_blog}`}
                 alt={blog.title_blog}
                 style={{ height: '200px', objectFit: 'cover' }}
               />
@@ -61,7 +61,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                     day: '2-digit',
                   })}
                 </Card.Text>
-                {blog.user_id === currentUserId && (
+                {blog.user_id === Number(currentUserId) && (
                   <div className="btn-container">
                     <Button
                       variant="outline-dark"
@@ -134,6 +134,6 @@ BlogsList.propTypes = {
       username: PropTypes.string.isRequired,
     })
   ).isRequired,
-  currentUserId: PropTypes.string,
+  currentUserId: PropTypes.number.isRequired,
   onDataChange: PropTypes.func.isRequired,
 };

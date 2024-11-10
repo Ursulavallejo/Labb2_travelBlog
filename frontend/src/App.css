@@ -289,3 +289,25 @@ main {
   color: #123456 !important;
   border-color: #123456 !important;
 }
+
+/* PROFILE PAGE */
+
+.background-image-container {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  background-image: url('../assets/images/istockphoto-1071294112-612x612.jpg');
+  background-color: #12345697;
+  background-blend-mode: overlay;
+}
+
+.background-blur-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(170, 195, 245, 0.039);
+  z-index: 1;
+}

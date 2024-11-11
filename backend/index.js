@@ -164,40 +164,7 @@ app.get('/api/blogs', async (req, res) => {
 });
 
 // POST - Create a new blog post
-// app.post('/api/blogs', async (req, res) => {
-//   const {
-//     title_blog,
-//     author,
-//     text_blog,
-//     image_blog,
-//     land_name,
-//     date,
-//     user_id,
-//   } = req.body;
 
-//   const query = `
-//     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
-//     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
-//   `;
-//   const values = [
-//     title_blog,
-//     author,
-//     text_blog,
-//     image_blog,
-//     land_name,
-//     date,
-//     user_id,
-//     /* FK_users */
-//   ];
-
-//   try {
-//     const result = await client.query(query, values);
-//     res.status(201).json(result.rows[0]);
-//   } catch (error) {
-//     console.error('Error creating post:', error);
-//     res.status(500).json({ error: 'Error creating post' });
-//   }
-// });
 // Modificar el endpoint /api/blogs para usar multer y manejar datos de multipart/form-data
 app.post('/api/blogs', upload.single('image'), async (req, res) => {
   console.log('Received request to create blog post');
@@ -250,9 +217,13 @@ app.post('/api/blogs', upload.single('image'), async (req, res) => {
 });
 
 // PUT- Update blog by blog_id
-app.put('/api/blogs/:id', async (req, res) => {
+
+app.put('/api/blogs/:id', upload.single('image'), async (req, res) => {
   const blogId = req.params.id;
-  const { title_blog, text_blog, image_blog, land_name, user_id } = req.body;
+  const { title_blog, text_blog, land_name, user_id } = req.body;
+  const image_blog = req.file
+    ? `/uploads/${req.file.filename}`
+    : req.body.image_blog;
 
   try {
     const result = await client.query(
@@ -266,15 +237,43 @@ app.put('/api/blogs/:id', async (req, res) => {
     if (result.rowCount > 0) {
       res.status(200).json({ message: 'Blogg uppdaterad framgångsrikt' });
     } else {
-      res.status(404).json({
-        message: 'Blogg hittades inte eller användaren har inte behörighet',
-      });
+      res
+        .status(404)
+        .json({
+          message: 'Blogg hittades inte eller användaren har inte behörighet',
+        });
     }
   } catch (error) {
     console.error('Fel vid uppdatering av bloggen:', error);
     res.status(500).json({ error: 'Fel vid uppdatering av bloggen' });
   }
 });
+
+// app.put('/api/blogs/:id', async (req, res) => {
+//   const blogId = req.params.id;
+//   const { title_blog, text_blog, image_blog, land_name, user_id } = req.body;
+
+//   try {
+//     const result = await client.query(
+//       `UPDATE blogs
+//        SET title_blog = $1, text_blog = $2, image_blog = $3, land_name = $4
+//        WHERE blog_id = $5 AND FK_users = $6
+//        RETURNING *`,
+//       [title_blog, text_blog, image_blog, land_name, blogId, user_id]
+//     );
+
+//     if (result.rowCount > 0) {
+//       res.status(200).json({ message: 'Blogg uppdaterad framgångsrikt' });
+//     } else {
+//       res.status(404).json({
+//         message: 'Blogg hittades inte eller användaren har inte behörighet',
+//       });
+//     }
+//   } catch (error) {
+//     console.error('Fel vid uppdatering av bloggen:', error);
+//     res.status(500).json({ error: 'Fel vid uppdatering av bloggen' });
+//   }
+// });
 
 // DELETE blog by ID
 app.delete('/api/blogs/:id', async (req, res) => {

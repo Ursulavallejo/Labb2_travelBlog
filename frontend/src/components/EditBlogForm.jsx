@@ -1,32 +1,43 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 export default function EditForm({ blog, onClose, onUpdate, userId }) {
   const [title, setTitle] = useState(blog.title_blog);
   const [content, setContent] = useState(blog.text_blog);
-  const [image, setImage] = useState(blog.image_blog);
+  const [image, setImage] = useState(null); // Cambia a null para almacenar un nuevo archivo
   const [country, setCountry] = useState(blog.land_name);
+
+  const handleFileChange = (e) => {
+    setImage(e.target.files[0]); // Almacena el archivo seleccionado
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`/api/blogs/${blog.blog_id}`, {
-        method: 'PUT',
+      const formData = new FormData();
+      formData.append('title_blog', title);
+      formData.append('text_blog', content);
+      formData.append('land_name', country);
+      formData.append('user_id', userId); // Incluye el ID del usuario
+
+      // Añade la nueva imagen si fue seleccionada
+      if (image) {
+        formData.append('image', image);
+      } else {
+        // Si no se seleccionó una nueva imagen, mantiene la imagen actual
+        formData.append('image_blog', blog.image_blog);
+      }
+
+      const response = await axios.put(`/api/blogs/${blog.blog_id}`, formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
-        body: JSON.stringify({
-          title_blog: title,
-          text_blog: content,
-          image_blog: image,
-          land_name: country,
-          user_id: userId, // check id_user
-        }),
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('Blogg uppdaterad!');
         onUpdate();
         onClose();
@@ -59,12 +70,11 @@ export default function EditForm({ blog, onClose, onUpdate, userId }) {
         />
       </Form.Group>
       <Form.Group controlId="formImage">
-        <Form.Label>Bild URL</Form.Label>
-        <Form.Control
-          type="text"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-        />
+        <Form.Label>Ny Bild (valfritt)</Form.Label>
+        <Form.Control type="file" onChange={handleFileChange} />
+        <Form.Text className="text-muted">
+          Lämna tom om du vill behålla den nuvarande bilden.
+        </Form.Text>
       </Form.Group>
       <Form.Group controlId="formContent">
         <Form.Label>Innehåll</Form.Label>

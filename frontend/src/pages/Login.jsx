@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
+import travelImage from '../assets/travel.svg';
 
 export default function Login() {
   const { setID, setUsername } = useContext(UserContext);
@@ -70,7 +71,7 @@ export default function Login() {
       <div id="container" className="login-container rounded-5 p-5">
         <div className="d-flex align-items-center justify-content-evenly">
           <img
-            src="/travel.svg"
+            src={travelImage}
             width="60"
             height="60"
             alt="Travel Icon"

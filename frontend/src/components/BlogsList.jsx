@@ -47,6 +47,13 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
               <Card.Img
                 variant="top"
                 src={`http://localhost:3000${blog.image_blog}`}
+                // src={
+                //   blog.image_blog.startsWith('http')
+                //     ? blog.image_blog
+                //     : `http://localhost:3000/uploads/${
+                //         blog.image_blog || 'ruta/imagen/por_defecto.jpg'
+                //       }`
+                // }
                 alt={blog.title_blog}
                 style={{ height: '200px', objectFit: 'cover' }}
               />

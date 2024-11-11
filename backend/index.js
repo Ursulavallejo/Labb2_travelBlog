@@ -167,26 +167,14 @@ app.get('/api/blogs', async (req, res) => {
 
 // Modificar el endpoint /api/blogs para usar multer y manejar datos de multipart/form-data
 app.post('/api/blogs', upload.single('image'), async (req, res) => {
-  console.log('Received request to create blog post');
   // Extrae los datos de texto desde req.body
   const { title_blog, author, text_blog, land_name, date, user_id } = req.body;
 
   // La ruta de la imagen si el archivo fue cargado
   const image_blog = req.file ? `/uploads/${req.file.filename}` : null;
 
-  console.log('Data received:', {
-    title_blog,
-    author,
-    text_blog,
-    land_name,
-    date,
-    user_id,
-    image_blog,
-  });
-
   // Validar que land_name y otros datos requeridos no sean null
   if (!land_name) {
-    console.error('Missing land_name');
     return res.status(400).json({ error: 'El campo land_name es obligatorio' });
   }
 
@@ -208,7 +196,6 @@ app.post('/api/blogs', upload.single('image'), async (req, res) => {
   try {
     // Ejecuta la consulta en la base de datos
     const result = await client.query(query, values);
-    console.log('Blog post created:', result.rows[0]);
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Error creating post:', error);
@@ -237,11 +224,9 @@ app.put('/api/blogs/:id', upload.single('image'), async (req, res) => {
     if (result.rowCount > 0) {
       res.status(200).json({ message: 'Blogg uppdaterad framgångsrikt' });
     } else {
-      res
-        .status(404)
-        .json({
-          message: 'Blogg hittades inte eller användaren har inte behörighet',
-        });
+      res.status(404).json({
+        message: 'Blogg hittades inte eller användaren har inte behörighet',
+      });
     }
   } catch (error) {
     console.error('Fel vid uppdatering av bloggen:', error);

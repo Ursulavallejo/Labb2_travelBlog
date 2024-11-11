@@ -4,6 +4,8 @@ const multer = require('multer'),
   cors = require('cors'),
   dotenv = require('dotenv'),
   { Client } = require('pg');
+const Jimp = require('jimp');
+// const Jimp = require('jimp').default || require('jimp');
 
 const app = express();
 app.use(express.json());
@@ -42,7 +44,6 @@ const upload = multer({
 
 // stactis files
 app.use('/uploads', express.static('uploads'));
-// app.use('/images', express.static('assets/images'));
 
 // >>> API DATABASE CRUD <<<<
 
@@ -243,7 +244,67 @@ app.post(
         .json({ error: 'Fältet landnamn är obligatoriskt' });
     }
 
-    // Definir la consulta SQL para insertar el post
+    ///JIMP!!!NOT WORKING!!
+    if (req.file) {
+      console.log(`Processing image at: uploads/${req.file.filename}`);
+
+      Jimp.read(`uploads/${req.file.filename}`)
+        .then((image) => {
+          console.log('Image loaded successfully');
+          return image
+            .resize(300, 200)
+            .writeAsync(`uploads/modified-${req.file.filename}`);
+        })
+        .then(() => {
+          console.log('Image resized successfully');
+          image_blog = `/uploads/modified-${req.file.filename}`;
+          // Inserta el resto del código que maneja la respuesta después del procesamiento aquí si es necesario
+        })
+        .catch((error) => {
+          console.error('Error processing image:', error);
+          return res.status(500).json({ error: 'Error processing image' });
+        });
+    } else {
+      console.log('image not loaded');
+    }
+    // if (req.file) {
+    //   console.log(`Processing image at: uploads/${req.file.filename}`);
+
+    //   Jimp.read(`/uploads/${req.file.filename}`)
+    //     .then((image) => {
+    //       console.log('Image loaded successfully');
+    //       return image
+    //         .resize(300, 200)
+    //         .writeAsync(`/uploads/modified-${req.file.filename}`);
+    //     })
+    //     .then(() => {
+    //       console.log('Image resized successfully');
+    //       image_blog = `/uploads/modified-${req.file.filename}`;
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error processing image:', error);
+    //       return res.status(500).json({ error: 'Error processing image' });
+    //     });
+    // } else {
+    //   console.log('error: no image has been load');
+    // }
+
+    // if (req.file) {
+    //   console.log(`Processing image at: uploads/${req.file.filename}`);
+    //   try {
+    //     const image = Jimp.read(`/uploads/${req.file.filename}`);
+    //     console.log('Image loaded successfully');
+    //     await image
+    //       .resize(300, 200)
+    //       .write(`/uploads/modified-${req.file.filename}`);
+    //     console.log('Image resized successfully');
+    //     image_blog = `/uploads/modified-${req.file.filename}`;
+    //   } catch (error) {
+    //     console.error('Error processing image:', error);
+    //     return res.status(500).json({ error: 'Error processing image' });
+    //   }
+    // }
+
     const query = `
     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;

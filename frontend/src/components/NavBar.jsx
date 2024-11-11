@@ -46,7 +46,7 @@ export default function NavBar({ onPostCreated }) {
           </Button>
           <Link to={'/profile'} className="link">
             <Button
-              variant="outline-light m-2 d-flex align-items-center btn p-2"
+              variant="outline-light m-2 d-flex align-items-center btn px-3 py-2"
               onClick={() => {}}
             >
               <FaUser className="me-1" />

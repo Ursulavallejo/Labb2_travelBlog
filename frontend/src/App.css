@@ -134,7 +134,11 @@ label,
   color: white;
   text-align: center;
 }
-
+#samtycke {
+  color: white;
+  margin: 10px 0;
+  font-weight: normal;
+}
 /* LOGIN PAGE */
 
 .login-page {

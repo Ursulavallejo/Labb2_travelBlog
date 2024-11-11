@@ -156,7 +156,7 @@ export default function Register() {
             >
               Bekräfta
             </button>
-            <button className="mx-auto rounded-3 mt-3 blue logButton p-2">
+            <button className="mx-auto rounded-3 mt-3  blue logButton p-2">
               <Link to="/" className="link ">
                 Har du redan ett konto?
               </Link>

@@ -17,10 +17,10 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
     const maxSize = 2 * 1024 * 1024; // 2MB en bytes
 
     if (file && !allowedTypes.includes(file.type)) {
-      alert('Solo se permiten archivos JPG y PNG');
+      alert('Endast JPG- och PNG-filer är tillåtna');
       setImage(null);
     } else if (file && file.size > maxSize) {
-      alert('El tamaño máximo de archivo es 2MB');
+      alert('Maximal filstorlek är 2 MB');
       setImage(null);
     } else {
       setImage(file); // save the file if file format and size is correct

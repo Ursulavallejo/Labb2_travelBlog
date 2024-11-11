@@ -267,28 +267,8 @@ app.post(
     } else {
       console.log('image not loaded');
     }
-    // if (req.file) {
-    //   console.log(`Processing image at: uploads/${req.file.filename}`);
 
-    //   Jimp.read(`/uploads/${req.file.filename}`)
-    //     .then((image) => {
-    //       console.log('Image loaded successfully');
-    //       return image
-    //         .resize(300, 200)
-    //         .writeAsync(`/uploads/modified-${req.file.filename}`);
-    //     })
-    //     .then(() => {
-    //       console.log('Image resized successfully');
-    //       image_blog = `/uploads/modified-${req.file.filename}`;
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error processing image:', error);
-    //       return res.status(500).json({ error: 'Error processing image' });
-    //     });
-    // } else {
-    //   console.log('error: no image has been load');
-    // }
-
+    // TRY this before
     // if (req.file) {
     //   console.log(`Processing image at: uploads/${req.file.filename}`);
     //   try {

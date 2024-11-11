@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 export default function Register() {
   function registerForm(e) {
     e.preventDefault();
@@ -38,13 +39,12 @@ export default function Register() {
       <h2 style={{ color: 'white' }}>Registrera dig</h2>
       <div
         id="containerReg"
-        className="d-flex rounded-5 p-5"
+        className="d-flex rounded-5 px-4 py-2"
         style={{ background: '#123456' }}
       >
         <form
           id="register"
           className="d-flex flex-column mx-auto w-auto"
-          action=""
           onSubmit={registerForm}
         >
           <label htmlFor="fname" className="mt-3">
@@ -78,17 +78,17 @@ export default function Register() {
             required
           />
           <label htmlFor="emailReg" className="mt-3">
-            Ange email:
+            Ange e-post:
           </label>
           <input
             id="emailReg"
             name="emailReg"
             type="text"
-            placeholder="Email..."
+            placeholder="E-post..."
             required
           />
           <label htmlFor="phoneReg" className="mt-3">
-            Ange email:
+            Ange telefonnumber:
           </label>
           <input
             id="phoneReg"
@@ -136,6 +136,11 @@ export default function Register() {
             className="w-50 mx-auto mt-3 rounded-2 btn btn-warning"
           >
             Bekräfta
+          </button>
+          <button className="mx-auto rounded-3 mt-3 btn blue">
+            <Link to="/" className="link ">
+              Har du redan ett konto?
+            </Link>
           </button>
         </form>
 

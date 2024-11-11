@@ -77,7 +77,7 @@ export default function Login() {
             style={{ margin: '1.2rem' }}
           />
           <span
-            style={{ color: '#e27e0a', fontWeight: '600', fontSize: '1.5rem' }}
+            style={{ color: '#ffc107', fontWeight: '600', fontSize: '1.5rem' }}
           >
             Travel Blog
           </span>
@@ -108,8 +108,10 @@ export default function Login() {
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2 blue">
             Logga in
           </button>
-          <button className="mx-auto rounded-3 mt-4">
-            <Link to="/register">ingen konto? Registrera här!</Link>
+          <button className="mx-auto rounded-3 mt-3 btn blue">
+            <Link to="/register" className="link ">
+              Inget konto? Registrera här!
+            </Link>
           </button>
         </form>
       </div>

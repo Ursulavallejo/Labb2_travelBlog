@@ -117,7 +117,7 @@ export default function Profile() {
             </h2>
             <div
               id="containerReg"
-              className="rounded-5 p-5"
+              className="rounded-5 px-4 py-2"
               style={{ backgroundColor: '#123456' }}
             >
               <Form
@@ -125,9 +125,13 @@ export default function Profile() {
                 onSubmit={editForm}
                 className="d-flex flex-column mx-auto"
               >
-                <FaEdit onClick={edit} className="fs-1 align-self-end" />
+                <FaEdit
+                  onClick={edit}
+                  className="fs-1 align-self-end"
+                  style={{ color: 'white', cursor: 'pointer' }}
+                />
                 <Form.Group className="mt-3">
-                  <Form.Label>Ange förnamn:</Form.Label>
+                  <Form.Label className="white-label">Ange förnamn:</Form.Label>
                   <Form.Control
                     id="fname"
                     className="editInput"
@@ -140,7 +144,9 @@ export default function Profile() {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                  <Form.Label>Ange efternamn:</Form.Label>
+                  <Form.Label className="white-label">
+                    Ange efternamn:
+                  </Form.Label>
                   <Form.Control
                     id="lname"
                     className="editInput"
@@ -153,7 +159,9 @@ export default function Profile() {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                  <Form.Label>Ange användarnamn:</Form.Label>
+                  <Form.Label className="white-label">
+                    Ange användarnamn:
+                  </Form.Label>
                   <Form.Control
                     id="username"
                     className="editInput"
@@ -166,7 +174,7 @@ export default function Profile() {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                  <Form.Label>Ange email:</Form.Label>
+                  <Form.Label className="white-label">Ange email:</Form.Label>
                   <Form.Control
                     id="emailEdit"
                     className="editInput"

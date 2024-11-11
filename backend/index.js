@@ -55,7 +55,7 @@ app.get('/users/:id', async (req, res) => {
 
 // POST user
 app.post('/users/register', async (req, res) => {
-  const { first_name, last_name, username, email, pass_word } = req.body;
+  const { first_name, last_name, username, email, phone, pass_word } = req.body;
   const query = `
   INSERT INTO users (first_name, last_name, username, email, phone, pass_word) VALUES ($1 ,$2, $3, $4, $5, $6)
   `;
@@ -101,6 +101,7 @@ app.post('/users/login', async (req, res) => {
   }
 });
 
+//PATCH -Update user
 app.patch('/users/edit/:id', async (req, res) => {
   const userId = req.params.id;
   const { first_name, last_name, username, phone, email } = req.body;

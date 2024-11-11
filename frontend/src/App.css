@@ -94,8 +94,12 @@ main {
   justify-content: end;
 }
 
-.form-label,
-label {
+.form-label {
+  font-weight: bolder;
+  color: black;
+}
+label,
+.white-label {
   font-weight: bolder;
   color: white;
 }

@@ -11,17 +11,22 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
   const [selectedBlogForEditing, setSelectedBlogForEditing] = useState(null);
 
   const handleDelete = async (blogId) => {
-    try {
-      const response = await fetch(`/api/blogs/${blogId}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        onDataChange();
-      } else {
-        alert('Något gick fel!');
+    const isConfirmed = window.confirm(
+      'Är du säker på att du vill ta bort detta inlägg?'
+    );
+    if (isConfirmed) {
+      try {
+        const response = await fetch(`/api/blogs/${blogId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          onDataChange();
+        } else {
+          alert('Något gick fel!');
+        }
+      } catch (error) {
+        console.error('Error deleting post:', error);
       }
-    } catch (error) {
-      console.error('Error deleting post:', error);
     }
   };
 

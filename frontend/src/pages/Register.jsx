@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
+
 export default function Register() {
   function registerForm(e) {
     e.preventDefault();
@@ -40,19 +41,19 @@ export default function Register() {
       className="background-image-container"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <div className=" d-flex flex-column justify-content-center align-items-center my-auto w-25 mx-auto">
-        <h2 style={{ color: 'white' }}>Registrera dig</h2>
+      <div className="d-flex flex-column justify-content-center align-items-center my-auto w-25 mx-auto">
+        <h2 className="heading">Registrera dig</h2>
         <div
           id="containerReg"
-          className="d-flex  rounded-5 px-4 py-2"
-          style={{ background: '#123456' }}
+          className="d-flex mx-auto   justify-content-center align-items-center rounded-5 px-4 py-2"
+          style={{ maxWidth: '300px' }}
         >
           <form
             id="register"
-            className="d-flex flex-column mx-auto "
+            className="d-flex flex-column mx-auto  "
             onSubmit={registerForm}
           >
-            <label htmlFor="fname" className="mt-3">
+            <label htmlFor="fname" className="mt-3 registerLabel">
               Ange förnamn:
             </label>
             <input
@@ -61,8 +62,9 @@ export default function Register() {
               type="text"
               placeholder="Förnamn..."
               required
+              className="registerInput"
             />
-            <label htmlFor="lname" className="mt-3">
+            <label htmlFor="lname" className="mt-3 registerLabel">
               Ange efternamn:
             </label>
             <input
@@ -71,8 +73,9 @@ export default function Register() {
               type="text"
               placeholder="Efternamn..."
               required
+              className="registerInput"
             />
-            <label htmlFor="username" className="mt-3">
+            <label htmlFor="username" className="mt-3 registerLabel">
               Ange användarnamn:
             </label>
             <input
@@ -81,8 +84,9 @@ export default function Register() {
               type="text"
               placeholder="Andvändarnamn..."
               required
+              className="registerInput"
             />
-            <label htmlFor="emailReg" className="mt-3">
+            <label htmlFor="emailReg" className="mt-3 registerLabel">
               Ange e-post:
             </label>
             <input
@@ -91,8 +95,9 @@ export default function Register() {
               type="text"
               placeholder="E-post..."
               required
+              className="registerInput"
             />
-            <label htmlFor="phoneReg" className="mt-3">
+            <label htmlFor="phoneReg" className="mt-3 registerLabel">
               Ange telefonnumber:
             </label>
             <input
@@ -102,16 +107,18 @@ export default function Register() {
               placeholder="0700000000"
               pattern="[0-9]{10}"
               required
+              className="registerInput"
             />
-            <label htmlFor="passwordReg" className="mt-3">
+            <label htmlFor="passwordReg" className="mt-3 registerLabel">
               Ange lösenord:
             </label>
             <input
               id="passwordReg"
               name="passwordReg"
-              type="passwordReg"
+              type="password"
               placeholder="Lösenord..."
               required
+              className="registerInput"
             />
             <div
               className="d-flex"
@@ -126,7 +133,11 @@ export default function Register() {
               />
               <label
                 htmlFor="samtycke"
-                style={{ color: 'white', margin: '10px' }}
+                style={{
+                  color: 'white',
+                  margin: '10px 0',
+                  fontWeight: 'normal',
+                }}
               >
                 Jag samtycker till att mina personuppgifter hanteras enligt
                 integritetspolicyn och GDPR.
@@ -145,8 +156,8 @@ export default function Register() {
             >
               Bekräfta
             </button>
-            <button className="mx-auto rounded-3 mt-3 btn blue p-2">
-              <Link to="/" className="link p-2 ">
+            <button className="mx-auto rounded-3 mt-3  blue logButton p-2">
+              <Link to="/" className="link ">
                 Har du redan ett konto?
               </Link>
             </button>

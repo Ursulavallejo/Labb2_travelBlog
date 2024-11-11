@@ -4,7 +4,7 @@ const multer = require('multer'),
   cors = require('cors'),
   dotenv = require('dotenv'),
   { Client } = require('pg');
-// const Jimp = require('jimp');
+const Jimp = require('jimp');
 // const Jimp = require('jimp').default || require('jimp');
 
 const app = express();
@@ -210,39 +210,124 @@ app.get('/api/blogs', async (req, res) => {
 });
 
 // POST - Create a new blog post
+const multer = require('multer');
+const path = require('path');
+const express = require('express');
+const Jimp = require('jimp');
+const { Client } = require('pg');
 
-// Modidy endpoint /api/blogs and manage  multipart/form-data
+const app = express();
+app.use(express.json());
+
+// Configuración de Multer para guardar las imágenes en 'uploads'
+const storage = multer.diskStorage({
+  destination: 'uploads',
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Nombre único con timestamp
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['image/jpeg', 'image/png'];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only JPG and PNG files are allowed'));
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // Tamaño máximo de 2MB
+  fileFilter: fileFilter,
+});
+
+// Ruta para manejar la subida y compresión de la imagen
 app.post(
   '/api/blogs',
-  (req, res, next) => {
-    // call upload.single handle file
-    upload.single('image')(req, res, function (err) {
-      if (err instanceof multer.MulterError) {
-        // multer error handle max size
-        return res.status(400).json({ error: err.message });
-      } else if (err) {
-        // error file type not permited
-        return res.status(400).json({
-          error:
-            'Endast JPG- och PNG-filer med en maximal storlek på 2MB är tillåtna',
-        });
-      }
-      next();
-    });
-  },
+  upload.single('image'), // Cargar la imagen con Multer
   async (req, res) => {
-    const { title_blog, author, text_blog, land_name, date, user_id } =
-      req.body;
-
-    const image_blog = req.file
-      ? `/uploads/${req.file.filename}`
-      : req.body.image_blog || null;
+    const { title_blog, author, text_blog, land_name, date, user_id } = req.body;
 
     if (!land_name) {
-      return res
-        .status(400)
-        .json({ error: 'Fältet landnamn är obligatoriskt' });
+      return res.status(400).json({ error: 'El campo land_name es obligatorio' });
     }
+
+    let image_blog = null;
+    if (req.file) {
+      const filePath = path.resolve(__dirname, 'uploads', req.file.filename);
+      const compressedPath = path.resolve(__dirname, 'uploads', `compressed-${req.file.filename}`);
+
+      try {
+        // Leer y comprimir la imagen con Jimp
+        const image = await Jimp.read(filePath);
+        await image.resize(300, 200).quality(70).writeAsync(compressedPath);
+
+        // Actualizar la ruta de `image_blog` para que apunte al archivo comprimido
+        image_blog = `/uploads/compressed-${req.file.filename}`;
+
+        // Eliminar el archivo original para ahorrar espacio
+        fs.unlinkSync(filePath);
+
+        console.log('Imagen comprimida y guardada exitosamente');
+      } catch (error) {
+        console.error('Error al procesar la imagen:', error);
+        return res.status(500).json({ error: 'Error al procesar la imagen' });
+      }
+    }
+
+    // Guardar los datos del blog en la base de datos
+    const query = `
+      INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
+      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+    `;
+    const values = [title_blog, author, text_blog, image_blog, land_name, date, user_id];
+
+    try {
+      const result = await client.query(query, values);
+      res.status(201).json(result.rows[0]);
+    } catch (error) {
+      console.error('Error al crear el post:', error);
+      res.status(500).json({ error: 'Error al crear el post' });
+    }
+  }
+);
+
+
+
+// abajo funciona >>>
+// Modidy endpoint /api/blogs and manage  multipart/form-data
+// app.post(
+//   '/api/blogs',
+//   (req, res, next) => {
+//     // call upload.single handle file
+//     upload.single('image')(req, res, function (err) {
+//       if (err instanceof multer.MulterError) {
+//         // multer error handle max size
+//         return res.status(400).json({ error: err.message });
+//       } else if (err) {
+//         // error file type not permited
+//         return res.status(400).json({
+//           error:
+//             'Endast JPG- och PNG-filer med en maximal storlek på 2MB är tillåtna',
+//         });
+//       }
+//       next();
+//     });
+//   },
+//   async (req, res) => {
+//     const { title_blog, author, text_blog, land_name, date, user_id } =
+//       req.body;
+
+//     const image_blog = req.file
+//       ? `/uploads/${req.file.filename}`
+//       : req.body.image_blog || null;
+
+//     if (!land_name) {
+//       return res
+//         .status(400)
+//         .json({ error: 'Fältet landnamn är obligatoriskt' });
+//     }
 
     ///JIMP!!!NOT WORKING!!
     // if (req.file) {

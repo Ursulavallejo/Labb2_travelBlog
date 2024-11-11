@@ -112,9 +112,8 @@ export default function Profile() {
           />
         ) : (
           <>
-            <h2 style={{ color: 'white', textAlign: 'center' }}>
-              Ändra dina uppgifter
-            </h2>
+            <h2 className="heading">Ändra dina uppgifter</h2>
+
             <div
               id="containerReg"
               className="rounded-5 px-4 py-2"

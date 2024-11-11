@@ -108,7 +108,7 @@ export default function Login() {
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2 blue">
             Logga in
           </button>
-          <button className="mx-auto rounded-3 mt-3 btn blue">
+          <button className="mx-auto rounded-3 mt-3 btn blue p-2">
             <Link to="/register" className="link ">
               Inget konto? Registrera här!
             </Link>

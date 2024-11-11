@@ -34,7 +34,7 @@ export default function NavBar({ onPostCreated }) {
             style={{ marginRight: '18px', marginLeft: '18px' }}
           />
           <span
-            style={{ color: '#e27e0a', fontWeight: '600', fontSize: '1.5rem' }}
+            style={{ color: '#ffc107', fontWeight: '600', fontSize: '1.5rem' }}
           >
             Travel Blog
           </span>
@@ -45,7 +45,7 @@ export default function NavBar({ onPostCreated }) {
           </Button>
           <Link to={'/profile'} className="link">
             <Button
-              variant="outline-light m-2 d-flex align-items-center"
+              variant="outline-light m-2 d-flex align-items-center btn p-2"
               onClick={() => {}}
             >
               <FaUser className="me-1" />

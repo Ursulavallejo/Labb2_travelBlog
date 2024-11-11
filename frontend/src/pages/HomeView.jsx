@@ -28,10 +28,10 @@ export default function HomeView() {
       <NavBar onPostCreated={fetchData} />
       <header className="hero">
         <div className="hero__block1">
-          <img src="http://unsplash.it/800/800" alt="RandomImage1" />
+          <img src="https://unsplash.it/800/800" alt="RandomImage1" />
         </div>
         <div className="hero__block2">
-          <img src="http://unsplash.it/1000/800" alt="RandomImage2" />
+          <img src="https://unsplash.it/1000/800" alt="RandomImage2" />
         </div>
         <div className="hero__title">
           <h1 className="title-home">Upptäckarens dagbok</h1>

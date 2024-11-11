@@ -103,6 +103,10 @@ label,
   font-weight: bolder;
   color: white;
 }
+.heading {
+  color: white;
+  text-align: center;
+}
 
 /* LOGIN PAGE */
 

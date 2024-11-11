@@ -34,14 +34,20 @@ export default function Login() {
     })
       .then((resp) => resp.json())
       .then((user) => {
-        const userID = user.data[0].user_id;
-        const username = user.data[0].username;
+        const userID = user.data.user_id;
+        const username = user.data.username;
+        const token = user.token;
 
         setID(userID);
         setUsername(username);
 
+        console.log(token);
+
         localStorage.setItem('ID', userID);
         localStorage.setItem('username', username);
+        localStorage.setItem('token', token);
+
+        console.log(localStorage.getItem('token'));
         // alert('Loggat in!');
         document.getElementById('login').reset();
         setFinish(true);
@@ -108,11 +114,11 @@ export default function Login() {
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2 blue">
             Logga in
           </button>
-          <button className="mx-auto rounded-3 mt-3 btn blue">
-            <Link to="/register" className="link ">
+          <Link to="/register" className="link mx-auto">
+            <button className="rounded-3 mt-3 btn blue">
               Inget konto? Registrera här!
-            </Link>
-          </button>
+            </button>
+          </Link>
         </form>
       </div>
     </div>

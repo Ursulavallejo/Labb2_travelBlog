@@ -1,5 +1,6 @@
 const path = require('path');
 
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -16,6 +17,23 @@ const client = new Client({
 });
 
 client.connect();
+
+// JWT authenticate
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['Authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  res.send({ autHead: authHeader, token: token });
+
+  if (!token) return res.status(401).json({ message: 'Token required' });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err)
+      return res.status(403).json({ message: 'Invalid or expired token' });
+
+    req.userId = user.userId;
+    next();
+  });
+};
 
 // refresher, GET users
 app.get('/users', async (req, res) => {
@@ -74,8 +92,9 @@ app.post('/users/register', async (req, res) => {
 
 // POST user and compare user login request with DB
 app.post('/users/login', async (req, res) => {
-  let email = req.body.email;
-  let pass_word = req.body.pass_word;
+  // const { email, pass_word } = req.body;
+  const email = req.body.email;
+  const pass_word = req.body.pass_word;
 
   if (email && pass_word) {
     const query = `
@@ -85,10 +104,17 @@ app.post('/users/login', async (req, res) => {
     try {
       const results = await client.query(query, values);
       if (results.rows.length > 0) {
-        console.log('Loggat in!');
+        const user = results.rows[0];
+        const token = jwt.sign(
+          { userId: user.user_id },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: '1h',
+          }
+        );
         res
           .status(200)
-          .send({ message: 'Login successful!', data: results.rows });
+          .send({ message: 'Login successful!', data: user, token: token });
       } else {
         res.status(401).send('Invalid email or password');
       }
@@ -131,21 +157,22 @@ WHERE user_id = $6;
 });
 
 // DELETE user
-app.delete('/users/delete', async (req, res) => {
-  const { email, pass_word } = req.body;
-  const query = `
-DELETE FROM users WHERE email = $1 AND pass_word = $2
-`;
-  const values = [email, pass_word];
+app.delete('/users/delete', authenticateToken, async (req, res) => {
+  const { userId } = req;
+  console.log(userId);
+  const query = `DELETE FROM users WHERE user_id = $1`;
+  const values = [userId];
   try {
     const results = await client.query(query, values);
     if (results.rowCount === 0) {
-      res.status(404).send({ message: 'User not found or incorrect input' });
+      return res
+        .status(404)
+        .send({ message: 'User not found or incorrect input' });
     }
-    res.status(200).send('User deletion successful!');
+    return res.status(200).send('User deletion successful!');
   } catch (error) {
-    res.status(400).send({ error: error });
     console.error('Error: ', error);
+    return res.status(500).send({ error: error });
   }
 });
 

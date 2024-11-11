@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
 import { Button, Spinner, Form, Container } from 'react-bootstrap';
 import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
-import { FaEdit } from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 export default function Profile() {
   const { ID } = useContext(UserContext);
@@ -47,6 +47,14 @@ export default function Profile() {
 
   // initial GET by user id to display user details
   useEffect(() => {
+    //////////////// OBS RADERA EJ ////////////////
+    // const token = localStorage.getItem('token');
+    // if (!token) return;
+    // const decodedToken = jwt_decode(token);
+    // const userId = decodedToken.userId;
+    // if (!userId) return;
+    ////////////////////////////////////////////////
+
     const fetchUser = () => {
       if (!ID) return;
       fetch(`users/${ID}`)
@@ -80,6 +88,37 @@ export default function Profile() {
     inputs.forEach((input) => {
       input.disabled = true;
     });
+  }
+
+  function userDelete() {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      console.log('the token ' + token);
+    }
+    fetch(`/users/delete`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error('Kunde inte radera konto!');
+        }
+        return resp.json();
+      })
+      .then(() => {
+        console.log(token);
+        localStorage.removeItem('token');
+        alert('Din konto har raderats!');
+        navigate('/');
+      })
+      .catch((err) => {
+        console.error(err);
+        alert('Något gick fel!');
+      });
   }
 
   const handleConfirm = () => {
@@ -125,11 +164,18 @@ export default function Profile() {
                 onSubmit={editForm}
                 className="d-flex flex-column mx-auto"
               >
-                <FaEdit
-                  onClick={edit}
-                  className="fs-1 align-self-end"
-                  style={{ color: 'white', cursor: 'pointer' }}
-                />
+                <div className="d-flex">
+                  <FaTrash
+                    onClick={userDelete}
+                    className="fs-1"
+                    style={{ color: 'white', cursor: 'pointer' }}
+                  />
+                  <FaEdit
+                    onClick={edit}
+                    className="fs-1 ms-auto"
+                    style={{ color: 'white', cursor: 'pointer' }}
+                  />
+                </div>
                 <Form.Group className="mt-3">
                   <Form.Label className="white-label">Ange förnamn:</Form.Label>
                   <Form.Control

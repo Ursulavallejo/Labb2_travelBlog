@@ -63,7 +63,9 @@ export default function NavBar({ onPostCreated }) {
 
       <Modal show={showModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Skapa Nytt Blogginlägg</Modal.Title>
+          <Modal.Title style={{ color: '#123456' }}>
+            Skapa Nytt Blogginlägg
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <AddBlogForm onClose={handleClose} onPostCreated={onPostCreated} />

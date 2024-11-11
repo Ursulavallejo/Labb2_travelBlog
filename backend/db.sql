@@ -80,3 +80,13 @@ VALUES
 -- Japan
 ('Japan verkar så unikt. Kyoto och Tokyo är definitivt på min resplan!', 4, 6),
 ('Tack för tipsen! Varma källor låter perfekt för att varva ner.', 2, 6);
+
+
+-- Skapa index på FK_users i blogs-tabellen
+CREATE INDEX idx_blogs_FK_users ON blogs(FK_users);
+
+-- Skapa index på FK_users och FK_blogs i comments-tabellen
+CREATE INDEX idx_comments_FK_blogs ON comments(FK_blogs);
+
+-- Skapa index på user_id i users-tabellen
+CREATE INDEX idx_users_user_id ON users(user_id);

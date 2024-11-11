@@ -37,8 +37,7 @@ export default function EditForm({ blog, onClose, onUpdate, userId }) {
         },
       });
 
-      if (response.status === 200) {
-        alert('Blogg uppdaterad!');
+      if (response.ok) {
         onUpdate();
         onClose();
       } else {

@@ -44,7 +44,7 @@ export default function HomeView() {
         <main>
           <BlogsList
             blogs={blogs}
-            currentUserId={ID}
+            currentUserId={ID ? Number(ID) : undefined}
             onDataChange={fetchData}
           />
         </main>

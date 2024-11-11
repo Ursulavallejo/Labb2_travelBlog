@@ -142,6 +142,6 @@ BlogsList.propTypes = {
       username: PropTypes.string.isRequired,
     })
   ).isRequired,
-  currentUserId: PropTypes.number.isRequired,
+  currentUserId: PropTypes.number,
   onDataChange: PropTypes.func.isRequired,
 };

@@ -76,9 +76,15 @@ export default function EditForm({ blog, onClose, onUpdate, userId }) {
           required
         />
       </Form.Group>
-      <Button variant="primary" type="submit">
-        Uppdatera Blogg
-      </Button>
+      <div className="d-flex justify-content-end my-4">
+        <Button
+          style={{ backgroundColor: '#123456', border: 'none' }}
+          type="submit"
+          className="mt-2 ms-2 blue"
+        >
+          Uppdatera
+        </Button>
+      </div>
     </Form>
   );
 }

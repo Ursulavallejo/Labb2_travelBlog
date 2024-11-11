@@ -24,7 +24,7 @@ export default function NavBar({ onPostCreated }) {
   return (
     <>
       <Navbar expand="lg" fixed="top" style={{ backgroundColor: '#123456' }}>
-        <Navbar.Brand href="#" className="d-flex align-items-center">
+        <Navbar.Brand href="/blogs" className="d-flex align-items-center">
           <img
             src="/travel.svg"
             width="60"
@@ -55,7 +55,7 @@ export default function NavBar({ onPostCreated }) {
           <Link to="/" className="link" onClick={handleLogout}>
             <Button variant="secondary m-2 d-flex align-items-center">
               <FaSignOutAlt className="me-1" />
-              Logga Ut
+              Logga ut
             </Button>
           </Link>
         </Nav>

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
 export default function Register() {
   function registerForm(e) {
     e.preventDefault();
@@ -6,9 +8,10 @@ export default function Register() {
     const lname = document.getElementById('lname');
     const username = document.getElementById('username');
     const email = document.getElementById('emailReg');
+    const phone = document.getElementById('phoneReg');
     const pass = document.getElementById('passwordReg');
 
-    fetch('http://localhost:8080/users/register', {
+    fetch('/users/register', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -18,6 +21,7 @@ export default function Register() {
         last_name: lname.value,
         username: username.value,
         email: email.value,
+        phone: phone.value,
         pass_word: pass.value,
       }),
     })
@@ -32,136 +36,162 @@ export default function Register() {
   }
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center my-auto w-25 mx-auto">
-      <h2>Registrera dig</h2>
-      <div
-        id="containerReg"
-        className="d-flex rounded-5 p-5"
-        style={{ background: '#0077B6' }}
-      >
-        <form
-          id="register"
-          className="d-flex flex-column mx-auto w-auto"
-          action=""
-          onSubmit={registerForm}
+    <div
+      className="background-image-container"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+      <div className=" d-flex flex-column justify-content-center align-items-center my-auto w-25 mx-auto">
+        <h2 style={{ color: 'white' }}>Registrera dig</h2>
+        <div
+          id="containerReg"
+          className="d-flex  rounded-5 px-4 py-2"
+          style={{ background: '#123456' }}
         >
-          <label htmlFor="fname" className="mt-3">
-            Ange förnamn:
-          </label>
-          <input
-            id="fname"
-            name="fname"
-            type="text"
-            placeholder="Förnamn..."
-            required
-          />
-          <label htmlFor="lname" className="mt-3">
-            Ange efternamn:
-          </label>
-          <input
-            id="lname"
-            name="lname"
-            type="text"
-            placeholder="Efternamn..."
-            required
-          />
-          <label htmlFor="username" className="mt-3">
-            Ange användarenamn:
-          </label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            placeholder="Andvändare namn..."
-            required
-          />
-          <label htmlFor="emailReg" className="mt-3">
-            Ange email:
-          </label>
-          <input
-            id="emailReg"
-            name="emailReg"
-            type="text"
-            placeholder="Email..."
-            required
-          />
-          <label htmlFor="passwordReg" className="mt-3">
-            Ange lösenord:
-          </label>
-          <input
-            id="passwordReg"
-            name="passwordReg"
-            type="passwordReg"
-            placeholder="Password..."
-            required
-          />
-          <div
-            className="d-flex align-items-center"
-            style={{ gap: '40px', padding: '20px 5px 0px 10px' }}
+          <form
+            id="register"
+            className="d-flex flex-column mx-auto "
+            onSubmit={registerForm}
           >
+            <label htmlFor="fname" className="mt-3">
+              Ange förnamn:
+            </label>
             <input
-              type="checkbox"
-              id="samtycke"
-              name="samtycke"
-              value="ok"
+              id="fname"
+              name="fname"
+              type="text"
+              placeholder="Förnamn..."
               required
             />
-            <p>
-              Jag samtycker till att mina personuppgifter hanteras enligt
-              integritetspolicyn och GDPR.
-            </p>
-          </div>
-          <button
-            className="w-50 mx-auto mt-3 rounded-2"
-            data-bs-toggle="modal"
-            data-bs-target="#samtyckeModal"
-          >
-            läs mer om samtycke
-          </button>
-          <button type="submit" className="w-50 mx-auto mt-3 rounded-2">
-            Bekräfta
-          </button>
-        </form>
+            <label htmlFor="lname" className="mt-3">
+              Ange efternamn:
+            </label>
+            <input
+              id="lname"
+              name="lname"
+              type="text"
+              placeholder="Efternamn..."
+              required
+            />
+            <label htmlFor="username" className="mt-3">
+              Ange användarnamn:
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Andvändarnamn..."
+              required
+            />
+            <label htmlFor="emailReg" className="mt-3">
+              Ange e-post:
+            </label>
+            <input
+              id="emailReg"
+              name="emailReg"
+              type="text"
+              placeholder="E-post..."
+              required
+            />
+            <label htmlFor="phoneReg" className="mt-3">
+              Ange telefonnumber:
+            </label>
+            <input
+              id="phoneReg"
+              name="phoneReg"
+              type="tel"
+              placeholder="0700000000"
+              pattern="[0-9]{10}"
+              required
+            />
+            <label htmlFor="passwordReg" className="mt-3">
+              Ange lösenord:
+            </label>
+            <input
+              id="passwordReg"
+              name="passwordReg"
+              type="passwordReg"
+              placeholder="Lösenord..."
+              required
+            />
+            <div
+              className="d-flex"
+              style={{ gap: '40px', padding: '20px 5px 0px 10px' }}
+            >
+              <input
+                type="checkbox"
+                id="samtycke"
+                name="samtycke"
+                value="ok"
+                required
+              />
+              <label
+                htmlFor="samtycke"
+                style={{ color: 'white', margin: '10px' }}
+              >
+                Jag samtycker till att mina personuppgifter hanteras enligt
+                integritetspolicyn och GDPR.
+              </label>
+            </div>
+            <button
+              className=" mx-auto btn btn-outline-warning"
+              data-bs-toggle="modal"
+              data-bs-target="#samtyckeModal"
+            >
+              Läs mer om samtycke
+            </button>
+            <button
+              type="submit"
+              className="w-50 mx-auto mt-3 rounded-2 btn btn-warning"
+            >
+              Bekräfta
+            </button>
+            <button className="mx-auto rounded-3 mt-3 btn blue p-2">
+              <Link to="/" className="link p-2 ">
+                Har du redan ett konto?
+              </Link>
+            </button>
+          </form>
 
-        <div
-          className="modal fade"
-          id="samtyckeModal"
-          tabIndex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h1 className="modal-title fs-5" id="exampleModalLabel">
-                  Hur vi hanterar dina uppgifter
-                </h1>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body">
-                Genom att använda vår tjänst godkänner du att vi samlar in,
-                behandlar och lagrar dina personuppgifter i enlighet med GDPR.
-                Vi hanterar dina uppgifter för att kunna erbjuda en säker och
-                personlig upplevelse samt för att uppfylla våra åtaganden
-                gentemot dig. Dina uppgifter används endast för de ändamål som
-                du har samtyckt till, och du kan när som helst återkalla ditt
-                samtycke. För mer information om hur vi skyddar din integritet
-                och behandlar dina personuppgifter, vänligen läs vår
-                integritetspolicy.
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Stäng
-                </button>
+          <div
+            className="modal fade"
+            id="samtyckeModal"
+            tabIndex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h1 className="modal-title fs-5" id="exampleModalLabel">
+                    Hur vi hanterar dina uppgifter
+                  </h1>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  Genom att använda vår tjänst godkänner du att vi samlar in,
+                  behandlar och lagrar dina personuppgifter i enlighet med GDPR.
+                  Vi hanterar dina uppgifter för att kunna erbjuda en säker och
+                  personlig upplevelse samt för att uppfylla våra åtaganden
+                  gentemot dig. Dina uppgifter används endast för de ändamål som
+                  du har samtyckt till, och du kan när som helst återkalla ditt
+                  samtycke. För mer information om hur vi skyddar din integritet
+                  och behandlar dina personuppgifter, vänligen läs vår
+                  integritetspolicy.
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Stäng
+                  </button>
+                </div>
               </div>
             </div>
           </div>

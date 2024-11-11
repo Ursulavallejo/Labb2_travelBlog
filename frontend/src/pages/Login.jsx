@@ -7,8 +7,8 @@ export default function Login() {
   const [finish, setFinish] = useState(false);
   const navigate = useNavigate();
 
-  console.log('setID:', setID); // Verifica si setID está definido
-  console.log('setUsername:', setUsername); // Verifica si setUsername está definido
+  console.log('setID:', setID);
+  console.log('setUsername:', setUsername);
 
   useEffect(() => {
     if (finish) {
@@ -37,14 +37,12 @@ export default function Login() {
         const userID = user.data[0].user_id;
         const username = user.data[0].username;
 
-        console.log(userID, username);
-
-        setID(userID); // Asegúrate de que setID está disponible
-        setUsername(username); // Asegúrate de que setUsername está disponible
+        setID(userID);
+        setUsername(username);
 
         localStorage.setItem('ID', userID);
         localStorage.setItem('username', username);
-        alert('Loggat in!');
+        // alert('Loggat in!');
         document.getElementById('login').reset();
         setFinish(true);
       })
@@ -79,7 +77,7 @@ export default function Login() {
             style={{ margin: '1.2rem' }}
           />
           <span
-            style={{ color: '#e27e0a', fontWeight: '600', fontSize: '1.5rem' }}
+            style={{ color: '#ffc107', fontWeight: '600', fontSize: '1.5rem' }}
           >
             Travel Blog
           </span>
@@ -110,10 +108,12 @@ export default function Login() {
           <button type="submit" className="w-50 mx-auto mt-3 rounded-2 blue">
             Logga in
           </button>
+          <button className="mx-auto rounded-3 mt-3 btn blue p-2">
+            <Link to="/register" className="link ">
+              Inget konto? Registrera här!
+            </Link>
+          </button>
         </form>
-        <button className="mx-auto">
-          <Link to="/blogs">TO HOME Temporal button</Link>
-        </button>
       </div>
     </div>
   );

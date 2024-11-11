@@ -12,9 +12,20 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
   const { ID, username } = useContext(UserContext);
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]); // Save the selected file
-  };
+    const file = e.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const maxSize = 2 * 1024 * 1024; // 2MB en bytes
 
+    if (file && !allowedTypes.includes(file.type)) {
+      alert('Solo se permiten archivos JPG y PNG');
+      setImage(null);
+    } else if (file && file.size > maxSize) {
+      alert('El tamaño máximo de archivo es 2MB');
+      setImage(null);
+    } else {
+      setImage(file); // save the file if file format and size are correct
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Submit triggered');
@@ -82,10 +93,10 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
       </Form.Group>
       <Form.Group controlId="formImage">
         <Form.Label>Bild</Form.Label>
-        <Form.Control
-          type="file"
-          onChange={handleFileChange} // Use handleFileChange for file input
-        />
+        <Form.Control type="file" onChange={handleFileChange} />
+        <Form.Text style={{ fontStyle: 'italic', color: '#555555' }}>
+          Endast JPG- och PNG-filer är tillåtna. Maximal storlek på 2MB.
+        </Form.Text>
       </Form.Group>
       <Form.Group controlId="formContent">
         <Form.Label>Innehåll</Form.Label>

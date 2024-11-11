@@ -25,10 +25,24 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+// Filter file type (jpeg/ png) and the size(max. 2MB)
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('only JPG / PNG'));
+  }
+};
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // max size 2MB
+  fileFilter: fileFilter,
+});
 
 // stactis files
 app.use('/uploads', express.static('public/uploads'));
+app.use('/images', express.static('assets/images'));
 
 // >>> API DATABASE CRUD <<<<
 
@@ -146,6 +160,7 @@ DELETE FROM users WHERE email = $1 AND pass_word = $2
 });
 
 // GET - blogs
+// GET - blogs
 app.get('/api/blogs', async (req, res) => {
   try {
     const query = `
@@ -156,52 +171,139 @@ app.get('/api/blogs', async (req, res) => {
       ORDER BY blogs.date DESC
     `;
     const { rows } = await client.query(query);
-    res.json(rows);
+
+    // Procesa la ruta de la imagen según su ubicación
+    const processedBlogs = rows.map((blog) => {
+      if (blog.image_blog.startsWith('uploads')) {
+        blog.image_blog = `/uploads/${blog.image_blog}`;
+      } else {
+        blog.image_blog = `/images/${blog.image_blog}`;
+      }
+      return blog;
+    });
+
+    res.json(processedBlogs);
   } catch (error) {
     console.error('Error fetching blogs:', error);
     res.status(500).send('Error fetching blogs');
   }
 });
 
+// app.get('/api/blogs', async (req, res) => {
+//   try {
+//     const query = `
+//       SELECT blogs.blog_id, blogs.land_name, blogs.image_blog, blogs.title_blog, blogs.text_blog,
+//              blogs.date, blogs.author, users.username, users.user_id
+//       FROM blogs
+//       JOIN users ON blogs.FK_users = users.user_id
+//       ORDER BY blogs.date DESC
+//     `;
+//     const { rows } = await client.query(query);
+//     res.json(rows);
+//   } catch (error) {
+//     console.error('Error fetching blogs:', error);
+//     res.status(500).send('Error fetching blogs');
+//   }
+// });
+
 // POST - Create a new blog post
+// Modificar el endpoint /api/blogs para manejar archivos y datos de multipart/form-data
+app.post(
+  '/api/blogs',
+  (req, res, next) => {
+    // Llama a upload.single con el middleware para manejar el archivo
+    upload.single('image')(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+        // Error específico de Multer (p.ej., tamaño máximo)
+        return res.status(400).json({ error: err.message });
+      } else if (err) {
+        // Otro error, como tipo de archivo no permitido
+        return res.status(400).json({
+          error:
+            'Solo se permiten archivos JPG y PNG con un tamaño máximo de 2MB',
+        });
+      }
+      next();
+    });
+  },
+  async (req, res) => {
+    // Extrae los datos de texto desde req.body
+    const { title_blog, author, text_blog, land_name, date, user_id } =
+      req.body;
 
-// Modificar el endpoint /api/blogs para usar multer y manejar datos de multipart/form-data
-app.post('/api/blogs', upload.single('image'), async (req, res) => {
-  // Extrae los datos de texto desde req.body
-  const { title_blog, author, text_blog, land_name, date, user_id } = req.body;
+    // La ruta de la imagen si el archivo fue cargado
+    const image_blog = req.file ? `/uploads/${req.file.filename}` : null;
 
-  // La ruta de la imagen si el archivo fue cargado
-  const image_blog = req.file ? `/uploads/${req.file.filename}` : null;
+    // Validar que land_name y otros datos requeridos no sean null
+    if (!land_name) {
+      return res
+        .status(400)
+        .json({ error: 'El campo land_name es obligatorio' });
+    }
 
-  // Validar que land_name y otros datos requeridos no sean null
-  if (!land_name) {
-    return res.status(400).json({ error: 'El campo land_name es obligatorio' });
-  }
-
-  // Definir la consulta SQL para insertar el post
-  const query = `
+    // Definir la consulta SQL para insertar el post
+    const query = `
     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
   `;
-  const values = [
-    title_blog,
-    author,
-    text_blog,
-    image_blog,
-    land_name,
-    date,
-    user_id,
-  ];
+    const values = [
+      title_blog,
+      author,
+      text_blog,
+      image_blog,
+      land_name,
+      date,
+      user_id,
+    ];
 
-  try {
-    // Ejecuta la consulta en la base de datos
-    const result = await client.query(query, values);
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error('Error creating post:', error);
-    res.status(500).json({ error: 'Error creating post' });
+    try {
+      // Ejecuta la consulta en la base de datos
+      const result = await client.query(query, values);
+      res.status(201).json(result.rows[0]);
+    } catch (error) {
+      console.error('Error creating post:', error);
+      res.status(500).json({ error: 'Error creating post' });
+    }
   }
-});
+);
+
+// // Modificar el endpoint /api/blogs para usar multer y manejar datos de multipart/form-data
+// app.post('/api/blogs', upload.single('image'), async (req, res) => {
+//   // Extrae los datos de texto desde req.body
+//   const { title_blog, author, text_blog, land_name, date, user_id } = req.body;
+
+//   // La ruta de la imagen si el archivo fue cargado
+//   const image_blog = req.file ? `/uploads/${req.file.filename}` : null;
+
+//   // Validar que land_name y otros datos requeridos no sean null
+//   if (!land_name) {
+//     return res.status(400).json({ error: 'El campo land_name es obligatorio' });
+//   }
+
+//   // Definir la consulta SQL para insertar el post
+//   const query = `
+//     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
+//     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+//   `;
+//   const values = [
+//     title_blog,
+//     author,
+//     text_blog,
+//     image_blog,
+//     land_name,
+//     date,
+//     user_id,
+//   ];
+
+//   try {
+//     // Ejecuta la consulta en la base de datos
+//     const result = await client.query(query, values);
+//     res.status(201).json(result.rows[0]);
+//   } catch (error) {
+//     console.error('Error creating post:', error);
+//     res.status(500).json({ error: 'Error creating post' });
+//   }
+// });
 
 // PUT- Update blog by blog_id
 

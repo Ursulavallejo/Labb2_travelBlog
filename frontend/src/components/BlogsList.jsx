@@ -46,7 +46,13 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
             <Card style={{ width: '100%', minHeight: '300px' }}>
               <Card.Img
                 variant="top"
-                src={`http://localhost:3000${blog.image_blog}`}
+                src={
+                  blog.image_blog.startsWith('http')
+                    ? blog.image_blog // Imagen de URL externa
+                    : `http://localhost:3000${blog.image_blog}` // Imagen local en /assets/images
+                }
+                // src={`http://localhost:3000${blog.image_blog}`}
+                // src={blog.image_blog}
                 // src={
                 //   blog.image_blog.startsWith('http')
                 //     ? blog.image_blog

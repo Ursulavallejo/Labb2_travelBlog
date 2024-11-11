@@ -19,7 +19,11 @@ export default function BlogCard({ blog, onClose }) {
       </Modal.Header>
       <Modal.Body>
         <img
-          src={blog.image_blog}
+          src={
+            blog.image_blog.startsWith('http')
+              ? blog.image_blog
+              : `http://localhost:3000${blog.image_blog}`
+          }
           alt={blog.title_blog}
           style={{
             width: '40%',

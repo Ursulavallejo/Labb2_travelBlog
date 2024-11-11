@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PropTypes from 'prop-types';
 import BlogCard from './BlogCard';
 import EditBlogForm from './EditBlogForm';
@@ -44,11 +45,13 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
             className="mb-4 d-flex align-items-stretch"
           >
             <Card style={{ width: '100%', minHeight: '300px' }}>
-              <Card.Img
-                variant="top"
-                src={blog.image_blog}
+              <LazyLoadImage
                 alt={blog.title_blog}
-                style={{ height: '200px', objectFit: 'cover' }}
+                src={blog.image_blog}
+                height={200}
+                width="100%"
+                style={{ objectFit: 'cover' }}
+                effect="blur" // Puedes elegir otros efectos como 'opacity' o 'black-and-white'
               />
               <Card.Body className="d-flex flex-column">
                 <Card.Title>{blog.title_blog}</Card.Title>

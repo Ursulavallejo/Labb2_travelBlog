@@ -17,18 +17,15 @@ export default function BlogCard({ blog, onClose }) {
       <Modal.Header closeButton>
         <Modal.Title>{blog.title_blog}</Modal.Title>
       </Modal.Header>
+
       <Modal.Body>
-        <img
-          src={blog.image_blog}
-          alt={blog.title_blog}
-          style={{
-            width: '400px',
-            height: '300px',
-            display: 'block',
-            margin: '0 auto 1rem auto',
-            borderRadius: '5px',
-          }}
-        />
+        <div className="image-container-card">
+          <img
+            src={blog.image_blog}
+            alt={blog.title_blog}
+            className="image-content-card"
+          />
+        </div>
         <p style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>
             <strong>Författare:</strong> {blog.username}

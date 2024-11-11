@@ -5,6 +5,7 @@ import { FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { UserContext } from '../Context/UserContext';
+import travelImage from '../assets/travel.svg';
 
 export default function NavBar({ onPostCreated }) {
   const [showModal, setShowModal] = useState(false);
@@ -26,7 +27,7 @@ export default function NavBar({ onPostCreated }) {
       <Navbar expand="lg" fixed="top" style={{ backgroundColor: '#123456' }}>
         <Navbar.Brand href="/blogs" className="d-flex align-items-center">
           <img
-            src="/travel.svg"
+            src={travelImage}
             width="60"
             height="60"
             className="d-inline-block align-center"
@@ -34,7 +35,7 @@ export default function NavBar({ onPostCreated }) {
             style={{ marginRight: '18px', marginLeft: '18px' }}
           />
           <span
-            style={{ color: '#e27e0a', fontWeight: '600', fontSize: '1.5rem' }}
+            style={{ color: '#ffc107', fontWeight: '600', fontSize: '1.5rem' }}
           >
             Travel Blog
           </span>
@@ -45,7 +46,7 @@ export default function NavBar({ onPostCreated }) {
           </Button>
           <Link to={'/profile'} className="link">
             <Button
-              variant="outline-light m-2 d-flex align-items-center"
+              variant="outline-light m-2 d-flex align-items-center btn px-3 py-2"
               onClick={() => {}}
             >
               <FaUser className="me-1" />
@@ -63,7 +64,9 @@ export default function NavBar({ onPostCreated }) {
 
       <Modal show={showModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Skapa Nytt Blogginlägg</Modal.Title>
+          <Modal.Title style={{ color: '#123456' }}>
+            Skapa Nytt Blogginlägg
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <AddBlogForm onClose={handleClose} onPostCreated={onPostCreated} />

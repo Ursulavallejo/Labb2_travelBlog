@@ -27,6 +27,33 @@ main {
 
 /* BLOGS  */
 /* Blogcard */
+
+.image-container-card {
+  width: 50%;
+  max-width: 500px;
+  height: 400px;
+  margin: 0 auto 1rem auto;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.image-content-card {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* .card-image-container {
+  width: '100%';
+  max-width: '400px';
+  height: '500px';
+  margin: '0 auto 1rem auto';
+  overflow: 'hidden';
+  border-radius: '5px';
+  background-color: red;
+} */
+
 .modal-dialog {
   min-width: 50%;
 }
@@ -103,7 +130,15 @@ label,
   font-weight: bolder;
   color: white;
 }
-
+.heading {
+  color: white;
+  text-align: center;
+}
+#samtycke {
+  color: white;
+  margin: 10px 0;
+  font-weight: normal;
+}
 /* LOGIN PAGE */
 
 .login-page {
@@ -221,9 +256,55 @@ label,
     transform: translateY(0) translateX(0);
   }
 }
+/*  iPad y smal screens */
+@media (max-width: 768px) {
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+  }
+
+  /* only show 3 first images */
+  .grid-image:nth-child(n + 4) {
+    display: none;
+  }
+
+  .grid-image-1 {
+    width: 250px;
+    height: 200px;
+  }
+  .grid-image-2 {
+    width: 220px;
+    height: 180px;
+  }
+  .grid-image-3 {
+    width: 180px;
+    height: 150px;
+    top: 65%;
+    left: 2%;
+  }
+}
+
+/* for movile */
+@media (max-width: 576px) {
+  .image-grid {
+    display: block;
+    background-image: url('https://unsplash.it/650/450');
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Ohide image*/
+  .grid-image {
+    display: none;
+  }
+}
 
 /* Login form*/
-.login-container {
+.login-container,
+#containerReg {
   position: relative;
   z-index: 1;
   background: #123456;
@@ -245,12 +326,13 @@ label,
   padding: 0rem;
   border-radius: 10px;
 }
-
 .login-form label {
   color: white;
 }
 
-.login-form button {
+.login-form button,
+.logButton,
+.blue {
   background-color: #123456;
   color: white;
   border: 1px solid white;
@@ -258,37 +340,34 @@ label,
   cursor: pointer;
   font-size: 1rem;
 }
-.login-form input {
-  width: 100vw;
+
+.login-form input,
+.registerInput {
   max-width: 250px;
   background-color: white;
-  color: black;
+  color: #123456;
   border: 1px solid #ccc;
   padding: 0.3rem;
   border-radius: 5px;
-  font-size: 1rem;
   margin-top: 0.5rem;
   height: 30px;
+}
+
+.blue:hover {
+  background-color: rgb(255, 193, 7) !important;
 }
 
 .link {
   text-decoration: none;
   color: #f8f9fa;
 }
-/* buttons */
-.blue {
-  background-color: #123456 !important;
-  color: white;
-}
-.blue:hover {
-  background-color: #e27e0a !important;
-}
+
 /* comments */
 .speech-bubble {
   position: relative;
   border-radius: 0.4em;
   padding: 0.5rem;
-  box-shadow: #7091a8 0px 1px 3px, #7091a8 0px 1px 2px;
+  box-shadow: #123456 0px 1px 3px, #123456 0px 1px 2px;
 }
 
 .speech-bubble:after {
@@ -299,7 +378,7 @@ label,
   width: 0;
   height: 0;
   border: 20px solid transparent;
-  border-right-color: rgb(116, 200, 233);
+  border-right-color: #123456;
   border-left: 0;
   border-bottom: 0;
   margin-top: -10px;

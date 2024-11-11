@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PropTypes from 'prop-types';
 import BlogCard from './BlogCard';
 import EditBlogForm from './EditBlogForm';
@@ -10,17 +11,22 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
   const [selectedBlogForEditing, setSelectedBlogForEditing] = useState(null);
 
   const handleDelete = async (blogId) => {
-    try {
-      const response = await fetch(`/api/blogs/${blogId}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        onDataChange();
-      } else {
-        alert('Något gick fel!');
+    const isConfirmed = window.confirm(
+      'Är du säker på att du vill ta bort detta inlägg?'
+    );
+    if (isConfirmed) {
+      try {
+        const response = await fetch(`/api/blogs/${blogId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          onDataChange();
+        } else {
+          alert('Något gick fel!');
+        }
+      } catch (error) {
+        console.error('Error deleting post:', error);
       }
-    } catch (error) {
-      console.error('Error deleting post:', error);
     }
   };
 
@@ -44,11 +50,13 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
             className="mb-4 d-flex align-items-stretch"
           >
             <Card style={{ width: '100%', minHeight: '300px' }}>
-              <Card.Img
-                variant="top"
-                src={blog.image_blog}
+              <LazyLoadImage
                 alt={blog.title_blog}
-                style={{ height: '200px', objectFit: 'cover' }}
+                src={blog.image_blog}
+                height={200}
+                width="100%"
+                style={{ objectFit: 'cover' }}
+                effect="blur" // Puedes elegir otros efectos como 'opacity' o 'black-and-white'
               />
               <Card.Body className="d-flex flex-column">
                 <Card.Title>{blog.title_blog}</Card.Title>
@@ -61,10 +69,11 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                     day: '2-digit',
                   })}
                 </Card.Text>
-                {blog.user_id === currentUserId && (
+                {blog.user_id === Number(currentUserId) && (
                   <div className="btn-container">
                     <Button
                       variant="outline-dark"
+                      aria-label="Uppdatera"
                       className="my-3 mx-2 align-self-end "
                       onClick={() => handleUpdate(blog)}
                     >
@@ -72,6 +81,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                     </Button>
                     <Button
                       variant="outline-dark"
+                      aria-label="Radera"
                       className="my-3 mx-2 align-self-end "
                       onClick={() => handleDelete(blog.blog_id)}
                     >
@@ -134,6 +144,6 @@ BlogsList.propTypes = {
       username: PropTypes.string.isRequired,
     })
   ).isRequired,
-  currentUserId: PropTypes.string,
+  currentUserId: PropTypes.number,
   onDataChange: PropTypes.func.isRequired,
 };

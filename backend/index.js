@@ -1,22 +1,55 @@
-const path = require('path');
+const multer = require('multer'),
+  path = require('path'),
+  express = require('express'),
+  cors = require('cors'),
+  jwt = require('jsonwebtoken')
+  dotenv = require('dotenv'),
+  { Client } = require('pg');
+const Jimp = require('jimp');
+const fs = require('fs');
+// const Jimp = require('jimp').default || require('jimp');
 
-const jwt = require('jsonwebtoken');
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const { Client } = require('pg');
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-
-dotenv.config();
 
 const client = new Client({
   connectionString: process.env.PGURI,
 });
 
 client.connect();
+//  >>> TO USE MULTER <<<<
+//  conf. multer to save images on the folder '/uploads --- this is first creatinf as after delete image'
+const storage = multer.diskStorage({
+  destination: 'uploads',
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // create the file name with timestap
+  },
+});
+// Multer configuration to use memory storage -- this is first saving on temporal store, compress the image and after save it
+// const storage = multer.memoryStorage(); // Store the file temporarily in memory
+
+// Filter file type (jpeg/ png) and the size(max. 2MB)
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('only JPG / PNG'));
+  }
+};
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // max size 2MB
+  fileFilter: fileFilter,
+});
+
+// stactis files
+app.use('/uploads', express.static('uploads'));
+
+// >>> API DATABASE CRUD <<<<
 
 // JWT authenticate
 const authenticateToken = (req, res, next) => {
@@ -177,6 +210,7 @@ app.delete('/users/delete', authenticateToken, async (req, res) => {
 });
 
 // GET - blogs
+
 app.get('/api/blogs', async (req, res) => {
   try {
     const query = `
@@ -187,7 +221,18 @@ app.get('/api/blogs', async (req, res) => {
       ORDER BY blogs.date DESC
     `;
     const { rows } = await client.query(query);
-    res.json(rows);
+
+    // Process the route of the files
+    const processedBlogs = rows.map((blog) => {
+      if (blog.image_blog.startsWith('/uploads')) {
+        blog.image_blog = `http://localhost:3000${blog.image_blog}`; // upload image
+      } else {
+        blog.image_blog = `/images/${blog.image_blog}`; // local image assets
+      }
+      return blog;
+    });
+
+    res.json(processedBlogs);
   } catch (error) {
     console.error('Error fetching blogs:', error);
     res.status(500).send('Error fetching blogs');
@@ -195,45 +240,176 @@ app.get('/api/blogs', async (req, res) => {
 });
 
 // POST - Create a new blog post
-app.post('/api/blogs', async (req, res) => {
-  const {
-    title_blog,
-    author,
-    text_blog,
-    image_blog,
-    land_name,
-    date,
-    user_id,
-  } = req.body;
 
-  const query = `
+// JIMP >>> POST route to create a new blog post with image processing --- this is first creating as after delete image
+
+// app.post(
+//   '/api/blogs',
+//   upload.single('image'), //  Multer
+//   async (req, res) => {
+//     const { title_blog, author, text_blog, land_name, date, user_id } =
+//       req.body;
+
+//     if (!land_name) {
+//       return res
+//         .status(400)
+//         .json({ error: 'El campo land_name es obligatorio' });
+//     }
+
+//     let image_blog = null;
+//     if (req.file) {
+//       const filePath = path.resolve(__dirname, 'uploads', req.file.filename);
+//       const compressedPath = path.resolve(
+//         __dirname,
+//         'uploads',
+//         `compressed-${req.file.filename}`
+//       );
+
+//       try {
+//         // Read and compress the image with Jimp
+//         const image = await Jimp.read(filePath);
+//         await image.resize(300, 200).quality(70).writeAsync(compressedPath);
+
+//         // update `image_blog` to the compressed file
+//         image_blog = `/uploads/compressed-${req.file.filename}`;
+
+//         // delete original file
+//         fs.unlinkSync(filePath);
+
+//         console.log('Bilden har komprimerats och sparats');
+//       } catch (error) {
+//         console.error('Fel vid behandling av bild:', error);
+//         return res
+//           .status(500)
+//           .json({ error: 'Det gick inte att bearbeta bilden' });
+//       }
+//     }
+
+// JIMP >>> POST route to handle file upload, processing with Jimp, and saving to disk--- this is first saving on temporal store, compress the image and after save it
+////GET ERROR ON CONSOLE ABOUT AXIOS!!!
+// app.post('/api/blogs', upload.single('image'), async (req, res) => {
+//   const { title_blog, author, text_blog, land_name, date, user_id } = req.body;
+
+//   if (!land_name) {
+//     return res.status(400).json({ error: 'Fältet land_name är obligatoriskt' });
+//   }
+
+//   let image_blog = null;
+//   if (req.file) {
+//     try {
+//       // Process image with Jimp from memory
+//       const image = await Jimp.read(req.file.buffer);
+//       await image.resize(300, 200).quality(70);
+
+//       // Create a unique filename for the compressed image
+//       const filename = `compressed-${Date.now()}-${req.file.originalname}`;
+//       const filePath = path.resolve(__dirname, 'uploads', filename);
+
+//       // Save the processed image to the 'uploads' directory
+//       await image.writeAsync(filePath);
+//       image_blog = `/uploads/${filename}`;
+
+//       console.log(
+//         'Bilden bearbetades och sparades framgångsrikt på:',
+//         image_blog
+//       );
+//     } catch (error) {
+//       console.error('Fel vid bearbetning av bilden med Jimp:', error);
+//       return res.status(500).json({ error: 'Fel vid bearbetning av bilden' });
+//     }
+//   }
+
+// THIS WORKS WITHOUT JIMP // save image to /uploads >>>
+// Modidy endpoint /api/blogs and manage  multipart/form-data
+app.post(
+  '/api/blogs',
+  (req, res, next) => {
+    // call upload.single handle file
+    upload.single('image')(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+        // multer error handle max size
+        return res.status(400).json({ error: err.message });
+      } else if (err) {
+        // error file type not permited
+        return res.status(400).json({
+          error:
+            'Endast JPG- och PNG-filer med en maximal storlek på 2MB är tillåtna',
+        });
+      }
+      next();
+    });
+  },
+  async (req, res) => {
+    const { title_blog, author, text_blog, land_name, date, user_id } =
+      req.body;
+
+    const image_blog = req.file
+      ? `/uploads/${req.file.filename}`
+      : req.body.image_blog || null;
+
+    if (!land_name) {
+      return res
+        .status(400)
+        .json({ error: 'Fältet landnamn är obligatoriskt' });
+    }
+
+    ///JIMP!!!NOT WORKING!!
+    // if (req.file) {
+    //   console.log(`Processing image at: uploads/${req.file.filename}`);
+
+    //   Jimp.read(`uploads/${req.file.filename}`)
+    //     .then((image) => {
+    //       console.log('Image loaded successfully');
+    //       return image
+    //         .resize(300, 200)
+    //         .writeAsync(`uploads/modified-${req.file.filename}`);
+    //     })
+    //     .then(() => {
+    //       console.log('Image resized successfully');
+    //       image_blog = `/uploads/modified-${req.file.filename}`;
+    //       // Inserta el resto del código que maneja la respuesta después del procesamiento aquí si es necesario
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error processing image:', error);
+    //       return res.status(500).json({ error: 'Error processing image' });
+    //     });
+    // } else {
+    //   console.log('image not loaded');
+    // }
+
+    // Save blog data in the database
+    const query = `
     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
   `;
-  const values = [
-    title_blog,
-    author,
-    text_blog,
-    image_blog,
-    land_name,
-    date,
-    user_id,
-    /* FK_users */
-  ];
+    const values = [
+      title_blog,
+      author,
+      text_blog,
+      image_blog,
+      land_name,
+      date,
+      user_id,
+    ];
 
-  try {
-    const result = await client.query(query, values);
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error('Error creating post:', error);
-    res.status(500).json({ error: 'Error creating post' });
+    try {
+      const result = await client.query(query, values);
+      res.status(201).json(result.rows[0]);
+    } catch (error) {
+      console.error('Error creating post:', error);
+      res.status(500).json({ error: 'Error creating post' });
+    }
   }
-});
+);
 
 // PUT- Update blog by blog_id
-app.put('/api/blogs/:id', async (req, res) => {
+
+app.put('/api/blogs/:id', upload.single('image'), async (req, res) => {
   const blogId = req.params.id;
-  const { title_blog, text_blog, image_blog, land_name, user_id } = req.body;
+  const { title_blog, text_blog, land_name, user_id } = req.body;
+  const image_blog = req.file
+    ? `/uploads/${req.file.filename}`
+    : req.body.image_blog;
 
   try {
     const result = await client.query(

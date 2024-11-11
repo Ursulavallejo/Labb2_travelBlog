@@ -100,8 +100,8 @@ export default function Comments({ blogId }) {
                       className="d-flex align-items-center"
                       variant="outline-dark"
                       size="sm"
+                      aria-label="Uppdatera"
                       style={{
-                        border: 'none',
                         padding: '0 2px',
                         margin: '2px 4px',
                       }}
@@ -113,8 +113,8 @@ export default function Comments({ blogId }) {
                       className="d-flex align-items-center"
                       variant="outline-dark"
                       size="sm"
+                      aria-label="Radera"
                       style={{
-                        border: 'none',
                         padding: '0 2px',
                         margin: '2px 4px',
                       }}

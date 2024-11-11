@@ -1,14 +1,12 @@
 import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
+import travelImage from '../assets/travel.svg';
 
 export default function Login() {
   const { setID, setUsername } = useContext(UserContext);
   const [finish, setFinish] = useState(false);
   const navigate = useNavigate();
-
-  console.log('setID:', setID);
-  console.log('setUsername:', setUsername);
 
   useEffect(() => {
     if (finish) {
@@ -76,7 +74,7 @@ export default function Login() {
       <div id="container" className="login-container rounded-5 p-5">
         <div className="d-flex align-items-center justify-content-evenly">
           <img
-            src="/travel.svg"
+            src={travelImage}
             width="60"
             height="60"
             alt="Travel Icon"
@@ -111,7 +109,10 @@ export default function Login() {
             placeholder="Password..."
             required
           />
-          <button type="submit" className="w-50 mx-auto mt-3 rounded-2 blue">
+          <button
+            type="submit"
+            className="w-50 mx-auto mt-3 rounded-2 btn blue"
+          >
             Logga in
           </button>
           <Link to="/register" className="link mx-auto">

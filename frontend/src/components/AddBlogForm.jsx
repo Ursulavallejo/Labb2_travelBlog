@@ -2,42 +2,72 @@ import { Form, Button } from 'react-bootstrap';
 import { useContext, useState } from 'react';
 import { UserContext } from '../Context/UserContext';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 export default function AddBlogForm({ onClose, onPostCreated }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(null); // Change to store file
   const [country, setCountry] = useState('');
   const { ID, username } = useContext(UserContext);
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const maxSize = 2 * 1024 * 1024; // 2MB en bytes
+
+    if (file && !allowedTypes.includes(file.type)) {
+      alert('Endast JPG- och PNG-filer är tillåtna');
+      setImage(null);
+    } else if (file && file.size > maxSize) {
+      alert('Maximal filstorlek är 2 MB');
+      setImage(null);
+    } else {
+      setImage(file); // save the file if file format and size is correct
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submit triggered');
+
     try {
-      const response = await fetch('/api/blogs', {
-        method: 'POST',
+      const formData = new FormData();
+      formData.append('title_blog', title);
+      formData.append('author', username);
+      formData.append('text_blog', content);
+      formData.append('land_name', country);
+      formData.append('date', new Date().toISOString());
+      formData.append('user_id', ID);
+
+      // Append image file if selected
+      if (image) {
+        formData.append('image', image);
+        console.log('Image appended:', image);
+      }
+
+      const response = await axios.post('/api/blogs', formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
-        body: JSON.stringify({
-          title_blog: title,
-          author: username, // use username using context
-          text_blog: content,
-          image_blog: image,
-          land_name: country,
-          date: new Date().toISOString(),
-          user_id: ID,
-        }),
       });
-      if (response.ok) {
+      console.log('Response received:', response);
+
+      if (response.status === 200 || response.status === 201) {
         onClose();
         if (onPostCreated) {
           onPostCreated();
         }
       } else {
+        console.error('Unexpected response status:', response.status);
+
         alert('Något gick fel!');
       }
     } catch (error) {
       console.error('Error creating post:', error);
+      console.error(
+        'Axios error:',
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -62,12 +92,11 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
         />
       </Form.Group>
       <Form.Group controlId="formImage">
-        <Form.Label>Bild URL</Form.Label>
-        <Form.Control
-          type="text"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-        />
+        <Form.Label>Bild</Form.Label>
+        <Form.Control type="file" onChange={handleFileChange} />
+        <Form.Text style={{ fontStyle: 'italic', color: '#555555' }}>
+          Endast JPG- och PNG-filer är tillåtna. Maximal storlek på 2MB.
+        </Form.Text>
       </Form.Group>
       <Form.Group controlId="formContent">
         <Form.Label>Innehåll</Form.Label>

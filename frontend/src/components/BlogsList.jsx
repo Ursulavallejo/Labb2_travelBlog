@@ -70,6 +70,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                   <div className="btn-container">
                     <Button
                       variant="outline-dark"
+                      aria-label="Uppdatera"
                       className="my-3 mx-2 align-self-end "
                       onClick={() => handleUpdate(blog)}
                     >
@@ -77,6 +78,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                     </Button>
                     <Button
                       variant="outline-dark"
+                      aria-label="Radera"
                       className="my-3 mx-2 align-self-end "
                       onClick={() => handleDelete(blog.blog_id)}
                     >

@@ -131,14 +131,7 @@ export default function Register() {
                 value="ok"
                 required
               />
-              <label
-                htmlFor="samtycke"
-                style={{
-                  color: 'white',
-                  margin: '10px 0',
-                  fontWeight: 'normal',
-                }}
-              >
+              <label htmlFor="samtycke" id="samtycke">
                 Jag samtycker till att mina personuppgifter hanteras enligt
                 integritetspolicyn och GDPR.
               </label>
@@ -156,7 +149,7 @@ export default function Register() {
             >
               Bekräfta
             </button>
-            <button className="mx-auto rounded-3 mt-3  blue logButton p-2">
+            <button className="mx-auto rounded-3 mt-3  blue logButton px-3 py-2">
               <Link to="/" className="link ">
                 Har du redan ett konto?
               </Link>

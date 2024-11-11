@@ -8,9 +8,6 @@ export default function Login() {
   const [finish, setFinish] = useState(false);
   const navigate = useNavigate();
 
-  console.log('setID:', setID);
-  console.log('setUsername:', setUsername);
-
   useEffect(() => {
     if (finish) {
       navigate('/blogs');
@@ -112,8 +109,8 @@ export default function Login() {
           >
             Logga in
           </button>
-          <button className="mx-auto rounded-3 mt-3 btn blue  p-2">
-            <Link to="/register" className="link ">
+          <button className="mx-auto rounded-3 mt-3 btn blue p-2">
+            <Link to="/register" className="link p-2 ">
               Inget konto? Registrera dig!
             </Link>
           </button>

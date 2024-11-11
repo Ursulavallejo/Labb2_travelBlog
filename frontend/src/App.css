@@ -134,7 +134,11 @@ label,
   color: white;
   text-align: center;
 }
-
+#samtycke {
+  color: white;
+  margin: 10px 0;
+  font-weight: normal;
+}
 /* LOGIN PAGE */
 
 .login-page {
@@ -303,6 +307,7 @@ label,
   margin-top: 0.5rem;
   height: 30px;
 }
+
 .blue:hover {
   background-color: rgb(255, 193, 7) !important;
 }

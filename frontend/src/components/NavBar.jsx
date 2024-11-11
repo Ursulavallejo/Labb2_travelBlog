@@ -5,6 +5,7 @@ import { FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { UserContext } from '../Context/UserContext';
+import travelImage from '../assets/travel.svg';
 
 export default function NavBar({ onPostCreated }) {
   const [showModal, setShowModal] = useState(false);
@@ -26,7 +27,7 @@ export default function NavBar({ onPostCreated }) {
       <Navbar expand="lg" fixed="top" style={{ backgroundColor: '#123456' }}>
         <Navbar.Brand href="/blogs" className="d-flex align-items-center">
           <img
-            src="/travel.svg"
+            src={travelImage}
             width="60"
             height="60"
             className="d-inline-block align-center"

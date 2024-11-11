@@ -46,16 +46,6 @@ app.use('/uploads', express.static('uploads'));
 
 // >>> API DATABASE CRUD <<<<
 
-// Multer upload
-
-// app.post('/upload', upload.single('image'), (req, res) => {
-//   const imagePath = `/uploads/${req.file.filename}`;
-
-//   // Save imagePath onthe dtabase with the post dta
-
-//   res.json({ message: 'image was loaded correct', imagePath });
-// });
-
 // refresher, GET users
 app.get('/users', async (req, res) => {
   try {
@@ -204,7 +194,7 @@ app.post(
         // error file type not permited
         return res.status(400).json({
           error:
-            'Solo se permiten archivos JPG y PNG con un tamaño máximo de 2MB',
+            'Endast JPG- och PNG-filer med en maximal storlek på 2MB är tillåtna',
         });
       }
       next();
@@ -279,32 +269,6 @@ app.put('/api/blogs/:id', upload.single('image'), async (req, res) => {
     res.status(500).json({ error: 'Fel vid uppdatering av bloggen' });
   }
 });
-
-// app.put('/api/blogs/:id', async (req, res) => {
-//   const blogId = req.params.id;
-//   const { title_blog, text_blog, image_blog, land_name, user_id } = req.body;
-
-//   try {
-//     const result = await client.query(
-//       `UPDATE blogs
-//        SET title_blog = $1, text_blog = $2, image_blog = $3, land_name = $4
-//        WHERE blog_id = $5 AND FK_users = $6
-//        RETURNING *`,
-//       [title_blog, text_blog, image_blog, land_name, blogId, user_id]
-//     );
-
-//     if (result.rowCount > 0) {
-//       res.status(200).json({ message: 'Blogg uppdaterad framgångsrikt' });
-//     } else {
-//       res.status(404).json({
-//         message: 'Blogg hittades inte eller användaren har inte behörighet',
-//       });
-//     }
-//   } catch (error) {
-//     console.error('Fel vid uppdatering av bloggen:', error);
-//     res.status(500).json({ error: 'Fel vid uppdatering av bloggen' });
-//   }
-// });
 
 // DELETE blog by ID
 app.delete('/api/blogs/:id', async (req, res) => {

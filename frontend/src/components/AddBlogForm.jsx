@@ -23,7 +23,7 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
       alert('El tamaño máximo de archivo es 2MB');
       setImage(null);
     } else {
-      setImage(file); // save the file if file format and size are correct
+      setImage(file); // save the file if file format and size is correct
     }
   };
   const handleSubmit = async (e) => {

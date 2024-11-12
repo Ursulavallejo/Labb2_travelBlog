@@ -77,7 +77,11 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                       className="my-3 mx-2 align-self-end "
                       onClick={() => handleUpdate(blog)}
                     >
-                      <FaEdit />
+                      <FaEdit
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Uppdatera"
+                      />
                     </Button>
                     <Button
                       variant="outline-dark"
@@ -85,7 +89,11 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                       className="my-3 mx-2 align-self-end "
                       onClick={() => handleDelete(blog.blog_id)}
                     >
-                      <FaTrash />
+                      <FaTrash
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Radera"
+                      />
                     </Button>
                   </div>
                 )}

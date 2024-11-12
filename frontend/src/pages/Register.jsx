@@ -149,11 +149,11 @@ export default function Register() {
             >
               Bekräfta
             </button>
-            <button className="mx-auto rounded-3 mt-3  blue logButton px-3 py-2">
-              <Link to="/" className="link ">
+            <Link to="/" className="link mx-auto">
+              <button className="rounded-3 mt-3 btn blue text-white">
                 Har du redan ett konto?
-              </Link>
-            </button>
+              </button>
+            </Link>
           </form>
 
           <div

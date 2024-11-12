@@ -66,6 +66,7 @@ export default function Login() {
             src={`https://unsplash.it/${600 + num * 50}/${400 + num * 50}`}
             alt={`RandomImage${num}`}
             className={`grid-image grid-image-${num}`}
+            loading="lazy"
           />
         ))}
       </div>

@@ -94,6 +94,7 @@ export default function Comments({ blogId }) {
             <p style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span className="d-flex ">
                 <strong>{comment.username} : </strong>
+
                 {Number(comment.fk_users) === Number(ID) && (
                   <>
                     <Button
@@ -104,10 +105,15 @@ export default function Comments({ blogId }) {
                       style={{
                         padding: '0 2px',
                         margin: '2px 4px',
+                        border: 'none',
                       }}
                       onClick={() => handleEditComment(comment)}
                     >
-                      <FaEdit />
+                      <FaEdit
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Uppdatera"
+                      />
                     </Button>
                     <Button
                       className="d-flex align-items-center"
@@ -117,10 +123,15 @@ export default function Comments({ blogId }) {
                       style={{
                         padding: '0 2px',
                         margin: '2px 4px',
+                        border: 'none',
                       }}
                       onClick={() => handleDeleteComment(comment.comment_id)}
                     >
-                      <FaTrash />
+                      <FaTrash
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Radera"
+                      />
                     </Button>
                   </>
                 )}

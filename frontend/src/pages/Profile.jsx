@@ -168,11 +168,17 @@ export default function Profile() {
                     onClick={userDelete}
                     className="fs-1"
                     style={{ color: 'white', cursor: 'pointer' }}
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Radera"
                   />
                   <FaEdit
                     onClick={edit}
                     className="fs-1 ms-auto"
                     style={{ color: 'white', cursor: 'pointer' }}
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Uppdatera"
                   />
                 </div>
                 <Form.Group className="mt-3">

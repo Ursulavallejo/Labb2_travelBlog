@@ -39,13 +39,10 @@ export default function Login() {
         setID(userID);
         setUsername(username);
 
-        console.log(token);
-
         localStorage.setItem('ID', userID);
         localStorage.setItem('username', username);
         localStorage.setItem('token', token);
 
-        console.log(localStorage.getItem('token'));
         // alert('Loggat in!');
         document.getElementById('login').reset();
         setFinish(true);

@@ -96,6 +96,7 @@ export default function Profile() {
     if (token) {
       console.log('the token ' + token);
     }
+
     fetch(`/users/delete`, {
       method: 'DELETE',
       headers: {
@@ -105,12 +106,11 @@ export default function Profile() {
     })
       .then((resp) => {
         if (!resp.ok) {
-          throw new Error('Kunde inte radera konto!');
+          throw new Error('Kunde inte radera konto! ');
         }
-        return resp.json();
       })
       .then(() => {
-        console.log(token);
+        localStorage.setItem('ID', null);
         localStorage.removeItem('token');
         alert('Din konto har raderats!');
         navigate('/');

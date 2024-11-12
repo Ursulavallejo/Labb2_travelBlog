@@ -2,9 +2,8 @@ const multer = require('multer'),
   path = require('path'),
   express = require('express'),
   cors = require('cors'),
-  jwt = require('jsonwebtoken')
-  dotenv = require('dotenv'),
-  { Client } = require('pg');
+  jwt = require('jsonwebtoken');
+(dotenv = require('dotenv')), ({ Client } = require('pg'));
 const Jimp = require('jimp');
 const fs = require('fs');
 // const Jimp = require('jimp').default || require('jimp');
@@ -53,15 +52,16 @@ app.use('/uploads', express.static('uploads'));
 
 // JWT authenticate
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['Authorization'];
+  const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  res.send({ autHead: authHeader, token: token });
 
   if (!token) return res.status(401).json({ message: 'Token required' });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err)
       return res.status(403).json({ message: 'Invalid or expired token' });
+
+    console.log('decode payload: ', user.userId);
 
     req.userId = user.userId;
     next();
@@ -192,11 +192,17 @@ WHERE user_id = $6;
 // DELETE user
 app.delete('/users/delete', authenticateToken, async (req, res) => {
   const { userId } = req;
-  console.log(userId);
+  console.log('userId from token ', userId);
+
+  if (!userId) {
+    return res.status(400).send({ message: 'User ID missing' });
+  }
+
   const query = `DELETE FROM users WHERE user_id = $1`;
   const values = [userId];
   try {
     const results = await client.query(query, values);
+    console.log('query results ', results);
     if (results.rowCount === 0) {
       return res
         .status(404)
@@ -205,7 +211,9 @@ app.delete('/users/delete', authenticateToken, async (req, res) => {
     return res.status(200).send('User deletion successful!');
   } catch (error) {
     console.error('Error: ', error);
-    return res.status(500).send({ error: error });
+    if (!res.headersSent) {
+      return res.status(500).send({ error: error });
+    }
   }
 });
 

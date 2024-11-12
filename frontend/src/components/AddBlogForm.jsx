@@ -93,7 +93,7 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
       </Form.Group>
       <Form.Group controlId="formImage">
         <Form.Label>Bild</Form.Label>
-        <Form.Control type="file" onChange={handleFileChange} />
+        <Form.Control type="file" onChange={handleFileChange} required />
         <Form.Text style={{ fontStyle: 'italic', color: '#555555' }}>
           Endast JPG- och PNG-filer är tillåtna. Maximal storlek på 2MB.
         </Form.Text>

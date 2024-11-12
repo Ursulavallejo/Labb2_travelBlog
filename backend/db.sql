@@ -50,8 +50,8 @@ VALUES
 CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,
     text_comment TEXT NOT NULL,
-    FK_users INT REFERENCES users(user_id),
-    FK_blogs INT REFERENCES blogs(blog_id),
+    FK_users INT REFERENCES users(user_id) ON DELETE CASCADE,
+    FK_blogs INT REFERENCES blogs(blog_id) ON DELETE CASCADE,
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

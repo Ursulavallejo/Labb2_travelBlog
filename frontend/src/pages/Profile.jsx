@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
 import { Button, Spinner, Form, Container } from 'react-bootstrap';
 import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaRegWindowClose } from 'react-icons/fa';
 
 export default function Profile() {
   const { ID } = useContext(UserContext);
@@ -166,19 +166,27 @@ export default function Profile() {
                 <div className="d-flex">
                   <FaTrash
                     onClick={userDelete}
-                    className="fs-1"
+                    className="fs-1  p-2"
                     style={{ color: 'white', cursor: 'pointer' }}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title="Radera"
+                    title="Radera konto"
                   />
                   <FaEdit
                     onClick={edit}
-                    className="fs-1 ms-auto"
+                    className="fs-1 p-2"
                     style={{ color: 'white', cursor: 'pointer' }}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title="Uppdatera"
+                    title="Uppdatera konto"
+                  />
+                  <FaRegWindowClose
+                    onClick={handleConfirm}
+                    className="fs-1 ms-auto p-2"
+                    style={{ color: '#ffc107', cursor: 'pointer' }}
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Stäng"
                   />
                 </div>
                 <Form.Group className="mt-3">
@@ -237,11 +245,10 @@ export default function Profile() {
                   />
                 </Form.Group>
 
-                <div className="d-flex justify-content-center mt-4">
+                <div className="d-flex justify-content-center mt-4 mb-4">
                   <Button
                     variant="warning"
                     className="w-50 mx-2 editInput"
-                    // onClick={handleConfirm}
                     type="submit"
                   >
                     Bekräfta uppdatering
@@ -256,13 +263,6 @@ export default function Profile() {
                   </Button>
                 </div>
               </Form>
-              <Button
-                variant="outline-warning"
-                className="w-50 mx-auto d-flex mt-4"
-                onClick={handleConfirm}
-              >
-                Tillbaka till Blogs
-              </Button>
             </div>
           </>
         )}

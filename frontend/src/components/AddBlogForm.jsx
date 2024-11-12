@@ -28,7 +28,7 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submit triggered');
+    // console.log('Submit triggered');
 
     try {
       const formData = new FormData();
@@ -42,7 +42,7 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
       // Append image file if selected
       if (image) {
         formData.append('image', image);
-        console.log('Image appended:', image);
+        // console.log('Image appended:', image);
       }
 
       const response = await axios.post('/api/blogs', formData, {
@@ -50,7 +50,7 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('Response received:', response);
+      // console.log('Response received:', response);
 
       if (response.status === 200 || response.status === 201) {
         onClose();

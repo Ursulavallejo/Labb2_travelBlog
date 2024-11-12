@@ -282,15 +282,15 @@ app.post(
         // console.log(image.getBuffer('image/jpeg', { quality: 80 }));
 
         await (await image.resize({ w: 300 })).write(compressedPath);
-        console.log('compressedPath', compressedPath);
-        console.log('filepath', filePath);
+        // console.log('compressedPath', compressedPath);
+        // console.log('filepath', filePath);
         // update `image_blog` to the compressed file THIS IS THE NAME GO TO TEH DATA BASE
         image_blog = `/uploads/compressed-${req.file.filename}`;
         // upload.single(`/uploads/compressed-${req.file.filename}`),
         // delete original file
         fs.unlinkSync(filePath);
 
-        console.log('Bilden har komprimerats och sparats');
+        // console.log('Bilden har komprimerats och sparats');
       } catch (error) {
         console.error('Fel vid behandling av bild:', error);
         return res

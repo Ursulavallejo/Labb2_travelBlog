@@ -11,6 +11,7 @@ services:
 
   backend:
     build: backend
+    container_name: backend-travel
     depends_on:
       database:
         condition: service_healthy
@@ -18,7 +19,9 @@ services:
       - PGURI=${PGURI}
     ports:
       - '3000:3000'
+
   database:
+    container_name: database
     environment:
       - POSTGRES_PASSWORD=${PASSWORD}
       - POSTGRES_DB=${DB_NAME}
@@ -27,7 +30,6 @@ services:
       interval: 2s
       retries: 5
       test: 'pg_isready --username=${DB_USER}'
-    image: postgres
+    image: postgres:latest
     volumes:
       - ./data:/var/lib/postgresql/data
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro

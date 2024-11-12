@@ -116,10 +116,11 @@ export default function Login() {
           >
             Logga in
           </button>
-          <Link to="/register" className="link mx-auto">
-            <button className="rounded-3 mt-3 btn blue">
-              Inget konto? Registrera här!
-            </button>
+          <Link
+            className=" link text-warning mx-auto rounded-3 mt-3 btn  p-2"
+            to="/register"
+          >
+            Inget konto? Registrera dig!
           </Link>
         </form>
       </div>

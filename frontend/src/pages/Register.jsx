@@ -62,7 +62,7 @@ export default function Register() {
         <h2 className="heading text-center text-white">Registrera dig</h2>
         <form
           id="register"
-          className="w-100"
+          className="w-100 mx-auto"
           onSubmit={registerForm}
           style={{
             textAlign: 'left', // Asegura que el texto de las etiquetas quede alineado a la izquierda
@@ -104,7 +104,7 @@ export default function Register() {
             <div key={index} style={{ marginBottom: '15px' }}>
               <label
                 htmlFor={input.id}
-                className="registerLabel text-white"
+                className="registerLabel text-white text-center"
                 style={{
                   display: 'block',
                   fontWeight: 'bold',
@@ -120,7 +120,7 @@ export default function Register() {
                 placeholder={input.placeholder}
                 required
                 pattern={input.pattern || undefined}
-                className="registerInput form-control"
+                className="registerInput form-control mx-auto"
                 style={{ width: '100%' }}
               />
             </div>
@@ -234,7 +234,7 @@ export default function Register() {
                     document.querySelector('.modal').classList.remove('show')
                   }
                 >
-                  mer om GDPR
+                  Mer om GDPR
                 </Link>
                 <button
                   type="button"

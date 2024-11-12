@@ -151,8 +151,6 @@ export default function Profile() {
           />
         ) : (
           <>
-            <h2 className="heading">Ändra dina uppgifter</h2>
-
             <div
               id="containerReg"
               className="rounded-5 px-4 py-2"
@@ -163,6 +161,7 @@ export default function Profile() {
                 onSubmit={editForm}
                 className="d-flex flex-column mx-auto"
               >
+                <h2 className="heading">Ändra dina uppgifter</h2>
                 <div className="d-flex">
                   <FaTrash
                     onClick={userDelete}

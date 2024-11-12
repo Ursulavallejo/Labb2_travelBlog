@@ -114,7 +114,7 @@ export default function Login() {
             Logga in
           </button>
           <Link
-            className=" link text-warning mx-auto rounded-3 mt-3 btn  p-2"
+            className="text-center text-warning d-block mt-3"
             to="/register"
           >
             Inget konto? Registrera dig!

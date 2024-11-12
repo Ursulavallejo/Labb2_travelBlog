@@ -44,14 +44,12 @@ export default function NavBar({ onPostCreated }) {
           <Button variant="outline-light m-2 " onClick={handleShow}>
             Nytt Inlägg
           </Button>
-          <Link to={'/profile'} className="link">
-            <Button
-              variant="outline-light m-2 d-flex align-items-center btn px-3 py-2"
-              onClick={() => {}}
-            >
-              <FaUser className="me-1" />
-              Användarkonto
-            </Button>
+          <Link
+            className=" btn btn-outline-light m-2 d-flex align-items-center p-2 link "
+            to="/profile"
+          >
+            <FaUser className="me-1" />
+            Användarkonto
           </Link>
           <Link to="/" className="link" onClick={handleLogout}>
             <Button variant="secondary m-2 d-flex align-items-center">

@@ -410,19 +410,17 @@ app.post(
   }
 );
 
-// PUT- Update blog by blog_id
+// PATCH- Update blog by blog_id
 app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
   const blogId = req.params.id;
   const { title_blog, text_blog, land_name, user_id } = req.body;
   const image_blog = req.file ? `/uploads/${req.file.filename}` : undefined;
 
   try {
-    // Construir la consulta dinámicamente
     let query = 'UPDATE blogs SET ';
     const values = [];
     let index = 1;
 
-    // Añadir cada campo solo si está definido
     if (title_blog) {
       query += `title_blog = $${index}, `;
       values.push(title_blog);
@@ -444,10 +442,8 @@ app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
       index++;
     }
 
-    // Eliminar la última coma y espacio
     query = query.slice(0, -2);
 
-    // Añadir la cláusula WHERE
     query += ` WHERE blog_id = $${index} AND FK_users = $${
       index + 1
     } RETURNING *`;
@@ -468,40 +464,14 @@ app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
   }
 });
 
-// app.put('/api/blogs/:id', upload.single('image'), async (req, res) => {
-//   const blogId = req.params.id;
-//   const { title_blog, text_blog, land_name, user_id } = req.body;
-//   const image_blog = req.file
-//     ? `/uploads/${req.file.filename}`
-//     : req.body.image_blog;
-
-//   try {
-//     const result = await client.query(
-//       `UPDATE blogs
-//        SET title_blog = $1, text_blog = $2, image_blog = $3, land_name = $4
-//        WHERE blog_id = $5 AND FK_users = $6
-//        RETURNING *`,
-//       [title_blog, text_blog, image_blog, land_name, blogId, user_id]
-//     );
-
-//     if (result.rowCount > 0) {
-//       res.status(200).json({ message: 'Blogg uppdaterad framgångsrikt' });
-//     } else {
-//       res.status(404).json({
-//         message: 'Blogg hittades inte eller användaren har inte behörighet',
-//       });
-//     }
-//   } catch (error) {
-//     console.error('Fel vid uppdatering av bloggen:', error);
-//     res.status(500).json({ error: 'Fel vid uppdatering av bloggen' });
-//   }
-// });
-
 // DELETE blog by ID
 app.delete('/api/blogs/:id', async (req, res) => {
   const blogId = req.params.id;
 
   try {
+    // Delete fist comments
+    await client.query('DELETE FROM comments WHERE FK_blogs = $1', [blogId]);
+
     const result = await client.query(
       'DELETE FROM blogs WHERE blog_id = $1 RETURNING *',
       [blogId]

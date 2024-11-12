@@ -2,11 +2,11 @@ const multer = require('multer'),
   path = require('path'),
   express = require('express'),
   cors = require('cors'),
-  jwt = require('jsonwebtoken');
-(dotenv = require('dotenv')), ({ Client } = require('pg'));
-const Jimp = require('jimp');
-const fs = require('fs');
-// const Jimp = require('jimp').default || require('jimp');
+  dotenv = require('dotenv'),
+  jwt = require('jsonwebtoken'),
+  { Client } = require('pg'),
+  { Jimp } = require('jimp'),
+  fs = require('fs');
 
 dotenv.config();
 
@@ -55,11 +55,11 @@ const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) return res.status(401).json({ message: 'Token required' });
+  if (!token) return res.status(401).json({ message: 'Token krävs' });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err)
-      return res.status(403).json({ message: 'Invalid or expired token' });
+      return res.status(403).json({ message: 'Ogiltig eller utgången token' });
 
     console.log('decode payload: ', user.userId);
 
@@ -96,7 +96,7 @@ app.get('/users/:id', async (req, res) => {
     } else {
       res
         .status(404)
-        .res.send({ success: 'fail', message: 'User could not be found' });
+        .res.send({ success: 'fail', message: 'Användaren kunde inte hittas' });
     }
   } catch (error) {
     console.error('Error fetching user:', error);
@@ -116,10 +116,10 @@ app.post('/users/register', async (req, res) => {
     const results = await client.query(query, values);
     res
       .status(201)
-      .send({ message: 'Registration successful!', data: results.rows });
+      .send({ message: 'Registreringen lyckad!!', data: results.rows });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: 'Failed to submit!', error });
+    res.status(500).send({ message: 'Det gick inte att skicka in!', error });
   }
 });
 
@@ -145,18 +145,20 @@ app.post('/users/login', async (req, res) => {
             expiresIn: '1h',
           }
         );
-        res
-          .status(200)
-          .send({ message: 'Login successful!', data: user, token: token });
+        res.status(200).send({
+          message: 'Inloggningen lyckades!',
+          data: user,
+          token: token,
+        });
       } else {
-        res.status(401).send('Invalid email or password');
+        res.status(401).send('Ogiltig e-postadress eller lösenord');
       }
     } catch (error) {
       console.error(error);
-      res.status(500).send('Failed to submit!');
+      res.status(500).send('Det gick inte att skicka in!');
     }
   } else {
-    res.status(400).send('Missing email or password!');
+    res.status(400).send('E-post eller lösenord saknas!');
   }
 });
 
@@ -180,9 +182,10 @@ WHERE user_id = $6;
     if (update.rowCount > 0) {
       res.status(200).send({ success: true, data: update.rows });
     } else {
-      res
-        .status(400)
-        .send({ success: false, message: 'Could not update user details' });
+      res.status(400).send({
+        success: false,
+        message: 'Kunde inte uppdatera användarinformation',
+      });
     }
   } catch (error) {
     res.status(500).send({ message: error });
@@ -195,7 +198,7 @@ app.delete('/users/delete', authenticateToken, async (req, res) => {
   console.log('userId from token ', userId);
 
   if (!userId) {
-    return res.status(400).send({ message: 'User ID missing' });
+    return res.status(400).send({ message: 'Användar-ID saknas' });
   }
 
   const query = `DELETE FROM users WHERE user_id = $1`;
@@ -206,9 +209,9 @@ app.delete('/users/delete', authenticateToken, async (req, res) => {
     if (results.rowCount === 0) {
       return res
         .status(404)
-        .send({ message: 'User not found or incorrect input' });
+        .send({ message: 'Användaren hittades inte eller felaktig inmatning' });
     }
-    return res.status(200).send('User deletion successful!');
+    return res.status(200).send('Användarens radering lyckades!');
   } catch (error) {
     console.error('Error: ', error);
     if (!res.headersSent) {
@@ -243,117 +246,19 @@ app.get('/api/blogs', async (req, res) => {
     res.json(processedBlogs);
   } catch (error) {
     console.error('Error fetching blogs:', error);
-    res.status(500).send('Error fetching blogs');
+    res.status(500).send('Fel vid hämtning av bloggen');
   }
 });
 
 // POST - Create a new blog post
 
 // JIMP >>> POST route to create a new blog post with image processing --- this is first creating as after delete image
-
-// app.post(
-//   '/api/blogs',
-//   upload.single('image'), //  Multer
-//   async (req, res) => {
-//     const { title_blog, author, text_blog, land_name, date, user_id } =
-//       req.body;
-
-//     if (!land_name) {
-//       return res
-//         .status(400)
-//         .json({ error: 'El campo land_name es obligatorio' });
-//     }
-
-//     let image_blog = null;
-//     if (req.file) {
-//       const filePath = path.resolve(__dirname, 'uploads', req.file.filename);
-//       const compressedPath = path.resolve(
-//         __dirname,
-//         'uploads',
-//         `compressed-${req.file.filename}`
-//       );
-
-//       try {
-//         // Read and compress the image with Jimp
-//         const image = await Jimp.read(filePath);
-//         await image.resize(300, 200).quality(70).writeAsync(compressedPath);
-
-//         // update `image_blog` to the compressed file
-//         image_blog = `/uploads/compressed-${req.file.filename}`;
-
-//         // delete original file
-//         fs.unlinkSync(filePath);
-
-//         console.log('Bilden har komprimerats och sparats');
-//       } catch (error) {
-//         console.error('Fel vid behandling av bild:', error);
-//         return res
-//           .status(500)
-//           .json({ error: 'Det gick inte att bearbeta bilden' });
-//       }
-//     }
-
-// JIMP >>> POST route to handle file upload, processing with Jimp, and saving to disk--- this is first saving on temporal store, compress the image and after save it
-////GET ERROR ON CONSOLE ABOUT AXIOS!!!
-// app.post('/api/blogs', upload.single('image'), async (req, res) => {
-//   const { title_blog, author, text_blog, land_name, date, user_id } = req.body;
-
-//   if (!land_name) {
-//     return res.status(400).json({ error: 'Fältet land_name är obligatoriskt' });
-//   }
-
-//   let image_blog = null;
-//   if (req.file) {
-//     try {
-//       // Process image with Jimp from memory
-//       const image = await Jimp.read(req.file.buffer);
-//       await image.resize(300, 200).quality(70);
-
-//       // Create a unique filename for the compressed image
-//       const filename = `compressed-${Date.now()}-${req.file.originalname}`;
-//       const filePath = path.resolve(__dirname, 'uploads', filename);
-
-//       // Save the processed image to the 'uploads' directory
-//       await image.writeAsync(filePath);
-//       image_blog = `/uploads/${filename}`;
-
-//       console.log(
-//         'Bilden bearbetades och sparades framgångsrikt på:',
-//         image_blog
-//       );
-//     } catch (error) {
-//       console.error('Fel vid bearbetning av bilden med Jimp:', error);
-//       return res.status(500).json({ error: 'Fel vid bearbetning av bilden' });
-//     }
-//   }
-
-// THIS WORKS WITHOUT JIMP // save image to /uploads >>>
-// Modidy endpoint /api/blogs and manage  multipart/form-data
 app.post(
   '/api/blogs',
-  (req, res, next) => {
-    // call upload.single handle file
-    upload.single('image')(req, res, function (err) {
-      if (err instanceof multer.MulterError) {
-        // multer error handle max size
-        return res.status(400).json({ error: err.message });
-      } else if (err) {
-        // error file type not permited
-        return res.status(400).json({
-          error:
-            'Endast JPG- och PNG-filer med en maximal storlek på 2MB är tillåtna',
-        });
-      }
-      next();
-    });
-  },
+  upload.single('image'), //  Multer
   async (req, res) => {
     const { title_blog, author, text_blog, land_name, date, user_id } =
       req.body;
-
-    const image_blog = req.file
-      ? `/uploads/${req.file.filename}`
-      : req.body.image_blog || null;
 
     if (!land_name) {
       return res
@@ -361,29 +266,38 @@ app.post(
         .json({ error: 'Fältet landnamn är obligatoriskt' });
     }
 
-    ///JIMP!!!NOT WORKING!!
-    // if (req.file) {
-    //   console.log(`Processing image at: uploads/${req.file.filename}`);
+    let image_blog = null;
+    if (req.file) {
+      const filePath = path.resolve(__dirname, 'uploads', req.file.filename);
+      const compressedPath = path.resolve(
+        __dirname,
+        'uploads',
+        `compressed-${req.file.filename}`
+      );
 
-    //   Jimp.read(`uploads/${req.file.filename}`)
-    //     .then((image) => {
-    //       console.log('Image loaded successfully');
-    //       return image
-    //         .resize(300, 200)
-    //         .writeAsync(`uploads/modified-${req.file.filename}`);
-    //     })
-    //     .then(() => {
-    //       console.log('Image resized successfully');
-    //       image_blog = `/uploads/modified-${req.file.filename}`;
-    //       // Inserta el resto del código que maneja la respuesta después del procesamiento aquí si es necesario
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error processing image:', error);
-    //       return res.status(500).json({ error: 'Error processing image' });
-    //     });
-    // } else {
-    //   console.log('image not loaded');
-    // }
+      try {
+        // Read and compress the image with Jimp
+        const image = await Jimp.read(filePath);
+
+        // console.log(image.getBuffer('image/jpeg', { quality: 80 }));
+
+        await (await image.resize({ w: 300 })).write(compressedPath);
+        console.log('compressedPath', compressedPath);
+        console.log('filepath', filePath);
+        // update `image_blog` to the compressed file THIS IS THE NAME GO TO TEH DATA BASE
+        image_blog = `/uploads/compressed-${req.file.filename}`;
+        // upload.single(`/uploads/compressed-${req.file.filename}`),
+        // delete original file
+        fs.unlinkSync(filePath);
+
+        console.log('Bilden har komprimerats och sparats');
+      } catch (error) {
+        console.error('Fel vid behandling av bild:', error);
+        return res
+          .status(500)
+          .json({ error: 'Det gick inte att bearbeta bilden' });
+      }
+    }
 
     // Save blog data in the database
     const query = `
@@ -405,7 +319,7 @@ app.post(
       res.status(201).json(result.rows[0]);
     } catch (error) {
       console.error('Error creating post:', error);
-      res.status(500).json({ error: 'Error creating post' });
+      res.status(500).json({ error: 'Det gick inte att skapa inlägget' });
     }
   }
 );
@@ -506,7 +420,7 @@ app.get('/api/comments', async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error('Error fetching comments:', error);
-    res.status(500).json({ error: 'Server error fetching comment.' });
+    res.status(500).json({ error: 'Serverfel vid hämtning av kommentar.' });
   }
 });
 
@@ -524,8 +438,8 @@ app.post('/api/comments', async (req, res) => {
     const result = await client.query(query, values);
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error('Error creating comment:', error);
-    res.status(500).json({ error: 'Error creating comment' });
+    console.error('Det gick inte att skapa kommentar:', error);
+    res.status(500).json({ error: 'Det gick inte att skapa kommentar' });
   }
 });
 
@@ -565,7 +479,7 @@ app.patch('/api/comments/:id', async (req, res) => {
     }
   } catch (error) {
     console.error('Error updating comment:', error);
-    res.status(500).json({ error: 'Server error updating comment.' });
+    res.status(500).json({ error: 'Serverfel vid uppdatering av kommentar.' });
   }
 });
 
@@ -582,18 +496,16 @@ app.delete('/api/comments/:id', async (req, res) => {
     const { rows } = await client.query(query, [id]);
 
     if (rows.length === 0) {
-      return res.status(404).json({ error: 'Comment not found' });
+      return res.status(404).json({ error: 'Kommentaren hittades inte' });
     }
 
-    res.json({ message: 'Comment deleted successfully' });
+    res.json({ message: 'Kommentaren har raderats!' });
   } catch (error) {
     console.error('Error deleting comment:', error);
-    res.status(500).json({ error: 'Server error deleting comment.' });
+    res.status(500).json({ error: 'Serverfel vid borttagning av kommentar.' });
   }
 });
 
-// Serve frontend files
-// app.use(express.static(path.join(path.resolve(), 'dist')));
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server kör på http://localhost:${port}`);

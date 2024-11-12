@@ -28,7 +28,7 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submit triggered');
+    // console.log('Submit triggered');
 
     try {
       const formData = new FormData();
@@ -42,7 +42,7 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
       // Append image file if selected
       if (image) {
         formData.append('image', image);
-        console.log('Image appended:', image);
+        // console.log('Image appended:', image);
       }
 
       const response = await axios.post('/api/blogs', formData, {
@@ -50,7 +50,7 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('Response received:', response);
+      // console.log('Response received:', response);
 
       if (response.status === 200 || response.status === 201) {
         onClose();
@@ -93,7 +93,7 @@ export default function AddBlogForm({ onClose, onPostCreated }) {
       </Form.Group>
       <Form.Group controlId="formImage">
         <Form.Label>Bild</Form.Label>
-        <Form.Control type="file" onChange={handleFileChange} />
+        <Form.Control type="file" onChange={handleFileChange} required />
         <Form.Text style={{ fontStyle: 'italic', color: '#555555' }}>
           Endast JPG- och PNG-filer är tillåtna. Maximal storlek på 2MB.
         </Form.Text>

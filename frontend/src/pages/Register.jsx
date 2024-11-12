@@ -39,164 +39,210 @@ export default function Register() {
   return (
     <div
       className="background-image-container"
-      style={{ backgroundImage: `url(${backgroundImage})` }}
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        minHeight: '100vh',
+        backgroundSize: 'cover',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
-      <div className="d-flex flex-column justify-content-center align-items-center my-auto w-25 mx-auto">
-        <h2 className="heading">Registrera dig</h2>
-        <div
-          id="containerReg"
-          className="d-flex mx-auto   justify-content-center align-items-center rounded-5 px-4 py-2"
-          style={{ maxWidth: '300px' }}
+      <div
+        className="d-flex flex-column justify-content-center"
+        style={{
+          maxWidth: '450px',
+          width: '100%',
+          backgroundColor: '#123456',
+          borderRadius: '10px',
+          padding: '30px',
+          margin: '2rem',
+        }}
+      >
+        <h2 className="heading text-center text-white">Registrera dig</h2>
+        <form
+          id="register"
+          className="w-100"
+          onSubmit={registerForm}
+          style={{
+            textAlign: 'left', // Asegura que el texto de las etiquetas quede alineado a la izquierda
+            margin: '0 auto', // Centra el formulario en el contenedor
+          }}
         >
-          <form
-            id="register"
-            className="d-flex flex-column mx-auto  "
-            onSubmit={registerForm}
-          >
-            <label htmlFor="fname" className="mt-3 registerLabel">
-              Ange förnamn:
-            </label>
-            <input
-              id="fname"
-              name="fname"
-              type="text"
-              placeholder="Förnamn..."
-              required
-              className="registerInput"
-            />
-            <label htmlFor="lname" className="mt-3 registerLabel">
-              Ange efternamn:
-            </label>
-            <input
-              id="lname"
-              name="lname"
-              type="text"
-              placeholder="Efternamn..."
-              required
-              className="registerInput"
-            />
-            <label htmlFor="username" className="mt-3 registerLabel">
-              Ange användarnamn:
-            </label>
-            <input
-              id="username"
-              name="username"
-              type="text"
-              placeholder="Andvändarnamn..."
-              required
-              className="registerInput"
-            />
-            <label htmlFor="emailReg" className="mt-3 registerLabel">
-              Ange e-post:
-            </label>
-            <input
-              id="emailReg"
-              name="emailReg"
-              type="text"
-              placeholder="E-post..."
-              required
-              className="registerInput"
-            />
-            <label htmlFor="phoneReg" className="mt-3 registerLabel">
-              Ange telefonnumber:
-            </label>
-            <input
-              id="phoneReg"
-              name="phoneReg"
-              type="tel"
-              placeholder="0700000000"
-              pattern="[0-9]{10}"
-              required
-              className="registerInput"
-            />
-            <label htmlFor="passwordReg" className="mt-3 registerLabel">
-              Ange lösenord:
-            </label>
-            <input
-              id="passwordReg"
-              name="passwordReg"
-              type="password"
-              placeholder="Lösenord..."
-              required
-              className="registerInput"
-            />
-            <div
-              className="d-flex"
-              style={{ gap: '40px', padding: '20px 5px 0px 10px' }}
-            >
-              <input
-                type="checkbox"
-                id="samtycke"
-                name="samtycke"
-                value="ok"
-                required
-              />
-              <label htmlFor="samtycke" id="samtycke">
-                Jag samtycker till att mina personuppgifter hanteras enligt
-                integritetspolicyn och GDPR.
+          {[
+            { id: 'fname', label: 'Ange förnamn:', placeholder: 'Förnamn...' },
+            {
+              id: 'lname',
+              label: 'Ange efternamn:',
+              placeholder: 'Efternamn...',
+            },
+            {
+              id: 'username',
+              label: 'Ange användarnamn:',
+              placeholder: 'Användarnamn...',
+            },
+            {
+              id: 'emailReg',
+              label: 'Ange e-post:',
+              placeholder: 'E-post...',
+              type: 'email',
+            },
+            {
+              id: 'phoneReg',
+              label: 'Ange telefonnummer:',
+              placeholder: '0700000000',
+              type: 'tel',
+              pattern: '[0-9]{10}',
+            },
+            {
+              id: 'passwordReg',
+              label: 'Ange lösenord:',
+              placeholder: 'Lösenord...',
+              type: 'password',
+            },
+          ].map((input, index) => (
+            <div key={index} style={{ marginBottom: '15px' }}>
+              <label
+                htmlFor={input.id}
+                className="registerLabel text-white"
+                style={{
+                  display: 'block',
+                  fontWeight: 'bold',
+                  marginBottom: '5px',
+                }}
+              >
+                {input.label}
               </label>
+              <input
+                id={input.id}
+                name={input.id}
+                type={input.type || 'text'}
+                placeholder={input.placeholder}
+                required
+                pattern={input.pattern || undefined}
+                className="registerInput form-control"
+                style={{ width: '100%' }}
+              />
             </div>
-            <button
-              className=" mx-auto btn btn-outline-warning"
-              data-bs-toggle="modal"
-              data-bs-target="#samtyckeModal"
-            >
-              Läs mer om samtycke
-            </button>
-            <button
-              type="submit"
-              className="w-50 mx-auto mt-3 rounded-2 btn btn-warning"
-            >
-              Bekräfta
-            </button>
-            <Link
-              className=" link text-warning mx-auto rounded-3 mt-3 btn  p-2"
-              to="/"
-            >
-              Har du redan ett konto?
-            </Link>
-          </form>
+          ))}
 
           <div
-            className="modal fade"
-            id="samtyckeModal"
-            tabIndex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
+            className="d-flex align-items-center"
+            style={{ gap: '10px', marginTop: '20px' }}
           >
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h1 className="modal-title fs-5" id="exampleModalLabel">
-                    Hur vi hanterar dina uppgifter
-                  </h1>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  Genom att använda vår tjänst godkänner du att vi samlar in,
-                  behandlar och lagrar dina personuppgifter i enlighet med GDPR.
-                  Vi hanterar dina uppgifter för att kunna erbjuda en säker och
-                  personlig upplevelse samt för att uppfylla våra åtaganden
-                  gentemot dig. Dina uppgifter används endast för de ändamål som
-                  du har samtyckt till, och du kan när som helst återkalla ditt
-                  samtycke. För mer information om hur vi skyddar din integritet
-                  och behandlar dina personuppgifter, vänligen läs vår
-                  integritetspolicy.
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Stäng
-                  </button>
-                </div>
+            <input
+              type="checkbox"
+              id="samtycke"
+              name="samtycke"
+              value="ok"
+              required
+            />
+            <label htmlFor="samtycke" className="text-white">
+              Jag samtycker till att mina personuppgifter hanteras enligt
+              integritetspolicyn och GDPR.
+            </label>
+          </div>
+
+          <button
+            className="btn btn-outline-warning w-100 mt-3"
+            data-bs-toggle="modal"
+            data-bs-target="#samtyckeModal"
+          >
+            Läs mer om samtycke
+          </button>
+          <button type="submit" className="btn btn-warning w-100 mt-3">
+            Bekräfta
+          </button>
+          <Link className="text-center text-warning d-block mt-3" to="/">
+            Har du redan ett konto?
+          </Link>
+        </form>
+
+        <div
+          className="modal fade"
+          id="samtyckeModal"
+          tabIndex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Hur vi hanterar dina uppgifter
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  Genom att använda vår tjänst godkänner du att vi{' '}
+                  <strong>samlar in</strong>, <strong>behandlar</strong> och{' '}
+                  <strong>lagrar dina personuppgifter</strong> i enlighet med
+                  GDPR.
+                </p>
+
+                <p>
+                  Vi hanterar dina uppgifter för att kunna erbjuda en{' '}
+                  <strong>säker och personlig upplevelse</strong> samt för att
+                  uppfylla våra åtaganden gentemot dig. Dina uppgifter används
+                  endast för de ändamål som du har{' '}
+                  <strong>samtyckt till</strong>, och du kan när som helst{' '}
+                  <strong>återkalla ditt samtycke</strong>.
+                </p>
+
+                <p>
+                  För mer information om hur vi{' '}
+                  <strong>skyddar din integritet</strong> och behandlar dina
+                  personuppgifter, vänligen läs vår{' '}
+                  <strong>integritetspolicy</strong>.
+                </p>
+
+                <p>
+                  När du laddar upp bilder är du{' '}
+                  <strong>
+                    ansvarig för att ha de nödvändiga rättigheterna
+                  </strong>{' '}
+                  till bilderna och att inte bryta mot upphovsrätten.
+                </p>
+
+                <p>
+                  Vi förväntar oss även att du håller en{' '}
+                  <strong>respektfull ton</strong> i dina interaktioner och att
+                  du avstår från att publicera innehåll som är{' '}
+                  <strong>olämpligt, sexuellt explicit</strong> eller{' '}
+                  <strong>olagligt</strong>.
+                </p>
+
+                <p>
+                  Användning av vår tjänst innebär att du{' '}
+                  <strong>samtycker till dessa riktlinjer</strong> och att vi
+                  förbehåller oss rätten att vidta åtgärder om de inte följs.
+                </p>
+              </div>
+
+              <div className="modal-footer">
+                <Link
+                  to="/gdpr"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  onClick={() =>
+                    document.querySelector('.modal').classList.remove('show')
+                  }
+                >
+                  mer om GDPR
+                </Link>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Stäng
+                </button>
               </div>
             </div>
           </div>

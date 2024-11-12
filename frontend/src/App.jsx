@@ -13,11 +13,13 @@ const Home = lazyWithPreload(() => import('./pages/HomeView'));
 const Login = lazyWithPreload(() => import('./pages/Login'));
 const Register = lazyWithPreload(() => import('./pages/Register'));
 const Profile = lazyWithPreload(() => import('./pages/Profile'));
+const Gdpr = lazyWithPreload(() => import('./pages/GdprView'));
 
 Home.preload();
 Login.preload();
 Register.preload();
 Home.preload();
+Gdpr.preload();
 
 export default function App() {
   useEffect(() => {
@@ -63,6 +65,14 @@ export default function App() {
             </Suspense>
           ),
           path: '/profile',
+        },
+        {
+          element: (
+            <Suspense fallback={<>Loading...</>}>
+              <Gdpr />
+            </Suspense>
+          ),
+          path: '/gdpr',
         },
       ],
       element: (

@@ -6,7 +6,7 @@ import axios from 'axios';
 export default function EditForm({ blog, onClose, onUpdate, userId }) {
   const [title, setTitle] = useState(blog.title_blog);
   const [content, setContent] = useState(blog.text_blog);
-  const [image, setImage] = useState(null); // Cambia a null para almacenar un nuevo archivo
+  const [image, setImage] = useState(null); // Mantiene null para almacenar un nuevo archivo
   const [country, setCountry] = useState(blog.land_name);
 
   const handleFileChange = (e) => {
@@ -18,26 +18,37 @@ export default function EditForm({ blog, onClose, onUpdate, userId }) {
 
     try {
       const formData = new FormData();
-      formData.append('title_blog', title);
-      formData.append('text_blog', content);
-      formData.append('land_name', country);
-      formData.append('user_id', userId); // Incluye el ID del usuario
+      formData.append('user_id', userId); // Incluye siempre el ID del usuario
 
-      // Añade la nueva imagen si fue seleccionada
-      if (image) {
-        formData.append('image', image);
-      } else {
-        // Si no se seleccionó una nueva imagen, mantiene la imagen actual
-        formData.append('image_blog', blog.image_blog);
+      // Solo añade los campos que han cambiado
+      if (title !== blog.title_blog) {
+        formData.append('title_blog', title);
+      }
+      if (content !== blog.text_blog) {
+        formData.append('text_blog', content);
+      }
+      if (country !== blog.land_name) {
+        formData.append('land_name', country);
       }
 
-      const response = await axios.put(`/api/blogs/${blog.blog_id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      // Añade la imagen solo si fue seleccionada
+      if (image) {
+        formData.append('image', image);
+      }
 
-      if (response.ok) {
+      // Cambia a PATCH para actualizar solo los campos proporcionados
+      const response = await axios.patch(
+        `/api/blogs/${blog.blog_id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        alert('Blogg uppdaterad!');
         onUpdate();
         onClose();
       } else {

@@ -1,10 +1,9 @@
-version: "3"
 services:
   frontend:
     image: nginx:latest
     container_name: frontend-travel
     ports:
-      - "8080:80"
+      - '8080:80'
     volumes:
       - ./frontend/dist:/usr/share/nginx/html:ro
       - ./default.conf:/etc/nginx/conf.d/default.conf:ro

@@ -3,13 +3,19 @@ import { UserContext } from '../Context/UserContext';
 import PropTypes from 'prop-types';
 import AddCommentForm from './AddCommentForm';
 import EditCommentForm from './EditCommentForm';
-import { FaTrash } from 'react-icons/fa';
-import { FaEdit } from 'react-icons/fa';
-import { Button } from 'react-bootstrap';
+import { FaTrash, FaEdit } from 'react-icons/fa';
+import { Button, Modal, Toast } from 'react-bootstrap';
 
 export default function Comments({ blogId }) {
   const [comments, setComments] = useState([]);
   const [commentToEdit, setCommentToEdit] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [commentIdToDelete, setCommentIdToDelete] = useState(null);
+
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState('success');
+
   const { ID } = useContext(UserContext);
 
   const fetchComments = useCallback(async () => {
@@ -38,44 +44,52 @@ export default function Comments({ blogId }) {
           : comment
       )
     );
-    setCommentToEdit(null); // Stänger redigeringsläget
+    setCommentToEdit(null);
   };
 
-  // Funktion för att avbryta redigering
   const handleCloseEdit = () => {
     setCommentToEdit(null);
   };
 
-  // Funktion för att välja en kommentar för redigering
   const handleEditComment = (comment) => {
     setCommentToEdit(comment);
   };
-  const handleDeleteComment = async (commentId) => {
-    const isConfirmed = window.confirm(
-      'Är du säker på att du vill ta bort denna kommentar?'
-    );
-    if (isConfirmed) {
-      try {
-        const response = await fetch(`/api/comments/${commentId}`, {
-          method: 'DELETE',
-        });
 
-        if (response.ok) {
-          setComments((prevComments) =>
-            prevComments.filter((comment) => comment.comment_id !== commentId)
-          );
-        } else {
-          alert('Något gick fel vid borttagning.');
-        }
-      } catch (error) {
-        console.error('Error deleting comment:', error);
+  const confirmDelete = (commentId) => {
+    setCommentIdToDelete(commentId);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteComment = async () => {
+    try {
+      const response = await fetch(`/api/comments/${commentIdToDelete}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setComments((prevComments) =>
+          prevComments.filter(
+            (comment) => comment.comment_id !== commentIdToDelete
+          )
+        );
+        setToastMessage('Kommentaren raderades framgångsrikt!');
+        setToastVariant('success');
+      } else {
+        setToastMessage('Något gick fel vid borttagning.');
+        setToastVariant('danger');
       }
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      setToastMessage('Ett fel inträffade vid borttagning.');
+      setToastVariant('danger');
+    } finally {
+      setShowDeleteModal(false);
+      setShowToast(true);
     }
   };
 
   return (
     <div
-      className="d-flex flex-column border-top border-secondary "
+      className="d-flex flex-column border-top border-secondary"
       style={{ marginTop: '3rem' }}
     >
       <h5
@@ -94,7 +108,6 @@ export default function Comments({ blogId }) {
             <p style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span className="d-flex ">
                 <strong>{comment.username} : </strong>
-
                 {Number(comment.fk_users) === Number(ID) && (
                   <>
                     <Button
@@ -109,11 +122,7 @@ export default function Comments({ blogId }) {
                       }}
                       onClick={() => handleEditComment(comment)}
                     >
-                      <FaEdit
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Uppdatera"
-                      />
+                      <FaEdit title="Uppdatera" />
                     </Button>
                     <Button
                       className="d-flex align-items-center"
@@ -125,13 +134,9 @@ export default function Comments({ blogId }) {
                         margin: '2px 4px',
                         border: 'none',
                       }}
-                      onClick={() => handleDeleteComment(comment.comment_id)}
+                      onClick={() => confirmDelete(comment.comment_id)}
                     >
-                      <FaTrash
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Radera"
-                      />
+                      <FaTrash title="Radera" />
                     </Button>
                   </>
                 )}
@@ -145,7 +150,6 @@ export default function Comments({ blogId }) {
               </span>
             </p>
             <div className="my-4">
-              {' '}
               {commentToEdit &&
                 commentToEdit.comment_id === comment.comment_id && (
                   <EditCommentForm
@@ -162,6 +166,40 @@ export default function Comments({ blogId }) {
         <p className="mx-auto my-2">Inga kommentarer.</p>
       )}
       <AddCommentForm blogId={blogId} onCommentAdded={handleCommentAdded} />
+
+      {/* Confirm Delete Modal */}
+      <Modal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Bekräfta Radering</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Är du säker på att du vill ta bort denna kommentar?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Avbryt
+          </Button>
+          <Button variant="danger" onClick={handleDeleteComment}>
+            Radera
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Toast Notification */}
+      <Toast
+        onClose={() => setShowToast(false)}
+        show={showToast}
+        delay={3000}
+        autohide
+        className="position-fixed bottom-0 end-0 m-3"
+        bg={toastVariant}
+      >
+        <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+      </Toast>
     </div>
   );
 }

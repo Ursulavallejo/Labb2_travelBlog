@@ -3,30 +3,52 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PropTypes from 'prop-types';
 import BlogCard from './BlogCard';
 import EditBlogForm from './EditBlogForm';
-import { Card, Button, Container, Row, Col, Modal } from 'react-bootstrap';
+import {
+  Card,
+  Button,
+  Container,
+  Row,
+  Col,
+  Modal,
+  Toast,
+} from 'react-bootstrap';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 
 export default function BlogsList({ blogs, currentUserId, onDataChange }) {
   const [selectedBlogForReading, setSelectedBlogForReading] = useState(null);
   const [selectedBlogForEditing, setSelectedBlogForEditing] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [blogIdToDelete, setBlogIdToDelete] = useState(null);
 
-  const handleDelete = async (blogId) => {
-    const isConfirmed = window.confirm(
-      'Är du säker på att du vill ta bort detta inlägg?'
-    );
-    if (isConfirmed) {
-      try {
-        const response = await fetch(`/api/blogs/${blogId}`, {
-          method: 'DELETE',
-        });
-        if (response.ok) {
-          onDataChange();
-        } else {
-          alert('Något gick fel!');
-        }
-      } catch (error) {
-        console.error('Error deleting post:', error);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState('success');
+
+  const confirmDelete = (blogId) => {
+    setBlogIdToDelete(blogId);
+    setShowDeleteModal(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/api/blogs/${blogIdToDelete}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setToastMessage('Bloggen raderades framgångsrikt!');
+        setToastVariant('success');
+        onDataChange();
+      } else {
+        setToastMessage('Något gick fel vid radering');
+        setToastVariant('danger');
       }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      setToastMessage('Ett fel inträffade vid radering');
+      setToastVariant('danger');
+    } finally {
+      setShowDeleteModal(false);
+      setShowToast(true);
     }
   };
 
@@ -56,7 +78,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                 height={200}
                 width="100%"
                 style={{ objectFit: 'cover' }}
-                effect="blur" // Puedes elegir otros efectos como 'opacity' o 'black-and-white'
+                effect="blur"
               />
               <Card.Body className="d-flex flex-column">
                 <Card.Title>{blog.title_blog}</Card.Title>
@@ -74,26 +96,18 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                     <Button
                       variant="outline-dark"
                       aria-label="Uppdatera"
-                      className="my-3 mx-2 align-self-end "
+                      className="my-3 mx-2 align-self-end"
                       onClick={() => handleUpdate(blog)}
                     >
-                      <FaEdit
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Uppdatera"
-                      />
+                      <FaEdit title="Uppdatera" />
                     </Button>
                     <Button
                       variant="outline-dark"
                       aria-label="Radera"
-                      className="my-3 mx-2 align-self-end "
-                      onClick={() => handleDelete(blog.blog_id)}
+                      className="my-3 mx-2 align-self-end"
+                      onClick={() => confirmDelete(blog.blog_id)}
                     >
-                      <FaTrash
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Radera"
-                      />
+                      <FaTrash title="Radera" />
                     </Button>
                   </div>
                 )}
@@ -136,6 +150,40 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
           </Modal.Body>
         </Modal>
       )}
+
+      {/* Confirm Delete Modal */}
+      <Modal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Bekräfta Radering</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Är du säker på att du vill ta bort detta inlägg?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Avbryt
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Radera
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Toast Notification */}
+      <Toast
+        onClose={() => setShowToast(false)}
+        show={showToast}
+        delay={3000}
+        autohide
+        className="position-fixed bottom-0 end-0 m-3"
+        bg={toastVariant}
+      >
+        <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+      </Toast>
     </Container>
   );
 }

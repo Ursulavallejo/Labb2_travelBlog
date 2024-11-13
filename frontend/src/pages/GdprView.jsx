@@ -1,4 +1,5 @@
-import { Container, Card } from 'react-bootstrap';
+import { Container, Card, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
 
 export default function GdprView() {
@@ -85,11 +86,37 @@ export default function GdprView() {
               olagligt innehåll.
             </p>
 
+            <h3>Lagringstid för personuppgifter</h3>
+            <p>
+              Vi lagrar dina personuppgifter så länge som ditt konto är aktivt
+              eller så länge det är nödvändigt för att tillhandahålla våra
+              tjänster. Vid avslut av ditt konto raderar vi dina personuppgifter
+              inom en rimlig tid, om inte lagstiftningen kräver att vi behåller
+              dem längre.
+            </p>
+
+            <h3>Uppdateringar av policyn</h3>
+            <p>
+              Denna policy kan komma att uppdateras för att återspegla ändringar
+              i våra tjänster eller rättsliga krav. Eventuella uppdateringar
+              kommer att meddelas via vår webbplats, och vi uppmanar dig att
+              regelbundet granska policyn.
+            </p>
+
             <p>
               Vid frågor om vår integritetspolicy eller om dina rättigheter,
               vänligen kontakta oss.
             </p>
           </Card.Body>
+          <Button className="w-25 mx-2 d-flex mx-auto btn blue">
+            <Link
+              style={{ color: 'white' }}
+              className="text-center d-block mt-3"
+              to="/register"
+            >
+              Tillbaka till registrering
+            </Link>
+          </Button>
         </Card>
       </Container>
     </div>

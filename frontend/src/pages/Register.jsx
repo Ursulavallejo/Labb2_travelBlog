@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
 import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
-import { Container, Form, Button, Modal } from 'react-bootstrap';
+import { Container, Form, Button, Modal, Toast } from 'react-bootstrap';
 import { useState } from 'react';
 
 export default function Register() {
   const [showModal, setShowModal] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState('success'); // 'success' for green, 'danger' for red
 
   function registerForm(e) {
     e.preventDefault();
@@ -30,13 +33,30 @@ export default function Register() {
         pass_word: pass,
       }),
     })
-      .then((resp) => resp.json())
-      .then(() => {
-        alert('Du har nu registrerats!');
-        e.target.reset();
+      .then((resp) =>
+        resp.json().then((data) => ({ status: resp.status, body: data }))
+      )
+      .then(({ status, body }) => {
+        if (status === 201) {
+          setToastMessage('Du har nu registrerats!');
+          setToastVariant('success');
+          e.target.reset();
+        } else if (status === 400) {
+          setToastMessage(body.message || 'Username already exists');
+          setToastVariant('danger');
+        } else {
+          setToastMessage(
+            body.message || 'Server error, please try again later'
+          );
+          setToastVariant('danger');
+        }
+        setShowToast(true);
       })
       .catch((err) => {
         console.error(err);
+        setToastMessage('Server error, please try again later');
+        setToastVariant('danger');
+        setShowToast(true);
       });
   }
 
@@ -171,7 +191,8 @@ export default function Register() {
             variant="outline-warning"
             className="w-100 mb-2"
             onClick={() => setShowModal(true)}
-            style={{ fontSize: '0.8rem' }} // Reducir ligeramente la fuente del botón
+            style={{ fontSize: '0.8rem' }}
+            type="button"
           >
             Läs mer om samtycke
           </Button>
@@ -236,7 +257,7 @@ export default function Register() {
           <Modal.Footer>
             <Link
               to="/gdpr"
-              className="btn btn-outline-warning"
+              className="btn btn-outline-info"
               onClick={() => setShowModal(false)}
             >
               Mer om GDPR
@@ -246,6 +267,17 @@ export default function Register() {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          delay={3000}
+          autohide
+          className="position-fixed bottom-0 end-0 m-3"
+          bg={toastVariant}
+        >
+          <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+        </Toast>
       </Container>
     </div>
   );

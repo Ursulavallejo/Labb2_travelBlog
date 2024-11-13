@@ -13,7 +13,7 @@ CREATE TABLE users (
 );
 
 INSERT INTO users (first_name, last_name, username, email, phone, pass_word)
-VALUES ('Pedram', 'Hejazi Kenari', 'pedram_h', 'PHK@ITHS.com', '0707203040', 'hemligt123'),
+VALUES('Sara', 'Lund', 'sara_l', 'sara.lund@example.com', '0705432109', 'password101'),
 ('John', 'Doe', 'john_d', 'john.doe@example.com', '0710304905', 'password123'),
 ('Jane', 'Smith', 'jane_s', 'jane.smith@example.com', '031123456', 'password456'),
 ('Alex', 'Writer', 'alex_w', 'alex.writer@example.com', '072324646757', 'password789');

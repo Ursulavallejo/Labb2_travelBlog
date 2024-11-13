@@ -7,7 +7,7 @@ COPY frontend/ ./
 RUN npm run build
 
 # Stage 2: Servera frontend med NGINX
-FROM nginx:latest
+FROM nginx:latest AS frontend
 COPY --from=build-frontend /frontend/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8080

@@ -9,7 +9,7 @@ CREATE TABLE users (
 );
 
 INSERT INTO users (first_name, last_name, username, email, phone, pass_word)
-VALUES ('Pedram', 'Hejazi Kenari', 'pedram_h', 'PHK@ITHS.com', '0707203040', 'hemligt123'),
+VALUES('Sara', 'Lund', 'sara_l', 'sara.lund@example.com', '0705432109', 'password101'),
 ('John', 'Doe', 'john_d', 'john.doe@example.com', '0710304905', 'password123'),
 ('Jane', 'Smith', 'jane_s', 'jane.smith@example.com', '031123456', 'password456'),
 ('Alex', 'Writer', 'alex_w', 'alex.writer@example.com', '072324646757', 'password789');
@@ -46,8 +46,8 @@ VALUES
 CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,
     text_comment TEXT NOT NULL,
-    FK_users INT REFERENCES users(user_id),
-    FK_blogs INT REFERENCES blogs(blog_id),
+    FK_users INT REFERENCES users(user_id) ON DELETE CASCADE,
+    FK_blogs INT REFERENCES blogs(blog_id) ON DELETE CASCADE,
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -86,19 +86,3 @@ CREATE INDEX idx_comments_FK_blogs ON comments(FK_blogs);
 
 -- Skapa index på user_id i users-tabellen
 CREATE INDEX idx_users_user_id ON users(user_id);
-
-SELECT * FROM comments;
-
-               -- COMMANDS
-
--- COPY init.sql
--- docker compose cp ./init.sql database:/init.sql
-
--- SKAPA tabeller
--- docker compose exec database psql -U postgres -d postgres -f /init.sql
-
--- VISA DATABASE LISTA
--- docker compose exec database psql -U postgres -c '\l'
-
--- ÖPPNA DATABASEN
--- docker compose exec database psql --username=postgres

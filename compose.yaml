@@ -17,6 +17,7 @@ services:
         condition: service_healthy
     environment:
       - PGURI=${PGURI}
+      - JWT_SECRET=${JWT_SECRET}
     ports:
       - '3000:3000'
 

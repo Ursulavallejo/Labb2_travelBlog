@@ -12,9 +12,13 @@ export default function BlogCard({ blog, onClose }) {
     setShowComments((prev) => !prev);
   };
 
-  const imageUrl = blog.image_blog.startsWith('/images/')
-    ? blog.image_blog.slice(7) // Remove the first 7 characters
-    : blog.image_blog;
+  /////// code added, might remove //////
+  // const imageUrl = blog.image_blog.startsWith('/images/')
+  //   ? blog.image_blog.slice(7) // Remove the first 7 characters
+  //   : blog.image_blog;
+  /////////////////////////////////////////////////////////7
+
+  console.log('Image URL from blog.image_blog:', blog.image_blog);
 
   return (
     <Modal show={!!blog} onHide={onClose} centered>
@@ -25,7 +29,11 @@ export default function BlogCard({ blog, onClose }) {
       <Modal.Body>
         <div className="image-container-card">
           <img
-            src={imageUrl}
+            src={
+              blog.image_blog.startsWith('http')
+                ? blog.image_blog
+                : `/images/${blog.image_blog}`
+            }
             alt={blog.title_blog}
             className="image-content-card"
           />

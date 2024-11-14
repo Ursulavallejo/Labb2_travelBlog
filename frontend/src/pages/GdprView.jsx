@@ -1,4 +1,4 @@
-import { Container, Card, Button } from 'react-bootstrap';
+import { Container, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
 
@@ -21,7 +21,7 @@ export default function GdprView() {
       >
         <Card className="p-4">
           <Card.Body>
-            <h1 className="text-center mb-4">Integritetsskyddspolicy</h1>
+            <h2 className="text-center mb-4">Integritetsskyddspolicy</h2>
             <p>
               Vi värnar om din integritet och strävar efter att skydda dina
               personuppgifter i enlighet med GDPR. Denna policy beskriver hur vi
@@ -108,15 +108,12 @@ export default function GdprView() {
               vänligen kontakta oss.
             </p>
           </Card.Body>
-          <Button className="w-25 mx-2 d-flex mx-auto btn blue">
-            <Link
-              style={{ color: 'white' }}
-              className="text-center d-block mt-3"
-              to="/register"
-            >
-              Tillbaka till registrering
-            </Link>
-          </Button>
+          <Link
+            className="text-center d-block mx-auto rounded-2 blue mt-3 link"
+            to="/register"
+          >
+            Tillbaka till registrering
+          </Link>
         </Card>
       </Container>
     </div>

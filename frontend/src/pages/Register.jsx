@@ -181,6 +181,7 @@ export default function Register() {
             <Form.Label
               className="text-white mb-0"
               style={{ fontSize: '0.7rem' }}
+              for="samtycke"
             >
               Jag samtycker till att mina personuppgifter hanteras enligt
               integritetspolicyn och GDPR.

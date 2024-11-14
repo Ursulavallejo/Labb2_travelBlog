@@ -167,7 +167,7 @@ export default function Profile() {
                     onClick={userDelete}
                     className="fs-1  p-2"
                     style={{ color: 'white', cursor: 'pointer' }}
-                    data-toggle="tooltip"
+                    data-bs-toggle="tooltip"
                     data-placement="top"
                     title="Radera konto"
                   />
@@ -175,15 +175,15 @@ export default function Profile() {
                     onClick={edit}
                     className="fs-1 p-2"
                     style={{ color: 'white', cursor: 'pointer' }}
-                    data-toggle="tooltip"
+                    data-bs-toggle="tooltip"
                     data-placement="top"
-                    title="Uppdatera konto"
+                    title="Uppdatera uppgifter"
                   />
                   <FaRegWindowClose
                     onClick={handleConfirm}
                     className="fs-1 ms-auto p-2"
                     style={{ color: '#ffc107', cursor: 'pointer' }}
-                    data-toggle="tooltip"
+                    data-bs-toggle="tooltip"
                     data-placement="top"
                     title="Stäng"
                   />

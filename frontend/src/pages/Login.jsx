@@ -104,7 +104,7 @@ export default function Login() {
             id="password"
             name="password"
             type="password"
-            placeholder="Password..."
+            placeholder="Lösenord..."
             required
           />
           <button

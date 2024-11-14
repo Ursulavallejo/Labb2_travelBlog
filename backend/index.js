@@ -72,9 +72,7 @@ const authenticateToken = (req, res, next) => {
 // refresher, GET users
 app.get('/users', async (req, res) => {
   try {
-    const query = `
-  SELECT * FROM users ORDER BY user_id ASC
-  `;
+    const query = ` SELECT * FROM users ORDER BY user_id ASC`;
     const { rows } = await client.query(query);
     res.send({ succes: 'true', users: rows });
   } catch (error) {
@@ -87,9 +85,7 @@ app.get('/users', async (req, res) => {
 app.get('/users/:id', async (req, res) => {
   const userId = req.params.id;
   try {
-    const query = `
-  SELECT * FROM users WHERE user_id = $1
-  `;
+    const query = `SELECT * FROM users WHERE user_id = $1 `;
     const values = [userId];
     const { rows } = await client.query(query, values);
     if (rows.length > 0) {
@@ -184,12 +180,12 @@ app.patch('/users/edit/:id', async (req, res) => {
   const { first_name, last_name, username, phone, email } = req.body;
   const query = `
   UPDATE users SET
-  first_name = COALESCE(NULLIF( $1, ''), first_name),
-  last_name = COALESCE(NULLIF( $2, ''), last_name),
-  username = COALESCE(NULLIF( $3, ''), username),
-  phone = COALESCE(NULLIF( $4, ''), phone),
-  email = COALESCE(NULLIF( $5, ''), email)
-WHERE user_id = $6;
+    first_name = COALESCE(NULLIF( $1, ''), first_name),
+    last_name = COALESCE(NULLIF( $2, ''), last_name),
+    username = COALESCE(NULLIF( $3, ''), username),
+    phone = COALESCE(NULLIF( $4, ''), phone),
+    email = COALESCE(NULLIF( $5, ''), email)
+  WHERE user_id = $6;
   `;
   const values = [first_name, last_name, username, phone, email, userId];
 
@@ -237,7 +233,6 @@ app.delete('/users/delete', authenticateToken, async (req, res) => {
 });
 
 // GET - blogs
-
 app.get('/api/blogs', async (req, res) => {
   try {
     const query = `

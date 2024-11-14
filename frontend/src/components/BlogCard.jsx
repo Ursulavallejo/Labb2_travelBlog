@@ -43,7 +43,11 @@ export default function BlogCard({ blog, onClose }) {
             <strong>Författare:</strong> {blog.username}
           </span>
           <span style={{ fontSize: '0.8rem', color: 'gray' }}>
-            {new Date(blog.date).toLocaleDateString()}
+            {new Date(blog.date).toLocaleDateString('sv-SE', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            })}
           </span>
         </p>
         <p>{blog.text_blog}</p>

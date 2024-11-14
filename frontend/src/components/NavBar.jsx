@@ -25,7 +25,7 @@ export default function NavBar({ onPostCreated }) {
   return (
     <>
       <Navbar expand="lg" fixed="top" style={{ backgroundColor: '#123456' }}>
-        <Navbar.Brand href="/blogs" className="d-flex align-items-center">
+        <Navbar.Brand className="d-flex align-items-center">
           <img
             src={travelImage}
             width="60"

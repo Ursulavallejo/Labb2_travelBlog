@@ -4,6 +4,7 @@ const multer = require('multer'),
   cors = require('cors'),
   dotenv = require('dotenv'),
   jwt = require('jsonwebtoken'),
+  argon2 = require('argon2'),
   { Client } = require('pg'),
   { Jimp } = require('jimp'),
   fs = require('fs');
@@ -107,10 +108,11 @@ app.get('/users/:id', async (req, res) => {
 // POST user
 app.post('/users/register', async (req, res) => {
   const { first_name, last_name, username, email, phone, pass_word } = req.body;
+  const hash = await argon2.hash(pass_word);
   const query = `
   INSERT INTO users (first_name, last_name, username, email, phone, pass_word) VALUES ($1 ,$2, $3, $4, $5, $6)
   `;
-  const values = [first_name, last_name, username, email, phone, pass_word];
+  const values = [first_name, last_name, username, email, phone, hash];
 
   try {
     const results = await client.query(query, values);
@@ -118,8 +120,18 @@ app.post('/users/register', async (req, res) => {
       .status(201)
       .send({ message: 'Registreringen lyckad!!', data: results.rows });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Det gick inte att skicka in!', error });
+    if (error.code === '23505') {
+      if (error.detail.includes('email')) {
+        res.status(400).send({ message: 'E-post adress används redan!' });
+      } else if (error.detail.includes('username')) {
+        res.status(400).send({ message: 'Username används redan!' });
+      } else if (error.detail.includes('phone')) {
+        res.status(400).send({ message: 'Telefon nummer används redan!' });
+      }
+      console.error(error);
+      res.stat;
+    }
+    us(500).send({ message: 'Det gick inte att skicka in!', error });
   }
 });
 
@@ -131,25 +143,29 @@ app.post('/users/login', async (req, res) => {
 
   if (email && pass_word) {
     const query = `
-    SELECT * FROM users WHERE email = $1 AND pass_word = $2
+    SELECT * FROM users WHERE email = $1
     `;
-    const values = [email, pass_word];
+    const values = [email];
     try {
       const results = await client.query(query, values);
       if (results.rows.length > 0) {
         const user = results.rows[0];
-        const token = jwt.sign(
-          { userId: user.user_id },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: '1h',
-          }
-        );
-        res.status(200).send({
-          message: 'Inloggningen lyckades!',
-          data: user,
-          token: token,
-        });
+        const validPassword = await argon2.verify(user.pass_word, pass_word);
+
+        if (validPassword) {
+          const token = jwt.sign(
+            { userId: user.user_id },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: '1h',
+            }
+          );
+          res.status(200).send({
+            message: 'Inloggningen lyckades!',
+            data: user,
+            token: token,
+          });
+        }
       } else {
         res.status(401).send('Ogiltig e-postadress eller lösenord');
       }

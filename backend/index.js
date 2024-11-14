@@ -248,7 +248,7 @@ app.get('/api/blogs', async (req, res) => {
     const processedBlogs = rows.map((blog) => {
       if (blog.image_blog.startsWith('/uploads')) {
         blog.image_blog = `http://localhost:3000${blog.image_blog}`; // upload image
-      } else {
+      } else if (!blog.image_blog.startsWith('http')) {
         blog.image_blog = `/images/${blog.image_blog}`; // local image assets
       }
       return blog;

@@ -12,6 +12,10 @@ export default function BlogCard({ blog, onClose }) {
     setShowComments((prev) => !prev);
   };
 
+  const imageUrl = blog.image_blog.startsWith('/images/')
+    ? blog.image_blog.slice(7) // Remove the first 7 characters
+    : blog.image_blog;
+
   return (
     <Modal show={!!blog} onHide={onClose} centered>
       <Modal.Header closeButton>
@@ -21,7 +25,7 @@ export default function BlogCard({ blog, onClose }) {
       <Modal.Body>
         <div className="image-container-card">
           <img
-            src={blog.image_blog}
+            src={imageUrl}
             alt={blog.title_blog}
             className="image-content-card"
           />

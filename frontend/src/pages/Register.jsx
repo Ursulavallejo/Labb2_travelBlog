@@ -1,16 +1,27 @@
-import { Link } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
 import { Container, Form, Button, Modal, Toast } from 'react-bootstrap';
-import { useState } from 'react';
+import { UserContext } from '../Context/UserContext';
+import { useState, useContext } from 'react';
 
 export default function Register() {
+  const { setID, setUsername } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-  const [toastVariant, setToastVariant] = useState('success'); // 'success' for green, 'danger' for red
+  const [toastVariant, setToastVariant] = useState('success');
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [consentChecked, setConsentChecked] = useState(false); // Estado para el consentimiento
 
   function registerForm(e) {
     e.preventDefault();
+
+    if (!consentChecked) {
+      setToastMessage('Du måste godkänna samtycket!');
+      setToastVariant('danger');
+      setShowToast(true);
+      return;
+    }
 
     const fname = e.target.fname.value;
     const lname = e.target.lname.value;
@@ -33,31 +44,45 @@ export default function Register() {
         pass_word: pass,
       }),
     })
-      .then((resp) =>
-        resp.json().then((data) => ({ status: resp.status, body: data }))
-      )
-      .then(({ status, body }) => {
-        if (status === 201) {
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.message === 'Registreringen lyckad!!' && data.data) {
+          const userID = data.data.user_id;
+          const username = data.data.username;
+          const token = data.token;
+
+          setID(userID);
+          setUsername(username);
+          localStorage.setItem('ID', userID);
+          localStorage.setItem('username', username);
+          localStorage.setItem('token', token);
+
           setToastMessage('Du har nu registrerats!');
           setToastVariant('success');
-          e.target.reset();
-        } else if (status === 400) {
-          setToastMessage(body.message || 'Username already exists');
-          setToastVariant('danger');
+          setShowToast(true);
+
+          // Retraso antes de redirigir para que el toast sea visible
+          setTimeout(() => {
+            setIsRegistered(true);
+          }, 3000); // 3 segundos
         } else {
           setToastMessage(
-            body.message || 'Server error, please try again later'
+            data.message || 'Error en el registro. Inténtalo igen.'
           );
           setToastVariant('danger');
+          setShowToast(true);
         }
-        setShowToast(true);
       })
       .catch((err) => {
-        console.error(err);
-        setToastMessage('Server error, please try again later');
+        console.error('Error en el registro:', err);
+        setToastMessage('Serverfel, försök igen senare.');
         setToastVariant('danger');
         setShowToast(true);
       });
+  }
+
+  if (isRegistered) {
+    return <Navigate to="/blogs" replace={true} />;
   }
 
   return (
@@ -106,7 +131,6 @@ export default function Register() {
               size="sm"
             />
           </Form.Group>
-
           <Form.Group className="mb-2" controlId="lname">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
               Ange efternamn:
@@ -118,7 +142,6 @@ export default function Register() {
               size="sm"
             />
           </Form.Group>
-
           <Form.Group className="mb-2" controlId="username">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
               Ange användarnamn:
@@ -130,7 +153,6 @@ export default function Register() {
               size="sm"
             />
           </Form.Group>
-
           <Form.Group className="mb-2" controlId="emailReg">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
               Ange e-post:
@@ -142,7 +164,6 @@ export default function Register() {
               size="sm"
             />
           </Form.Group>
-
           <Form.Group className="mb-2" controlId="phoneReg">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
               Ange telefonnummer:
@@ -155,7 +176,6 @@ export default function Register() {
               size="sm"
             />
           </Form.Group>
-
           <Form.Group className="mb-2" controlId="passwordReg">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
               Ange lösenord:
@@ -168,6 +188,7 @@ export default function Register() {
             />
           </Form.Group>
 
+          {/* Checkbox de consentimiento */}
           <Form.Group
             className="d-flex align-items-center mb-2"
             style={{ fontSize: '0.7rem' }}
@@ -177,12 +198,10 @@ export default function Register() {
               id="samtycke"
               required
               className="me-2"
+              checked={consentChecked}
+              onChange={() => setConsentChecked(!consentChecked)}
             />
-            <Form.Label
-              className="text-white mb-0"
-              style={{ fontSize: '0.7rem' }}
-              for="samtycke"
-            >
+            <Form.Label className="text-white mb-0" htmlFor="samtycke">
               Jag samtycker till att mina personuppgifter hanteras enligt
               integritetspolicyn och GDPR.
             </Form.Label>
@@ -236,23 +255,6 @@ export default function Register() {
               <strong>skyddar din integritet</strong> och behandlar dina
               personuppgifter, vänligen läs vår{' '}
               <strong>integritetspolicy</strong>.
-            </p>
-            <p>
-              När du laddar upp bilder är du{' '}
-              <strong>ansvarig för att ha de nödvändiga rättigheterna</strong>{' '}
-              till bilderna och att inte bryta mot upphovsrätten.
-            </p>
-            <p>
-              Vi förväntar oss även att du håller en{' '}
-              <strong>respektfull ton</strong> i dina interaktioner och att du
-              avstår från att publicera innehåll som är{' '}
-              <strong>olämpligt, sexuellt explicit</strong> eller{' '}
-              <strong>olagligt</strong>.
-            </p>
-            <p>
-              Användning av vår tjänst innebär att du{' '}
-              <strong>samtycker till dessa riktlinjer</strong> och att vi
-              förbehåller oss rätten att vidta åtgärder om de inte följs.
             </p>
           </Modal.Body>
           <Modal.Footer>

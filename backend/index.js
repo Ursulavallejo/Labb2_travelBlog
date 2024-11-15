@@ -101,20 +101,30 @@ app.get('/users/:id', async (req, res) => {
   }
 });
 
-// POST user
+// POST user (Register)
 app.post('/users/register', async (req, res) => {
   const { first_name, last_name, username, email, phone, pass_word } = req.body;
   const hash = await argon2.hash(pass_word);
   const query = `
-  INSERT INTO users (first_name, last_name, username, email, phone, pass_word) VALUES ($1 ,$2, $3, $4, $5, $6)
+    INSERT INTO users (first_name, last_name, username, email, phone, pass_word)
+    VALUES ($1 ,$2, $3, $4, $5, $6)
+    RETURNING user_id, username, email, phone;
   `;
   const values = [first_name, last_name, username, email, phone, hash];
 
   try {
-    const results = await client.query(query, values);
-    res
-      .status(201)
-      .send({ message: 'Registreringen lyckad!!', data: results.rows });
+    const result = await client.query(query, values);
+    const user = result.rows[0];
+
+    const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.status(201).send({
+      message: 'Registreringen lyckad!!',
+      data: user,
+      token: token,
+    });
   } catch (error) {
     if (error.code === '23505') {
       if (error.detail.includes('email')) {
@@ -124,12 +134,41 @@ app.post('/users/register', async (req, res) => {
       } else if (error.detail.includes('phone')) {
         res.status(400).send({ message: 'Telefon nummer används redan!' });
       }
+    } else {
       console.error(error);
-      res.stat;
+      res.status(500).send({ message: 'Det gick inte att skicka in!', error });
     }
-    us(500).send({ message: 'Det gick inte att skicka in!', error });
   }
 });
+
+// app.post('/users/register', async (req, res) => {
+//   const { first_name, last_name, username, email, phone, pass_word } = req.body;
+//   const hash = await argon2.hash(pass_word);
+//   const query = `
+//   INSERT INTO users (first_name, last_name, username, email, phone, pass_word) VALUES ($1 ,$2, $3, $4, $5, $6)
+//   `;
+//   const values = [first_name, last_name, username, email, phone, hash];
+
+//   try {
+//     const results = await client.query(query, values);
+//     res
+//       .status(201)
+//       .send({ message: 'Registreringen lyckad!!', data: results.rows });
+//   } catch (error) {
+//     if (error.code === '23505') {
+//       if (error.detail.includes('email')) {
+//         res.status(400).send({ message: 'E-post adress används redan!' });
+//       } else if (error.detail.includes('username')) {
+//         res.status(400).send({ message: 'Username används redan!' });
+//       } else if (error.detail.includes('phone')) {
+//         res.status(400).send({ message: 'Telefon nummer används redan!' });
+//       }
+//       console.error(error);
+//       res.stat;
+//     }
+//     res.status(500).send({ message: 'Det gick inte att skicka in!', error });
+//   }
+// });
 
 // POST user and compare user login request with DB
 app.post('/users/login', async (req, res) => {

@@ -125,8 +125,7 @@ main {
   font-weight: bolder;
   color: black;
 }
-label,
-.white-label {
+label {
   font-weight: bolder;
   color: white;
 }

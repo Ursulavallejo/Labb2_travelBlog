@@ -464,6 +464,7 @@ app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
   const { title_blog, text_blog, land_name, user_id } = req.body;
 
   let image_blog = null;
+
   if (req.file) {
     // If a new image is uploaded, process it
     const filePath = path.resolve(__dirname, 'uploads', req.file.filename);

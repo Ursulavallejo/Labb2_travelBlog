@@ -244,36 +244,6 @@ app.delete('/users/delete', authenticateToken, async (req, res) => {
 
 // GET - blogs
 // >>>>>>>>>>>>> THIS ON THE SERVER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// app.get('/api/blogs', async (req, res) => {
-//   try {
-//     const query = `
-//       SELECT blogs.blog_id, blogs.land_name, blogs.image_blog, blogs.title_blog, blogs.text_blog,
-//              blogs.date, blogs.author, users.username, users.user_id
-//       FROM blogs
-//       JOIN users ON blogs.FK_users = users.user_id
-//       ORDER BY blogs.date DESC
-//     `;
-//     const { rows } = await client.query(query);
-
-//     // Process the route of the files
-//     const processedBlogs = rows.map((blog) => {
-//       if (blog.image_blog.startsWith('/uploads')) {
-//         blog.image_blog = `http://localhost:3000${blog.image_blog}`; // upload image
-//       } else if (!blog.image_blog.startsWith('http')) {
-//         blog.image_blog = `/images/${blog.image_blog}`; // local image assets
-//       }
-//       return blog;
-//     });
-
-//     res.json(processedBlogs);
-//   } catch (error) {
-//     console.error('Error fetching blogs:', error);
-//     res.status(500).send('Fel vid hämtning av bloggen');
-//   }
-// });
-// >>>>>>>>>>>>>>>>>>>>END SERVER VERSION>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-// >>>>>>>>>>>>>>>>>>   THIS VERSION WORKS LOCAL  >>>>>>>>>>>>>>>>>>>>>>
 app.get('/api/blogs', async (req, res) => {
   try {
     const query = `
@@ -289,7 +259,7 @@ app.get('/api/blogs', async (req, res) => {
     const processedBlogs = rows.map((blog) => {
       if (blog.image_blog.startsWith('/uploads')) {
         blog.image_blog = `http://localhost:3000${blog.image_blog}`; // upload image
-      } else {
+      } else if (!blog.image_blog.startsWith('http')) {
         blog.image_blog = `/images/${blog.image_blog}`; // local image assets
       }
       return blog;
@@ -301,86 +271,42 @@ app.get('/api/blogs', async (req, res) => {
     res.status(500).send('Fel vid hämtning av bloggen');
   }
 });
+// >>>>>>>>>>>>>>>>>>>>END SERVER VERSION>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// >>>>>>>>>>>>>>>>>>   THIS VERSION WORKS LOCAL  >>>>>>>>>>>>>>>>>>>>>>
+// app.get('/api/blogs', async (req, res) => {
+//   try {
+//     const query = `
+//       SELECT blogs.blog_id, blogs.land_name, blogs.image_blog, blogs.title_blog, blogs.text_blog,
+//              blogs.date, blogs.author, users.username, users.user_id
+//       FROM blogs
+//       JOIN users ON blogs.FK_users = users.user_id
+//       ORDER BY blogs.date DESC
+//     `;
+//     const { rows } = await client.query(query);
+
+//     // Process the route of the files
+//     const processedBlogs = rows.map((blog) => {
+//       if (blog.image_blog.startsWith('/uploads')) {
+//         blog.image_blog = `http://localhost:3000${blog.image_blog}`; // upload image
+//       } else {
+//         blog.image_blog = `/images/${blog.image_blog}`; // local image assets
+//       }
+//       return blog;
+//     });
+
+//     res.json(processedBlogs);
+//   } catch (error) {
+//     console.error('Error fetching blogs:', error);
+//     res.status(500).send('Fel vid hämtning av bloggen');
+//   }
+// });
 // >>>>>>>>>>>>>>>>>>>>>>>END LOCAL VERSION>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // POST - Create a new blog post
 
 // JIMP >>> POST route to create a new blog post with image processing --- this is first creating as after delete image
 // >>>>>>>>>>>>> THIS ON THE SERVER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// app.post(
-//   '/api/blogs',
-//   upload.single('image'), //  Multer
-//   async (req, res) => {
-//     const { title_blog, author, text_blog, land_name, date, user_id } =
-//       req.body;
-
-//     if (!land_name) {
-//       return res
-//         .status(400)
-//         .json({ error: 'Fältet landnamn är obligatoriskt' });
-//     }
-
-//     let image_blog = null;
-//     if (req.file) {
-//       const filePath = path.resolve(__dirname, 'uploads', req.file.filename);
-//       const compressedPath = path.resolve(
-//         __dirname,
-//         'uploads',
-//         `compressed-${req.file.filename}`
-//       );
-
-//       try {
-//         // Read and compress the image with Jimp
-//         const image = await Jimp.read(filePath);
-
-//         // console.log(image.getBuffer('image/jpeg', { quality: 80 }));
-
-//         await (await image.resize({ w: 300 })).write(compressedPath);
-//         // console.log('compressedPath', compressedPath);
-//         // console.log('filepath', filePath);
-//         // update `image_blog` to the compressed file THIS IS THE NAME GO TO TEH DATA BASE
-//         const baseUrl = `${req.protocol}://${req.headers.host}`;
-//         image_blog = `${baseUrl}/uploads/compressed-${req.file.filename}`;
-//         // upload.single(`/uploads/compressed-${req.file.filename}`),
-//         // delete original file
-//         fs.unlinkSync(filePath);
-
-//         // console.log('Bilden har komprimerats och sparats');
-//       } catch (error) {
-//         console.error('Fel vid behandling av bild:', error);
-//         return res
-//           .status(500)
-//           .json({ error: 'Det gick inte att bearbeta bilden' });
-//       }
-//     }
-
-//     // Save blog data in the database
-//     const query = `
-//     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
-//     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
-//   `;
-//     const values = [
-//       title_blog,
-//       author,
-//       text_blog,
-//       image_blog,
-//       land_name,
-//       date,
-//       user_id,
-//     ];
-
-//     try {
-//       const result = await client.query(query, values);
-//       res.status(201).json(result.rows[0]);
-//     } catch (error) {
-//       console.error('Error creating post:', error);
-//       res.status(500).json({ error: 'Det gick inte att skapa inlägget' });
-//     }
-//   }
-// );
-// >>>>>>>>>>>>>>>>>>>>END SERVER VERSION>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-// >>>>>>>>>>>>>>>>>>   THIS VERSION WORKS LOCAL  >>>>>>>>>>>>>>>>>>>>>>
 app.post(
   '/api/blogs',
   upload.single('image'), //  Multer
@@ -413,7 +339,8 @@ app.post(
         // console.log('compressedPath', compressedPath);
         // console.log('filepath', filePath);
         // update `image_blog` to the compressed file THIS IS THE NAME GO TO TEH DATA BASE
-        image_blog = `/uploads/compressed-${req.file.filename}`;
+        const baseUrl = `${req.protocol}://${req.headers.host}`;
+        image_blog = `${baseUrl}/uploads/compressed-${req.file.filename}`;
         // upload.single(`/uploads/compressed-${req.file.filename}`),
         // delete original file
         fs.unlinkSync(filePath);
@@ -451,6 +378,79 @@ app.post(
     }
   }
 );
+// >>>>>>>>>>>>>>>>>>>>END SERVER VERSION>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// >>>>>>>>>>>>>>>>>>   THIS VERSION WORKS LOCAL  >>>>>>>>>>>>>>>>>>>>>>
+// app.post(
+//   '/api/blogs',
+//   upload.single('image'), //  Multer
+//   async (req, res) => {
+//     const { title_blog, author, text_blog, land_name, date, user_id } =
+//       req.body;
+
+//     if (!land_name) {
+//       return res
+//         .status(400)
+//         .json({ error: 'Fältet landnamn är obligatoriskt' });
+//     }
+
+//     let image_blog = null;
+//     if (req.file) {
+//       const filePath = path.resolve(__dirname, 'uploads', req.file.filename);
+//       const compressedPath = path.resolve(
+//         __dirname,
+//         'uploads',
+//         `compressed-${req.file.filename}`
+//       );
+
+//       try {
+//         // Read and compress the image with Jimp
+//         const image = await Jimp.read(filePath);
+
+//         // console.log(image.getBuffer('image/jpeg', { quality: 80 }));
+
+//         await (await image.resize({ w: 300 })).write(compressedPath);
+//         // console.log('compressedPath', compressedPath);
+//         // console.log('filepath', filePath);
+//         // update `image_blog` to the compressed file THIS IS THE NAME GO TO TEH DATA BASE
+//         image_blog = `/uploads/compressed-${req.file.filename}`;
+//         // upload.single(`/uploads/compressed-${req.file.filename}`),
+//         // delete original file
+//         fs.unlinkSync(filePath);
+
+//         // console.log('Bilden har komprimerats och sparats');
+//       } catch (error) {
+//         console.error('Fel vid behandling av bild:', error);
+//         return res
+//           .status(500)
+//           .json({ error: 'Det gick inte att bearbeta bilden' });
+//       }
+//     }
+
+//     // Save blog data in the database
+//     const query = `
+//     INSERT INTO blogs (title_blog, author, text_blog, image_blog, land_name, date, FK_users)
+//     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+//   `;
+//     const values = [
+//       title_blog,
+//       author,
+//       text_blog,
+//       image_blog,
+//       land_name,
+//       date,
+//       user_id,
+//     ];
+
+//     try {
+//       const result = await client.query(query, values);
+//       res.status(201).json(result.rows[0]);
+//     } catch (error) {
+//       console.error('Error creating post:', error);
+//       res.status(500).json({ error: 'Det gick inte att skapa inlägget' });
+//     }
+//   }
+// );
 
 // >>>>>>>>>>>>>>>>>>>>>>>END LOCAL VERSION>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -458,137 +458,137 @@ app.post(
 
 // >>>>>>>>>>>>> THIS ON THE SERVER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-// app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
-//   const blogId = req.params.id;
-//   const { title_blog, text_blog, land_name, user_id } = req.body;
-
-//   let image_blog = null;
-//   if (req.file) {
-//     // If a new image is uploaded, process it
-//     const filePath = path.resolve(__dirname, 'uploads', req.file.filename);
-//     const compressedPath = path.resolve(
-//       __dirname,
-//       'uploads',
-//       `compressed-${req.file.filename}`
-//     );
-
-//     try {
-//       const image = await Jimp.read(filePath);
-//       await (await image.resize({ width: 300 })).write(compressedPath);
-
-//       const baseUrl = `${req.protocol}://${req.headers.host}`;
-//       image_blog = `${baseUrl}/uploads/compressed-${req.file.filename}`;
-
-//       fs.unlinkSync(filePath); // Remove the original image
-//     } catch (error) {
-//       console.error('Error processing the image:', error);
-//       return res
-//         .status(500)
-//         .json({ error: 'Det gick inte att bearbeta bilden.' });
-//     }
-//   }
-
-//   try {
-//     // Fetch the current image if no new image is uploaded
-//     if (!image_blog) {
-//       const currentImageQuery = `SELECT image_blog FROM blogs WHERE blog_id = $1 AND FK_users = $2`;
-//       const currentImageResult = await client.query(currentImageQuery, [
-//         blogId,
-//         user_id,
-//       ]);
-
-//       if (currentImageResult.rows.length > 0) {
-//         image_blog = currentImageResult.rows[0].image_blog; // Retain the existing image
-//       } else {
-//         return res.status(404).json({ error: 'Blogg hittades inte.' });
-//       }
-//     }
-
-//     // Build the update query
-//     const query = `
-//       UPDATE blogs SET
-//         title_blog = COALESCE($1, title_blog),
-//         text_blog = COALESCE($2, text_blog),
-//         land_name = COALESCE($3, land_name),
-//         image_blog = $4
-//       WHERE blog_id = $5 AND FK_users = $6
-//       RETURNING *;
-//     `;
-//     const values = [title_blog, text_blog, land_name, image_blog, blogId, user_id];
-
-//     const result = await client.query(query, values);
-
-//     if (result.rowCount > 0) {
-//       res.status(200).json({
-//         message: 'Blogg uppdaterad framgångsrikt',
-//         data: result.rows[0],
-//       });
-//     } else {
-//       res.status(404).json({
-//         message: 'Blogg hittades inte eller användaren har inte behörighet.',
-//       });
-//     }
-//   } catch (error) {
-//     console.error('Error updating the blog:', error);
-//     res.status(500).json({ error: 'Fel vid uppdatering av bloggen.' }); /
-//   }
-// });
-
-// >>>>>>>>>>>>>>>>>>   END SERVER VERSION  >>>>>>>>>>>>>>>>>>>>>>
-
-// >>>>>>>>>>>>>>>>>>   THIS VERSION WORKS LOCAL  >>>>>>>>>>>>>>>>>>>>>>
 app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
   const blogId = req.params.id;
   const { title_blog, text_blog, land_name, user_id } = req.body;
-  const image_blog = req.file ? `/uploads/${req.file.filename}` : undefined;
+
+  let image_blog = null;
+  if (req.file) {
+    // If a new image is uploaded, process it
+    const filePath = path.resolve(__dirname, 'uploads', req.file.filename);
+    const compressedPath = path.resolve(
+      __dirname,
+      'uploads',
+      `compressed-${req.file.filename}`
+    );
+
+    try {
+      const image = await Jimp.read(filePath);
+      await (await image.resize({ width: 300 })).write(compressedPath);
+
+      const baseUrl = `${req.protocol}://${req.headers.host}`;
+      image_blog = `${baseUrl}/uploads/compressed-${req.file.filename}`;
+
+      fs.unlinkSync(filePath); // Remove the original image
+    } catch (error) {
+      console.error('Error processing the image:', error);
+      return res
+        .status(500)
+        .json({ error: 'Det gick inte att bearbeta bilden.' });
+    }
+  }
 
   try {
-    let query = 'UPDATE blogs SET ';
-    const values = [];
-    let index = 1;
+    // Fetch the current image if no new image is uploaded
+    if (!image_blog) {
+      const currentImageQuery = `SELECT image_blog FROM blogs WHERE blog_id = $1 AND FK_users = $2`;
+      const currentImageResult = await client.query(currentImageQuery, [
+        blogId,
+        user_id,
+      ]);
 
-    if (title_blog) {
-      query += `title_blog = $${index}, `;
-      values.push(title_blog);
-      index++;
-    }
-    if (text_blog) {
-      query += `text_blog = $${index}, `;
-      values.push(text_blog);
-      index++;
-    }
-    if (land_name) {
-      query += `land_name = $${index}, `;
-      values.push(land_name);
-      index++;
-    }
-    if (image_blog) {
-      query += `image_blog = $${index}, `;
-      values.push(image_blog);
-      index++;
+      if (currentImageResult.rows.length > 0) {
+        image_blog = currentImageResult.rows[0].image_blog; // Retain the existing image
+      } else {
+        return res.status(404).json({ error: 'Blogg hittades inte.' });
+      }
     }
 
-    query = query.slice(0, -2);
-
-    query += ` WHERE blog_id = $${index} AND FK_users = $${
-      index + 1
-    } RETURNING *`;
-    values.push(blogId, user_id);
+    // Build the update query
+    const query = `
+      UPDATE blogs SET
+        title_blog = COALESCE($1, title_blog),
+        text_blog = COALESCE($2, text_blog),
+        land_name = COALESCE($3, land_name),
+        image_blog = $4
+      WHERE blog_id = $5 AND FK_users = $6
+      RETURNING *;
+    `;
+    const values = [title_blog, text_blog, land_name, image_blog, blogId, user_id];
 
     const result = await client.query(query, values);
 
     if (result.rowCount > 0) {
-      res.status(200).json({ message: 'Blogg uppdaterad framgångsrikt' });
+      res.status(200).json({
+        message: 'Blogg uppdaterad framgångsrikt',
+        data: result.rows[0],
+      });
     } else {
       res.status(404).json({
-        message: 'Blogg hittades inte eller användaren har inte behörighet',
+        message: 'Blogg hittades inte eller användaren har inte behörighet.',
       });
     }
   } catch (error) {
-    console.error('Fel vid uppdatering av bloggen:', error);
-    res.status(500).json({ error: 'Fel vid uppdatering av bloggen' });
+    console.error('Error updating the blog:', error);
+    res.status(500).json({ error: 'Fel vid uppdatering av bloggen.' }); /
   }
 });
+
+// >>>>>>>>>>>>>>>>>>   END SERVER VERSION  >>>>>>>>>>>>>>>>>>>>>>
+
+// >>>>>>>>>>>>>>>>>>   THIS VERSION WORKS LOCAL  >>>>>>>>>>>>>>>>>>>>>>
+// app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
+//   const blogId = req.params.id;
+//   const { title_blog, text_blog, land_name, user_id } = req.body;
+//   const image_blog = req.file ? `/uploads/${req.file.filename}` : undefined;
+
+//   try {
+//     let query = 'UPDATE blogs SET ';
+//     const values = [];
+//     let index = 1;
+
+//     if (title_blog) {
+//       query += `title_blog = $${index}, `;
+//       values.push(title_blog);
+//       index++;
+//     }
+//     if (text_blog) {
+//       query += `text_blog = $${index}, `;
+//       values.push(text_blog);
+//       index++;
+//     }
+//     if (land_name) {
+//       query += `land_name = $${index}, `;
+//       values.push(land_name);
+//       index++;
+//     }
+//     if (image_blog) {
+//       query += `image_blog = $${index}, `;
+//       values.push(image_blog);
+//       index++;
+//     }
+
+//     query = query.slice(0, -2);
+
+//     query += ` WHERE blog_id = $${index} AND FK_users = $${
+//       index + 1
+//     } RETURNING *`;
+//     values.push(blogId, user_id);
+
+//     const result = await client.query(query, values);
+
+//     if (result.rowCount > 0) {
+//       res.status(200).json({ message: 'Blogg uppdaterad framgångsrikt' });
+//     } else {
+//       res.status(404).json({
+//         message: 'Blogg hittades inte eller användaren har inte behörighet',
+//       });
+//     }
+//   } catch (error) {
+//     console.error('Fel vid uppdatering av bloggen:', error);
+//     res.status(500).json({ error: 'Fel vid uppdatering av bloggen' });
+//   }
+// });
 
 // >>>>>>>>>>>>>>>>>>   END LOCAL VERSION  >>>>>>>>>>>>>>>>>>>>>>
 

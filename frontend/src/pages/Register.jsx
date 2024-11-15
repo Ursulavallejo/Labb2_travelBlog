@@ -11,7 +11,7 @@ export default function Register() {
   const [toastMessage, setToastMessage] = useState('');
   const [toastVariant, setToastVariant] = useState('success');
   const [isRegistered, setIsRegistered] = useState(false);
-  const [consentChecked, setConsentChecked] = useState(false); // Estado para el consentimiento
+  const [consentChecked, setConsentChecked] = useState(false);
 
   function registerForm(e) {
     e.preventDefault();
@@ -61,10 +61,9 @@ export default function Register() {
           setToastVariant('success');
           setShowToast(true);
 
-          // Retraso antes de redirigir para que el toast sea visible
           setTimeout(() => {
             setIsRegistered(true);
-          }, 3000); // 3 segundos
+          }, 2000);
         } else {
           setToastMessage(
             data.message || 'Error en el registro. Inténtalo igen.'
@@ -188,7 +187,6 @@ export default function Register() {
             />
           </Form.Group>
 
-          {/* Checkbox de consentimiento */}
           <Form.Group
             className="d-flex align-items-center mb-2"
             style={{ fontSize: '0.7rem' }}

@@ -64,7 +64,7 @@ export default function Login() {
       })
       .catch((err) => {
         console.error(err);
-        setToastMessage(err.message); // Mensaje devuelto por el servidor
+        setToastMessage(err.message);
         setToastVariant('danger');
         setShowToast(true);
       });
@@ -72,7 +72,6 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      {/* Background Images */}
       <div className="image-grid">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
           <img
@@ -85,7 +84,6 @@ export default function Login() {
         ))}
       </div>
 
-      {/* Login Form */}
       <div id="container" className="login-container rounded-5 p-5">
         <div className="d-flex align-items-center justify-content-evenly">
           <img
@@ -139,7 +137,6 @@ export default function Login() {
         </form>
       </div>
 
-      {/* Toast Notifications */}
       <ToastContainer className="p-3" position="top-end">
         <Toast
           onClose={() => setShowToast(false)}

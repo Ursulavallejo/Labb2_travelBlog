@@ -117,7 +117,7 @@ export default function Register() {
         <Form
           onSubmit={registerForm}
           style={{ width: '85%' }}
-          className="mb-2 mx-auto "
+          className="mb-2 mx-auto was-validated"
         >
           <Form.Group className="mb-2" controlId="fname">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
@@ -126,9 +126,11 @@ export default function Register() {
             <Form.Control
               type="text"
               placeholder="Förnamn..."
-              required
               size="sm"
+              required
             />
+            <div className="valid-feedback fs-6">Ser bra ut!</div>
+            <div className="invalid-feedback fs-6">Lämna inte fälten tomt!</div>
           </Form.Group>
           <Form.Group className="mb-2" controlId="lname">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
@@ -140,6 +142,8 @@ export default function Register() {
               required
               size="sm"
             />
+            <div className="valid-feedback fs-6">Ser bra ut!</div>
+            <div className="invalid-feedback fs-6">Lämna inte fälten tomt!</div>
           </Form.Group>
           <Form.Group className="mb-2" controlId="username">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
@@ -151,6 +155,8 @@ export default function Register() {
               required
               size="sm"
             />
+            <div className="valid-feedback fs-6">Ser bra ut!</div>
+            <div className="invalid-feedback fs-6">Användarnman krävs!</div>
           </Form.Group>
           <Form.Group className="mb-2" controlId="emailReg">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
@@ -162,6 +168,8 @@ export default function Register() {
               required
               size="sm"
             />
+            <div className="valid-feedback fs-6">Ser bra ut!</div>
+            <div className="invalid-feedback fs-6">Mail adress krävs!</div>
           </Form.Group>
           <Form.Group className="mb-2" controlId="phoneReg">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
@@ -174,6 +182,8 @@ export default function Register() {
               required
               size="sm"
             />
+            <div className="valid-feedback fs-6">Ser bra ut!</div>
+            <div className="invalid-feedback fs-6">Telefonnummer krävs!</div>
           </Form.Group>
           <Form.Group className="mb-2" controlId="passwordReg">
             <Form.Label className="text-white" style={{ fontSize: '0.85rem' }}>
@@ -185,6 +195,8 @@ export default function Register() {
               required
               size="sm"
             />
+            <div className="valid-feedback fs-6">Ser bra ut!</div>
+            <div className="invalid-feedback fs-6">Ange ett lösenord!</div>
           </Form.Group>
 
           <Form.Group
@@ -199,6 +211,8 @@ export default function Register() {
               checked={consentChecked}
               onChange={() => setConsentChecked(!consentChecked)}
             />
+            <div className="valid-feedback fs-6">Du har godkänt!</div>
+            <div className="invalid-feedback fs-6">Ditt godkännande krävs!</div>
             <Form.Label className="text-white mb-0" htmlFor="samtycke">
               Jag samtycker till att mina personuppgifter hanteras enligt
               integritetspolicyn och GDPR.

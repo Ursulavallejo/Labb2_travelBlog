@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
 import travelImage from '../assets/travel.svg';
-import { Toast, ToastContainer } from 'react-bootstrap';
+import { Toast, ToastContainer, Form } from 'react-bootstrap';
 
 export default function Login() {
   const { setID, setUsername } = useContext(UserContext);
@@ -99,29 +99,47 @@ export default function Login() {
             Travel Blog
           </span>
         </div>
-        <form
+        <Form
           id="login"
-          className="d-flex flex-column mx-auto login-form"
+          className="d-flex flex-column mx-auto login-form was-validated"
           onSubmit={loginForm}
         >
-          <label htmlFor="email">Ange email:</label>
-          <input
-            id="email"
-            name="email"
-            type="text"
-            placeholder="Email..."
-            required
-          />
-          <label htmlFor="password" className="mt-3">
-            Ange lösenord:
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Lösenord..."
-            required
-          />
+          <Form.Group>
+            <Form.Label
+              className="text-white"
+              htmlFor="email"
+              style={{ fontSize: '0.85rem' }}
+            >
+              Ange email:
+            </Form.Label>
+            <Form.Control
+              id="email"
+              name="email"
+              type="text"
+              placeholder="Email..."
+              required
+            />
+            <div className="valid-feedback fs-6">Ser bra ut!</div>
+            <div className="invalid-feedback fs-6">Lämna inte fälten tomt!</div>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label
+              htmlFor="password"
+              className="mt-3 text-white"
+              style={{ fontSize: '0.85rem' }}
+            >
+              Ange lösenord:
+            </Form.Label>
+            <Form.Control
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Lösenord..."
+              required
+            />
+            <div className="valid-feedback fs-6">Ser bra ut!</div>
+            <div className="invalid-feedback fs-6">Lämna inte fälten tomt!</div>
+          </Form.Group>
           <button
             type="submit"
             className="w-50 mx-auto mt-3 rounded-2 btn blue"
@@ -134,7 +152,7 @@ export default function Login() {
           >
             Inget konto? Registrera dig!
           </Link>
-        </form>
+        </Form>
       </div>
 
       <ToastContainer className="p-3" position="top-end">

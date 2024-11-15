@@ -143,44 +143,44 @@ app.post('/users/register', async (req, res) => {
 
 // POST user and compare user login request with DB
 app.post('/users/login', async (req, res) => {
-  // const { email, pass_word } = req.body;
   const email = req.body.email;
   const pass_word = req.body.pass_word;
 
-  if (email && pass_word) {
-    const query = `
-    SELECT * FROM users WHERE email = $1
-    `;
-    const values = [email];
-    try {
-      const results = await client.query(query, values);
-      if (results.rows.length > 0) {
-        const user = results.rows[0];
-        const validPassword = await argon2.verify(user.pass_word, pass_word);
+  if (!email || !pass_word) {
+    return res.status(400).send('E-post eller lösenord saknas!');
+  }
 
-        if (validPassword) {
-          const token = jwt.sign(
-            { userId: user.user_id },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: '1h',
-            }
-          );
-          res.status(200).send({
-            message: 'Inloggningen lyckades!',
-            data: user,
-            token: token,
-          });
-        }
+  const query = `
+    SELECT * FROM users WHERE email = $1
+  `;
+  const values = [email];
+
+  try {
+    const results = await client.query(query, values);
+    if (results.rows.length > 0) {
+      const user = results.rows[0];
+      const validPassword = await argon2.verify(user.pass_word, pass_word);
+
+      if (validPassword) {
+        const token = jwt.sign(
+          { userId: user.user_id },
+          process.env.JWT_SECRET,
+          { expiresIn: '1h' }
+        );
+        return res.status(200).send({
+          message: 'Inloggningen lyckades!',
+          data: user,
+          token: token,
+        });
       } else {
-        res.status(401).send('Ogiltig e-postadress eller lösenord');
+        return res.status(401).send('Felaktigt lösenord!');
       }
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Det gick inte att skicka in!');
+    } else {
+      return res.status(404).send('E-posten hittades inte!');
     }
-  } else {
-    res.status(400).send('E-post eller lösenord saknas!');
+  } catch (error) {
+    console.error('Error during login:', error);
+    return res.status(500).send('Det gick inte att skicka in!');
   }
 });
 

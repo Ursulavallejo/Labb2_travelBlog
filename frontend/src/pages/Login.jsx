@@ -34,9 +34,9 @@ export default function Login() {
         pass_word: pass.value,
       }),
     })
-      .then((resp) => resp.json())
-      .then((user) => {
-        if (user.data) {
+      .then(async (resp) => {
+        if (resp.ok) {
+          const user = await resp.json();
           const userID = user.data.user_id;
           const username = user.data.username;
           const token = user.token;
@@ -48,7 +48,7 @@ export default function Login() {
           localStorage.setItem('username', username);
           localStorage.setItem('token', token);
 
-          setToastMessage('Loggat in!');
+          setToastMessage('Inloggningen lyckades!');
           setToastVariant('success');
           setShowToast(true);
 
@@ -56,14 +56,15 @@ export default function Login() {
 
           setTimeout(() => {
             setFinish(true);
-          }, 3000); // Delay navigation to show the toast
+          }, 3000);
         } else {
-          throw new Error('Invalid credentials');
+          const errorMessage = await resp.text();
+          throw new Error(errorMessage);
         }
       })
       .catch((err) => {
         console.error(err);
-        setToastMessage('Felaktig lösenord eller email!');
+        setToastMessage(err.message); // Mensaje devuelto por el servidor
         setToastVariant('danger');
         setShowToast(true);
       });
@@ -71,7 +72,7 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      {/* Container mosaic photos */}
+      {/* Background Images */}
       <div className="image-grid">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
           <img
@@ -84,7 +85,7 @@ export default function Login() {
         ))}
       </div>
 
-      {/* Container form logIn */}
+      {/* Login Form */}
       <div id="container" className="login-container rounded-5 p-5">
         <div className="d-flex align-items-center justify-content-evenly">
           <img
@@ -138,7 +139,7 @@ export default function Login() {
         </form>
       </div>
 
-      {/* Toast Notification */}
+      {/* Toast Notifications */}
       <ToastContainer className="p-3" position="top-end">
         <Toast
           onClose={() => setShowToast(false)}

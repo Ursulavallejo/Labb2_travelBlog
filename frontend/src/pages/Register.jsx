@@ -249,12 +249,27 @@ export default function Register() {
               och du kan när som helst <strong>återkalla ditt samtycke</strong>.
             </p>
             <p>
+              Genom att ladda upp bilder i vår tjänst intygar du att du har{' '}
+              <strong>upphovsrätten</strong> eller tillståndet att använda
+              bilderna. Plattformen tar <strong>inget ansvar</strong> för
+              eventuella upphovsrättsintrång som uppstår från användargenererat
+              innehåll.
+            </p>
+            <p>
+              Vi vill också uppmana till en respektfull och vänlig ton i alla
+              kommentarer. Inlägg eller kommentarer med{' '}
+              <strong>rasistiskt</strong>, <strong>sexistiskt</strong> eller{' '}
+              <strong>etniskt kränkande innehåll</strong> kommer inte att
+              tolereras och kan leda till att kontot blockeras.
+            </p>
+            <p>
               För mer information om hur vi{' '}
               <strong>skyddar din integritet</strong> och behandlar dina
               personuppgifter, vänligen läs vår{' '}
               <strong>integritetspolicy</strong>.
             </p>
           </Modal.Body>
+
           <Modal.Footer>
             <Link
               to="/gdpr"

@@ -1,7 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
-import { Button, Spinner, Form, Container } from 'react-bootstrap';
+import {
+  Button,
+  Spinner,
+  Form,
+  Container,
+  Toast,
+  ToastContainer,
+} from 'react-bootstrap';
 import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
 import { FaEdit, FaTrash, FaRegWindowClose } from 'react-icons/fa';
 
@@ -10,9 +17,11 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [isEnabled, setEnabled] = useState(true);
   const [profile, setProfile] = useState({});
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState('success'); // 'success' or 'danger'
   const navigate = useNavigate();
 
-  // PATCH form for editing user details
   function editForm(e) {
     e.preventDefault();
 
@@ -35,26 +44,21 @@ export default function Profile() {
     })
       .then((resp) => resp.json())
       .then(() => {
-        alert('Profiluppgifter uppdaterade!');
+        setToastMessage('Profiluppgifter uppdaterade!');
+        setToastVariant('success');
+        setShowToast(true);
         document.getElementById('edit').reset();
         setLoading(true);
       })
       .catch((err) => {
         console.error(err);
-        alert('Något gick fel!');
+        setToastMessage('Något gick fel!');
+        setToastVariant('danger');
+        setShowToast(true);
       });
   }
 
-  // initial GET by user id to display user details
   useEffect(() => {
-    //////////////// OBS RADERA EJ ////////////////
-    // const token = localStorage.getItem('token');
-    // if (!token) return;
-    // const decodedToken = jwt_decode(token);
-    // const userId = decodedToken.userId;
-    // if (!userId) return;
-    ////////////////////////////////////////////////
-
     const fetchUser = () => {
       if (!ID) return;
       fetch(`users/${ID}`)
@@ -76,7 +80,7 @@ export default function Profile() {
 
   function edit() {
     setEnabled(false);
-    let inputs = document.querySelectorAll('.editInput');
+    const inputs = document.querySelectorAll('.editInput');
     inputs.forEach((input) => {
       input.disabled = false;
     });
@@ -84,7 +88,7 @@ export default function Profile() {
 
   function cancel() {
     setEnabled(true);
-    let inputs = document.querySelectorAll('.editInput');
+    const inputs = document.querySelectorAll('.editInput');
     inputs.forEach((input) => {
       input.disabled = true;
     });
@@ -92,10 +96,6 @@ export default function Profile() {
 
   function userDelete() {
     const token = localStorage.getItem('token');
-
-    if (token) {
-      console.log('the token ' + token);
-    }
 
     fetch(`/users/delete`, {
       method: 'DELETE',
@@ -106,29 +106,29 @@ export default function Profile() {
     })
       .then((resp) => {
         if (!resp.ok) {
-          throw new Error('Kunde inte radera konto! ');
+          throw new Error('Kunde inte radera konto!');
         }
-      })
-      .then(() => {
-        localStorage.setItem('ID', null);
+        localStorage.removeItem('ID');
         localStorage.removeItem('token');
-        alert('Din konto har raderats!');
-        navigate('/');
+        setToastMessage('Din konto har raderats!');
+        setToastVariant('success');
+        setShowToast(true);
+
+        setTimeout(() => {
+          navigate('/');
+        }, 3000);
       })
       .catch((err) => {
         console.error(err);
-        alert('Något gick fel!');
+        setToastMessage('Något gick fel!');
+        setToastVariant('danger');
+        setShowToast(true);
       });
   }
 
   const handleConfirm = () => {
-    // alert('Profiluppgifter uppdaterade!');
     navigate('/blogs');
   };
-
-  // const handleCancel = () => {
-  //   navigate('/blogs');
-  // };
 
   return (
     <div
@@ -266,6 +266,18 @@ export default function Profile() {
           </>
         )}
       </Container>
+
+      <ToastContainer className="p-3" position="top-end">
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          bg={toastVariant}
+          delay={3000}
+          autohide
+        >
+          <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 }

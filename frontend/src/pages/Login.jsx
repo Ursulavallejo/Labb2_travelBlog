@@ -110,6 +110,7 @@ export default function Login() {
             name="email"
             type="text"
             placeholder="Email..."
+            autoComplete="email"
             required
           />
           <label htmlFor="password" className="mt-3">
@@ -120,6 +121,7 @@ export default function Login() {
             name="password"
             type="password"
             placeholder="Lösenord..."
+            autoComplete="current-password"
             required
           />
           <button

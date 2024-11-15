@@ -6,6 +6,9 @@ import {
   Spinner,
   Form,
   Container,
+  OverlayTrigger,
+  Modal,
+  Tooltip,
   Toast,
   ToastContainer,
 } from 'react-bootstrap';
@@ -20,7 +23,12 @@ export default function Profile() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastVariant, setToastVariant] = useState('success'); // 'success' or 'danger'
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const navigate = useNavigate();
+
+  const tooltipEdit = <Tooltip id="tooltip">Uppdatera konto</Tooltip>;
+  const tooltipDelete = <Tooltip id="tooltip">Radera konto</Tooltip>;
+  const tooltipClose = <Tooltip id="tooltip">Stäng</Tooltip>;
 
   function editForm(e) {
     e.preventDefault();
@@ -122,10 +130,13 @@ export default function Profile() {
         console.error(err);
         setToastMessage('Något gick fel!');
         setToastVariant('danger');
+        setShowDeleteModal(false);
         setShowToast(true);
       });
   }
-
+  const handleDeleteConfirm = () => {
+    setShowDeleteModal(true);
+  };
   const handleConfirm = () => {
     navigate('/blogs');
   };
@@ -163,31 +174,59 @@ export default function Profile() {
               >
                 <h2 className="heading">Ändra dina uppgifter</h2>
                 <div className="d-flex">
-                  <FaTrash
-                    onClick={userDelete}
-                    className="fs-1  p-2"
-                    style={{ color: 'white', cursor: 'pointer' }}
-                    data-bs-toggle="tooltip"
-                    data-placement="top"
-                    title="Radera konto"
-                  />
-                  <FaEdit
-                    onClick={edit}
-                    className="fs-1 p-2"
-                    style={{ color: 'white', cursor: 'pointer' }}
-                    data-bs-toggle="tooltip"
-                    data-placement="top"
-                    title="Uppdatera uppgifter"
-                  />
-                  <FaRegWindowClose
-                    onClick={handleConfirm}
-                    className="fs-1 ms-auto p-2"
-                    style={{ color: '#ffc107', cursor: 'pointer' }}
-                    data-bs-toggle="tooltip"
-                    data-placement="top"
-                    title="Stäng"
-                  />
+                  <OverlayTrigger placement="top" overlay={tooltipEdit}>
+                    <span>
+                      <FaEdit
+                        onClick={edit}
+                        className="fs-1 p-2"
+                        style={{ color: 'white', cursor: 'pointer' }}
+                      />{' '}
+                    </span>
+                  </OverlayTrigger>
+                  <OverlayTrigger placement="top" overlay={tooltipDelete}>
+                    <span>
+                      <FaTrash
+                        onClick={handleDeleteConfirm}
+                        className="fs-1 p-2"
+                        style={{ color: 'white', cursor: 'pointer' }}
+                      />{' '}
+                    </span>
+                  </OverlayTrigger>
+                  <OverlayTrigger placement="top" overlay={tooltipClose}>
+                    <span className="ms-auto ">
+                      <FaRegWindowClose
+                        onClick={handleConfirm}
+                        className="fs-1 ms-auto p-2"
+                        style={{ color: '#ffc107', cursor: 'pointer' }}
+                      />{' '}
+                    </span>
+                  </OverlayTrigger>
                 </div>
+                {/* Confirm Delete Modal */}
+                <Modal
+                  show={showDeleteModal}
+                  onHide={() => setShowDeleteModal(false)}
+                  centered
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Bekräfta Radering Konto</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    Är du säker på att du vill ta bort ditt konto? Den här
+                    åtgärden är permanent och kan inte ångras.
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setShowDeleteModal(false)}
+                    >
+                      Avbryt
+                    </Button>
+                    <Button variant="danger" onClick={userDelete}>
+                      Radera konto
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
                 <Form.Group className="mt-3">
                   <Form.Label className="white-label">Ange förnamn:</Form.Label>
                   <Form.Control

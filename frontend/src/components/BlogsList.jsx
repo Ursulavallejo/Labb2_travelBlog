@@ -7,6 +7,8 @@ import {
   Card,
   Button,
   Container,
+  OverlayTrigger,
+  Tooltip,
   Row,
   Col,
   Modal,
@@ -23,6 +25,9 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastVariant, setToastVariant] = useState('success');
+
+  const tooltipEdit = <Tooltip id="tooltip">Uppdatera inlägget</Tooltip>;
+  const tooltipDelete = <Tooltip id="tooltip">Radera inlägget</Tooltip>;
 
   const confirmDelete = (blogId) => {
     setBlogIdToDelete(blogId);
@@ -93,22 +98,26 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                 </Card.Text>
                 {blog.user_id === Number(currentUserId) && (
                   <div className="btn-container">
-                    <Button
-                      variant="outline-dark"
-                      aria-label="Uppdatera"
-                      className="my-3 mx-2 align-self-end"
-                      onClick={() => handleUpdate(blog)}
-                    >
-                      <FaEdit title="Uppdatera" />
-                    </Button>
-                    <Button
-                      variant="outline-dark"
-                      aria-label="Radera"
-                      className="my-3 mx-2 align-self-end"
-                      onClick={() => confirmDelete(blog.blog_id)}
-                    >
-                      <FaTrash title="Radera" />
-                    </Button>
+                    <OverlayTrigger placement="top" overlay={tooltipEdit}>
+                      <Button
+                        onClick={() => handleUpdate(blog)}
+                        className="my-3 mx-2 align-self-end"
+                        style={{ cursor: 'pointer' }}
+                        variant="outline-dark"
+                      >
+                        <FaEdit />
+                      </Button>
+                    </OverlayTrigger>
+                    <OverlayTrigger placement="top" overlay={tooltipDelete}>
+                      <Button
+                        onClick={() => confirmDelete(blog.blog_id)}
+                        className="my-3 mx-2 align-self-end"
+                        style={{ cursor: 'pointer' }}
+                        variant="outline-dark"
+                      >
+                        <FaTrash />{' '}
+                      </Button>
+                    </OverlayTrigger>
                   </div>
                 )}
                 <Button

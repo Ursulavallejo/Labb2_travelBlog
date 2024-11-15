@@ -1,5 +1,5 @@
 import { Navigate, Link } from 'react-router-dom';
-import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
+import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.avif';
 import { Container, Form, Button, Modal, Toast } from 'react-bootstrap';
 import { UserContext } from '../Context/UserContext';
 import { useState, useContext } from 'react';

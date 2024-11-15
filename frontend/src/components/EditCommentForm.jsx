@@ -19,11 +19,9 @@ export default function EditCommentForm({ comment, onUpdate, onCancel }) {
       if (response.ok) {
         const updatedComment = await response.json();
         onUpdate(updatedComment);
-      } else {
-        alert('Error updating comment.');
       }
     } catch (error) {
-      console.error('Error updating comment:', error);
+      console.error('Ett fel inträffade vid uppdatering kommentar:', error);
     }
   };
 

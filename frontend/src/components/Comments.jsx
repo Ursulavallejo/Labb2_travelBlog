@@ -1,10 +1,11 @@
 import { useContext, useState, useEffect, useCallback } from 'react';
 import { UserContext } from '../Context/UserContext';
 import PropTypes from 'prop-types';
-import AddCommentForm from './AddCommentForm';
-import EditCommentForm from './EditCommentForm';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import { Button, Modal, Toast, OverlayTrigger, Tooltip } from 'react-bootstrap';
+
+import AddCommentForm from './AddCommentForm';
+import EditCommentForm from './EditCommentForm';
 
 export default function Comments({ blogId }) {
   const [comments, setComments] = useState([]);
@@ -18,8 +19,8 @@ export default function Comments({ blogId }) {
 
   const { ID } = useContext(UserContext);
 
-  const tooltipEdit = <Tooltip id="tooltip">Uppdatera kommentar</Tooltip>;
-  const tooltipDelete = <Tooltip id="tooltip">Radera kommentar</Tooltip>;
+  const tooltipEdit = <Tooltip id="tooltip">Uppdatera</Tooltip>;
+  const tooltipDelete = <Tooltip id="tooltip">Radera</Tooltip>;
 
   const fetchComments = useCallback(async () => {
     try {
@@ -35,10 +36,12 @@ export default function Comments({ blogId }) {
     fetchComments();
   }, [blogId, fetchComments]);
 
+  //POST
   const handleCommentAdded = () => {
     fetchComments();
   };
 
+  //PATCH
   const handleCommentUpdated = (updatedComment) => {
     setComments((prevComments) =>
       prevComments.map((comment) =>
@@ -50,14 +53,14 @@ export default function Comments({ blogId }) {
     setCommentToEdit(null);
   };
 
+  const handleEditComment = (comment) => {
+    setCommentToEdit(comment);
+  };
   const handleCloseEdit = () => {
     setCommentToEdit(null);
   };
 
-  const handleEditComment = (comment) => {
-    setCommentToEdit(comment);
-  };
-
+  //DELETE
   const confirmDelete = (commentId) => {
     setCommentIdToDelete(commentId);
     setShowDeleteModal(true);
@@ -76,9 +79,6 @@ export default function Comments({ blogId }) {
         );
         setToastMessage('Kommentaren raderades framgångsrikt!');
         setToastVariant('success');
-      } else {
-        setToastMessage('Något gick fel vid borttagning.');
-        setToastVariant('danger');
       }
     } catch (error) {
       console.error('Error deleting comment:', error);
@@ -156,7 +156,7 @@ export default function Comments({ blogId }) {
           </div>
         ))
       ) : (
-        <p className="mx-auto my-2">Inga kommentarer.</p>
+        <p className="mx-auto my-2">Inga kommentarer än.</p>
       )}
       <AddCommentForm blogId={blogId} onCommentAdded={handleCommentAdded} />
 

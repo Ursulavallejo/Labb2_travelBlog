@@ -12,7 +12,7 @@ import {
   Toast,
   ToastContainer,
 } from 'react-bootstrap';
-import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
+import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.avif';
 import { FaEdit, FaTrash, FaRegWindowClose } from 'react-icons/fa';
 
 export default function Profile() {
@@ -172,7 +172,7 @@ export default function Profile() {
                 onSubmit={editForm}
                 className="d-flex flex-column mx-auto"
               >
-                <h2 className="heading">Ändra dina uppgifter</h2>
+                <h2 className="heading m-2">Ändra dina uppgifter</h2>
                 <div className="d-flex">
                   <OverlayTrigger placement="top" overlay={tooltipEdit}>
                     <span>

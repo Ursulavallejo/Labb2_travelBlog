@@ -475,7 +475,7 @@ app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
 
     try {
       const image = await Jimp.read(filePath);
-      await (await image.resize({ width: 300 })).write(compressedPath);
+      await image.resize(300, Jimp.AUTO).writeAsync(compressedPath);
 
       const baseUrl = `${req.protocol}://${req.headers.host}`;
       image_blog = `${baseUrl}/uploads/compressed-${req.file.filename}`;

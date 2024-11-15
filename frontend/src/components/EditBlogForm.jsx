@@ -53,7 +53,7 @@ export default function EditForm({ blog, onClose, onUpdate, userId }) {
         setToastVariant('success');
         setShowToast(true);
         onUpdate();
-        setTimeout(() => onClose(), 1000); // Delay close to allow toast display
+        setTimeout(() => onClose(), 1000);
       } else {
         setToastMessage('Något gick fel vid uppdatering');
         setToastVariant('danger');

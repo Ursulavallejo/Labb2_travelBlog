@@ -25,6 +25,10 @@ services:
       - '3000:3000'
     networks:
       - travel-net
+    deploy:
+      resources:
+        limits:
+          memory: 2G
 
   database:
     image: postgres:latest

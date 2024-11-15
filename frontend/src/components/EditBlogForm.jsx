@@ -15,7 +15,23 @@ export default function EditForm({ blog, onClose, onUpdate, userId }) {
   const [toastVariant, setToastVariant] = useState('success'); // 'success' for green, 'danger' for red
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const maxSize = 2 * 1024 * 1024;
+
+    if (file && !allowedTypes.includes(file.type)) {
+      setToastMessage('Endast JPG- och PNG-filer är tillåtna');
+      setToastVariant('danger');
+      setShowToast(true);
+      setImage(null);
+    } else if (file && file.size > maxSize) {
+      setToastMessage('Maximal filstorlek är 2 MB');
+      setToastVariant('danger');
+      setShowToast(true);
+      setImage(null);
+    } else {
+      setImage(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -49,11 +65,11 @@ export default function EditForm({ blog, onClose, onUpdate, userId }) {
       );
 
       if (response.status === 200) {
-        setToastMessage('Blogg uppdaterad!');
+        setToastMessage('Blogg uppdaterad framgångsrikt!');
         setToastVariant('success');
         setShowToast(true);
         onUpdate();
-        setTimeout(() => onClose(), 1000);
+        setTimeout(() => onClose(), 1000); // Delay close to allow toast display
       } else {
         setToastMessage('Något gick fel vid uppdatering');
         setToastVariant('danger');
@@ -94,7 +110,7 @@ export default function EditForm({ blog, onClose, onUpdate, userId }) {
           <Form.Label>Ny Bild (valfritt)</Form.Label>
           <Form.Control type="file" onChange={handleFileChange} />
           <Form.Text className="text-muted">
-            Lämna tom om du vill behålla den nuvarande bilden.
+            Endast JPG- och PNG-filer är tillåtna. Maximal storlek på 2MB.
           </Form.Text>
         </Form.Group>
         <Form.Group controlId="formContent">

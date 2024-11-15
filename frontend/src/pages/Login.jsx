@@ -2,10 +2,14 @@ import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
 import travelImage from '../assets/travel.svg';
+import { Toast, ToastContainer } from 'react-bootstrap';
 
 export default function Login() {
   const { setID, setUsername } = useContext(UserContext);
   const [finish, setFinish] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState('success'); // 'success' or 'danger'
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,24 +36,36 @@ export default function Login() {
     })
       .then((resp) => resp.json())
       .then((user) => {
-        const userID = user.data.user_id;
-        const username = user.data.username;
-        const token = user.token;
+        if (user.data) {
+          const userID = user.data.user_id;
+          const username = user.data.username;
+          const token = user.token;
 
-        setID(userID);
-        setUsername(username);
+          setID(userID);
+          setUsername(username);
 
-        localStorage.setItem('ID', userID);
-        localStorage.setItem('username', username);
-        localStorage.setItem('token', token);
+          localStorage.setItem('ID', userID);
+          localStorage.setItem('username', username);
+          localStorage.setItem('token', token);
 
-        // alert('Loggat in!');
-        document.getElementById('login').reset();
-        setFinish(true);
+          setToastMessage('Loggat in!');
+          setToastVariant('success');
+          setShowToast(true);
+
+          document.getElementById('login').reset();
+
+          setTimeout(() => {
+            setFinish(true);
+          }, 3000); // Delay navigation to show the toast
+        } else {
+          throw new Error('Invalid credentials');
+        }
       })
       .catch((err) => {
         console.error(err);
-        alert('Felaktig lösenord eller email!');
+        setToastMessage('Felaktig lösenord eller email!');
+        setToastVariant('danger');
+        setShowToast(true);
       });
   }
 
@@ -121,6 +137,19 @@ export default function Login() {
           </Link>
         </form>
       </div>
+
+      {/* Toast Notification */}
+      <ToastContainer className="p-3" position="top-end">
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          bg={toastVariant}
+          delay={3000}
+          autohide
+        >
+          <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 }

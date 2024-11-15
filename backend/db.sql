@@ -45,7 +45,7 @@ VALUES
 ('Japan', 'japan_tokio.avif',
 'Japan: Ett Land av Tradition och Modernitet',
 'Japan erbjuder en spännande mix av gammal tradition och futuristisk innovation. En resa till Kyoto tar dig tillbaka i tiden med sina vackra tempel och teceremonier, medan Tokyo bjuder på en värld av teknologi och neonljus. Besök en onsen för en avkopplande stund i varma källor eller utforska Akihabara, där Japans populärkultur tar över. Japans kultur är unik i världen och lämnar ingen besökare oberörd – här finns alltid något nytt och fascinerande att upptäcka.',
-1, 'pedram_h');
+1, 'sara_l');
 
 CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,

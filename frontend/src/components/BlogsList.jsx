@@ -67,7 +67,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
 
   return (
     <Container>
-      <Row className="justify-content-center">
+      <Row>
         {blogs.map((blog) => (
           <Col
             data-aos="fade-up"
@@ -104,6 +104,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                         className="my-3 mx-2 align-self-end"
                         style={{ cursor: 'pointer' }}
                         variant="outline-dark"
+                        aria-label="Uppdatera"
                       >
                         <FaEdit />
                       </Button>
@@ -114,6 +115,7 @@ export default function BlogsList({ blogs, currentUserId, onDataChange }) {
                         className="my-3 mx-2 align-self-end"
                         style={{ cursor: 'pointer' }}
                         variant="outline-dark"
+                        aria-label="Radera"
                       >
                         <FaTrash />{' '}
                       </Button>

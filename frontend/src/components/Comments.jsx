@@ -18,8 +18,8 @@ export default function Comments({ blogId }) {
 
   const { ID } = useContext(UserContext);
 
-  const tooltipEdit = <Tooltip id="tooltip">Uppdatera kommentar</Tooltip>;
-  const tooltipDelete = <Tooltip id="tooltip">Radera kommentar</Tooltip>;
+  const tooltipEdit = <Tooltip id="tooltip">Uppdatera</Tooltip>;
+  const tooltipDelete = <Tooltip id="tooltip">Radera</Tooltip>;
 
   const fetchComments = useCallback(async () => {
     try {
@@ -156,7 +156,7 @@ export default function Comments({ blogId }) {
           </div>
         ))
       ) : (
-        <p className="mx-auto my-2">Inga kommentarer.</p>
+        <p className="mx-auto my-2">Inga kommentarer än.</p>
       )}
       <AddCommentForm blogId={blogId} onCommentAdded={handleCommentAdded} />
 

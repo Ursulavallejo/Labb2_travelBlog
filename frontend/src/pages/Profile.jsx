@@ -172,7 +172,7 @@ export default function Profile() {
                 onSubmit={editForm}
                 className="d-flex flex-column mx-auto"
               >
-                <h2 className="heading">Ändra dina uppgifter</h2>
+                <h2 className="heading m-2">Ändra dina uppgifter</h2>
                 <div className="d-flex">
                   <OverlayTrigger placement="top" overlay={tooltipEdit}>
                     <span>

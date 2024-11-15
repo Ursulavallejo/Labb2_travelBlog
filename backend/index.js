@@ -341,6 +341,7 @@ app.post(
         // update `image_blog` to the compressed file THIS IS THE NAME GO TO TEH DATA BASE
         const baseUrl = `${req.protocol}://${req.headers.host}`;
         image_blog = `${baseUrl}/uploads/compressed-${req.file.filename}`;
+
         // upload.single(`/uploads/compressed-${req.file.filename}`),
         // delete original file
         fs.unlinkSync(filePath);

@@ -64,7 +64,7 @@ export default function EditForm({ blog, onClose, onUpdate, userId }) {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         setToastMessage('Blogg uppdaterad framgångsrikt!');
         setToastVariant('success');
         setShowToast(true);

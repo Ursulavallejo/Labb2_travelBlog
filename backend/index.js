@@ -466,32 +466,13 @@ app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
   let image_blog = null;
 
   if (req.file) {
-    // If a new image is uploaded, process it
-    const filePath = path.resolve(__dirname, 'uploads', req.file.filename);
-    const compressedPath = path.resolve(
-      __dirname,
-      'uploads',
-      `compressed-${req.file.filename}`
-    );
-
-    try {
-      const image = await Jimp.read(filePath);
-      await image.resize(300, Jimp.AUTO).writeAsync(compressedPath);
-
-      const baseUrl = `${req.protocol}://${req.headers.host}`;
-      image_blog = `${baseUrl}/uploads/compressed-${req.file.filename}`;
-
-      fs.unlinkSync(filePath); // Remove the original image
-    } catch (error) {
-      console.error('Error processing the image:', error);
-      return res
-        .status(500)
-        .json({ error: 'Det gick inte att bearbeta bilden.' });
-    }
+    // Generate the full URL for the new image if a file is uploaded
+    const baseUrl = `${req.protocol}://${req.headers.host}`;
+    image_blog = `${baseUrl}/uploads/${req.file.filename}`;
   }
 
   try {
-    // Fetch the current image if no new image is uploaded
+    // If no new image is uploaded, retain the current image from the database
     if (!image_blog) {
       const currentImageQuery = `SELECT image_blog FROM blogs WHERE blog_id = $1 AND FK_users = $2`;
       const currentImageResult = await client.query(currentImageQuery, [
@@ -500,13 +481,13 @@ app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
       ]);
 
       if (currentImageResult.rows.length > 0) {
-        image_blog = currentImageResult.rows[0].image_blog; // Retain the existing image
+        image_blog = currentImageResult.rows[0].image_blog; // Keep the existing image
       } else {
         return res.status(404).json({ error: 'Blogg hittades inte.' });
       }
     }
 
-    // Build the update query
+    // Build the update query for the blog post
     const query = `
       UPDATE blogs SET
         title_blog = COALESCE($1, title_blog),

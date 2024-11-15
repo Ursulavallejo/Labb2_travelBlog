@@ -515,7 +515,14 @@ app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
       WHERE blog_id = $5 AND FK_users = $6
       RETURNING *;
     `;
-    const values = [title_blog, text_blog, land_name, image_blog, blogId, user_id];
+    const values = [
+      title_blog,
+      text_blog,
+      land_name,
+      image_blog,
+      blogId,
+      user_id,
+    ];
 
     const result = await client.query(query, values);
 
@@ -531,7 +538,7 @@ app.patch('/api/blogs/:id', upload.single('image'), async (req, res) => {
     }
   } catch (error) {
     console.error('Error updating the blog:', error);
-    res.status(500).json({ error: 'Fel vid uppdatering av bloggen.' }); /
+    res.status(500).json({ error: 'Fel vid uppdatering av bloggen.' });
   }
 });
 

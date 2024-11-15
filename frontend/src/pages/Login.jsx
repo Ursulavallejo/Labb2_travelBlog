@@ -104,12 +104,12 @@ export default function Login() {
           className="d-flex flex-column mx-auto login-form"
           onSubmit={loginForm}
         >
-          <label htmlFor="email">Ange email:</label>
+          <label htmlFor="email">Ange e-post:</label>
           <input
             id="email"
             name="email"
             type="text"
-            placeholder="Email..."
+            placeholder="E-post..."
             autoComplete="email"
             required
           />

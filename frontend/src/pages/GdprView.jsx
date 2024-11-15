@@ -1,6 +1,6 @@
 import { Container, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
+import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.avif';
 
 export default function GdprView() {
   return (

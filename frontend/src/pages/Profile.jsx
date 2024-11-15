@@ -12,7 +12,7 @@ import {
   Toast,
   ToastContainer,
 } from 'react-bootstrap';
-import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
+import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.avif';
 import { FaEdit, FaTrash, FaRegWindowClose } from 'react-icons/fa';
 
 export default function Profile() {

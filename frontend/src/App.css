@@ -330,7 +330,8 @@ label {
   padding: 0rem;
   border-radius: 10px;
 }
-.login-form label {
+.login-form label,
+.white-label {
   color: white;
 }
 

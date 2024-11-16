@@ -66,7 +66,8 @@ export default function Register() {
           }, 2000);
         } else {
           setToastMessage(
-            data.message || 'Error en el registro. Inténtalo igen.'
+            data.message ||
+              'Ett fel träffat vid registrrering.Försök igen senare!'
           );
           setToastVariant('danger');
           setShowToast(true);

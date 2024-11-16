@@ -10,6 +10,10 @@ export default function Login() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastVariant, setToastVariant] = useState('success'); // 'success' or 'danger'
+  const [touchedFields, setTouchedFields] = useState({
+    email: false,
+    password: false,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +21,15 @@ export default function Login() {
       navigate('/blogs');
     }
   }, [finish, navigate]);
+
+  const handleBlur = (field) => {
+    setTouchedFields((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const isFieldValid = (field) => {
+    const input = document.getElementById(field);
+    return input.checkValidity();
+  };
 
   function loginForm(e) {
     e.preventDefault();
@@ -118,9 +131,18 @@ export default function Login() {
               type="text"
               placeholder="Email..."
               required
+              onBlur={() => handleBlur('email')}
             />
-            <div className="valid-feedback fs-6">Ser bra ut!</div>
-            <div className="invalid-feedback fs-6">Lämna inte fälten tomt!</div>
+
+            <div
+              className={`invalid-feedback fs-6 ${
+                touchedFields.email && !isFieldValid('email')
+                  ? 'd-block'
+                  : 'd-none'
+              }`}
+            >
+              Lämna inte fälten tomt!
+            </div>
           </Form.Group>
           <Form.Group>
             <Form.Label
@@ -136,9 +158,17 @@ export default function Login() {
               type="password"
               placeholder="Lösenord..."
               required
+              onBlur={() => handleBlur('password')}
             />
-            <div className="valid-feedback fs-6">Ser bra ut!</div>
-            <div className="invalid-feedback fs-6">Lämna inte fälten tomt!</div>
+            <div
+              className={`invalid-feedback fs-6 ${
+                touchedFields.password && !isFieldValid('password')
+                  ? 'd-block'
+                  : 'd-none'
+              }`}
+            >
+              Lämna inte fälten tomt!
+            </div>
           </Form.Group>
           <button
             type="submit"
@@ -160,7 +190,7 @@ export default function Login() {
           onClose={() => setShowToast(false)}
           show={showToast}
           bg={toastVariant}
-          delay={3000}
+          delay={2000}
           autohide
         >
           <Toast.Body className="text-white">{toastMessage}</Toast.Body>

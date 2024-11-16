@@ -25,10 +25,12 @@ export default function Login() {
   const handleBlur = (field) => {
     setTouchedFields((prev) => ({ ...prev, [field]: true }));
   };
+
   const isFieldValid = (field) => {
     const input = document.getElementById(field);
     return input.checkValidity();
   };
+
   function loginForm(e) {
     e.preventDefault();
 
@@ -187,7 +189,7 @@ export default function Login() {
           onClose={() => setShowToast(false)}
           show={showToast}
           bg={toastVariant}
-          delay={3000}
+          delay={2000}
           autohide
         >
           <Toast.Body className="text-white">{toastMessage}</Toast.Body>

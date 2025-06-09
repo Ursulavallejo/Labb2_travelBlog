@@ -47,7 +47,7 @@ The application is deployed on a dedicated Microsoft Azure server and optimized 
 
 [<img src="documentation/BlogFormPost.png" width="400"/>](create-post)
 
-[<img src="documentation/CommentarView.png.png" width="400"/>](comments-view)
+[<img src="documentation/CommentarView.png" width="400"/>](comments-view)
 
 [<img src="documentation/Comments.png" width="300"/>](comments-detail)
 

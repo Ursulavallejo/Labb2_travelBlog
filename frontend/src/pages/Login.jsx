@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/UserContext';
 import travelImage from '../assets/travel.svg';
-import { Toast, ToastContainer } from 'react-bootstrap';
+import { Toast, ToastContainer, Form } from 'react-bootstrap';
 
 export default function Login() {
   const { setID, setUsername } = useContext(UserContext);
@@ -10,6 +10,10 @@ export default function Login() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastVariant, setToastVariant] = useState('success'); // 'success' or 'danger'
+  const [touchedFields, setTouchedFields] = useState({
+    email: false,
+    password: false,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +21,15 @@ export default function Login() {
       navigate('/blogs');
     }
   }, [finish, navigate]);
+
+  const handleBlur = (field) => {
+    setTouchedFields((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const isFieldValid = (field) => {
+    const input = document.getElementById(field);
+    return input.checkValidity();
+  };
 
   function loginForm(e) {
     e.preventDefault();
@@ -99,29 +112,63 @@ export default function Login() {
             Travel Blog
           </span>
         </div>
-        <form
+        <Form
           id="login"
-          className="d-flex flex-column mx-auto login-form"
+          className="d-flex flex-column mx-auto login-form was-validated"
           onSubmit={loginForm}
         >
-          <label htmlFor="email">Ange email:</label>
-          <input
-            id="email"
-            name="email"
-            type="text"
-            placeholder="Email..."
-            required
-          />
-          <label htmlFor="password" className="mt-3">
-            Ange lösenord:
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Lösenord..."
-            required
-          />
+          <Form.Group>
+            <Form.Label
+              className="text-white"
+              htmlFor="email"
+              style={{ fontSize: '0.85rem' }}
+            >
+              Ange email:
+            </Form.Label>
+            <Form.Control
+              id="email"
+              name="email"
+              type="text"
+              placeholder="Email..."
+              required
+              onBlur={() => handleBlur('email')}
+            />
+            <div
+              className={`invalid-feedback fs-6 ${
+                touchedFields.email && !isFieldValid('email')
+                  ? 'd-block'
+                  : 'd-none'
+              }`}
+            >
+              Lämna inte fälten tomt!
+            </div>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label
+              htmlFor="password"
+              className="mt-3 text-white"
+              style={{ fontSize: '0.85rem' }}
+            >
+              Ange lösenord:
+            </Form.Label>
+            <Form.Control
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Lösenord..."
+              required
+              onBlur={() => handleBlur('password')}
+            />
+            <div
+              className={`invalid-feedback fs-6 ${
+                touchedFields.password && !isFieldValid('password')
+                  ? 'd-block'
+                  : 'd-none'
+              }`}
+            >
+              Lämna inte fälten tomt!
+            </div>
+          </Form.Group>
           <button
             type="submit"
             className="w-50 mx-auto mt-3 rounded-2 btn blue"
@@ -134,7 +181,7 @@ export default function Login() {
           >
             Inget konto? Registrera dig!
           </Link>
-        </form>
+        </Form>
       </div>
 
       <ToastContainer className="p-3" position="top-end">
@@ -142,7 +189,7 @@ export default function Login() {
           onClose={() => setShowToast(false)}
           show={showToast}
           bg={toastVariant}
-          delay={3000}
+          delay={2000}
           autohide
         >
           <Toast.Body className="text-white">{toastMessage}</Toast.Body>

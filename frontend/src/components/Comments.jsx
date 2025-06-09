@@ -1,10 +1,11 @@
 import { useContext, useState, useEffect, useCallback } from 'react';
 import { UserContext } from '../Context/UserContext';
 import PropTypes from 'prop-types';
+import { FaTrash, FaEdit } from 'react-icons/fa';
+import { Button, Modal, Toast, OverlayTrigger, Tooltip } from 'react-bootstrap';
+
 import AddCommentForm from './AddCommentForm';
 import EditCommentForm from './EditCommentForm';
-import { FaTrash, FaEdit } from 'react-icons/fa';
-import { Button, Modal, Toast } from 'react-bootstrap';
 
 export default function Comments({ blogId }) {
   const [comments, setComments] = useState([]);
@@ -17,6 +18,9 @@ export default function Comments({ blogId }) {
   const [toastVariant, setToastVariant] = useState('success');
 
   const { ID } = useContext(UserContext);
+
+  const tooltipEdit = <Tooltip id="tooltip">Uppdatera</Tooltip>;
+  const tooltipDelete = <Tooltip id="tooltip">Radera</Tooltip>;
 
   const fetchComments = useCallback(async () => {
     try {
@@ -32,10 +36,12 @@ export default function Comments({ blogId }) {
     fetchComments();
   }, [blogId, fetchComments]);
 
+  //POST
   const handleCommentAdded = () => {
     fetchComments();
   };
 
+  //PATCH
   const handleCommentUpdated = (updatedComment) => {
     setComments((prevComments) =>
       prevComments.map((comment) =>
@@ -47,14 +53,14 @@ export default function Comments({ blogId }) {
     setCommentToEdit(null);
   };
 
+  const handleEditComment = (comment) => {
+    setCommentToEdit(comment);
+  };
   const handleCloseEdit = () => {
     setCommentToEdit(null);
   };
 
-  const handleEditComment = (comment) => {
-    setCommentToEdit(comment);
-  };
-
+  //DELETE
   const confirmDelete = (commentId) => {
     setCommentIdToDelete(commentId);
     setShowDeleteModal(true);
@@ -73,9 +79,6 @@ export default function Comments({ blogId }) {
         );
         setToastMessage('Kommentaren raderades framgångsrikt!');
         setToastVariant('success');
-      } else {
-        setToastMessage('Något gick fel vid borttagning.');
-        setToastVariant('danger');
       }
     } catch (error) {
       console.error('Error deleting comment:', error);
@@ -106,38 +109,28 @@ export default function Comments({ blogId }) {
             className="speech-bubble"
           >
             <p style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span className="d-flex ">
+              <span className="d-flex align-items-center ">
                 <strong>{comment.username} : </strong>
                 {Number(comment.fk_users) === Number(ID) && (
                   <>
-                    <Button
-                      className="d-flex align-items-center"
-                      variant="outline-dark"
-                      size="sm"
-                      aria-label="Uppdatera"
-                      style={{
-                        padding: '0 2px',
-                        margin: '2px 4px',
-                        border: 'none',
-                      }}
-                      onClick={() => handleEditComment(comment)}
-                    >
-                      <FaEdit title="Uppdatera" />
-                    </Button>
-                    <Button
-                      className="d-flex align-items-center"
-                      variant="outline-dark"
-                      size="sm"
-                      aria-label="Radera"
-                      style={{
-                        padding: '0 2px',
-                        margin: '2px 4px',
-                        border: 'none',
-                      }}
-                      onClick={() => confirmDelete(comment.comment_id)}
-                    >
-                      <FaTrash title="Radera" />
-                    </Button>
+                    <OverlayTrigger placement="top" overlay={tooltipEdit}>
+                      <span>
+                        <FaEdit
+                          onClick={() => handleEditComment(comment)}
+                          className="fs-2 p-2"
+                          style={{ cursor: 'pointer' }}
+                        />{' '}
+                      </span>
+                    </OverlayTrigger>
+                    <OverlayTrigger placement="top" overlay={tooltipDelete}>
+                      <span>
+                        <FaTrash
+                          onClick={() => confirmDelete(comment.comment_id)}
+                          className="fs-2 p-2"
+                          style={{ cursor: 'pointer' }}
+                        />{' '}
+                      </span>
+                    </OverlayTrigger>
                   </>
                 )}
               </span>
@@ -163,7 +156,7 @@ export default function Comments({ blogId }) {
           </div>
         ))
       ) : (
-        <p className="mx-auto my-2">Inga kommentarer.</p>
+        <p className="mx-auto my-2">Inga kommentarer än.</p>
       )}
       <AddCommentForm blogId={blogId} onCommentAdded={handleCommentAdded} />
 

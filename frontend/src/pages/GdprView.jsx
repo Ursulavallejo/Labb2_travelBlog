@@ -1,6 +1,6 @@
 import { Container, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.jpg';
+import backgroundImage from '../assets/images/istockphoto-1071294112-612x612.avif';
 
 export default function GdprView() {
   return (
@@ -20,7 +20,9 @@ export default function GdprView() {
         style={{ maxWidth: '700px' }}
       >
         <Card className="p-4">
-          <Card.Body>
+          <Card.Body
+            style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 160px)' }}
+          >
             <h2 className="text-center mb-4">Integritetsskyddspolicy</h2>
             <p>
               Vi värnar om din integritet och strävar efter att skydda dina

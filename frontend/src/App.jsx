@@ -1,10 +1,6 @@
 import { createHashRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { useEffect, Suspense } from 'react';
 import { lazyWithPreload } from 'react-lazy-with-preload';
-// import Home from './pages/HomeView';
-// import Login from './pages/Login';
-// import Register from './pages/Register';
-// import Profile from './pages/Profile';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './App.css';

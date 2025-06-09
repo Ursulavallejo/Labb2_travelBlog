@@ -25,11 +25,9 @@ export default function CommentForm({ blogId, onCommentAdded }) {
       if (response.ok) {
         setCommentText('');
         onCommentAdded();
-      } else {
-        alert('Något gick fel!');
       }
     } catch (error) {
-      console.error('Error creating comment:', error);
+      console.error('Ett fel inträffade vid att skapa kommentar:', error);
     }
   };
 

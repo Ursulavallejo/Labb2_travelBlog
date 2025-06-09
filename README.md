@@ -57,6 +57,8 @@ The application is deployed on a dedicated Microsoft Azure server and optimized 
 
 ### 📄 [Detailed Information of the Project](Detail_Info.md)
 
+---
+
 ### 🔧 Installation and Usage
 
 **Prerequisites:**

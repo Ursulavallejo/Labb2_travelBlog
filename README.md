@@ -57,11 +57,6 @@ The application is deployed on a dedicated Microsoft Azure server and optimized 
 
 ### 📄 [Detailed Information of the Project](Detail_Info.md)
 
-¡Perfecto!
-Te voy a generar una sección **clara y bien explicada** para que te quede en el README (así cuando lo mires en el futuro te acuerdas bien). También te voy a explicar _en comentarios para ti_ cómo se hace, pero en el bloque que te doy ya puedes pegarlo limpio.
-
----
-
 ### 🔧 Installation and Usage
 
 **Prerequisites:**

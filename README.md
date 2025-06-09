@@ -1,15 +1,54 @@
-Upptäckarens dagbok är en bloggplattform för de som älskar äventyr och nya upptäckter. Här kan användare läsa inspirerande blogginlägg om resor och upplevelser, samt skapa och dela sina egna berättelser.
+#### November 2024
 
-Funktioner:
+#### The development team behind Travel BLOG: Gözde Akun, Pedram Hejazi and Ursula Vallejo.
 
-    Blogginlägg: Se och läs bloggposter om olika äventyr och platser.
-    Skapa inlägg: Lägg till egna blogginlägg för att dela dina erfarenheter.
-    Kommentarer: Lämna kommentarer på andras blogginlägg.
-    Responsiv design: Anpassar sig till både desktop och mobila enheter.
+### 📋 Project Summary
 
-Teknologier:
+_Travel Blog_ is a fullstack web application designed for adventure lovers and explorers to share their travel stories and connect with a community.
 
-    React (med hooks och state management)
-    Bootstrap (för snabb och responsiv design)
-    Node.js och Express (för backend API)
-    PostgreSQL (för databaslagring)
+The project features a responsive frontend built with React and Bootstrap, a secure backend powered by Node.js and Express, and a PostgreSQL database for persistent storage. The entire application is containerized and managed using Docker Compose, with NGINX serving as a reverse proxy.
+
+Key functionalities include:
+
+- User registration and login with JWT-based authentication
+- GDPR-compliant data handling and user consent
+- Create, read, update, and delete blog posts
+- Browse and read blog posts about various adventures and places
+- Create new posts to share personal experiences
+- Leave comments on other users' blog posts
+- Image upload and compression with Multer and Jimp
+- Responsive design optimized for both desktop and mobile devices
+- Automated database initialization for consistent deployment
+
+The application is deployed on a dedicated Microsoft Azure server and optimized for performance and scalability.
+
+---
+
+### 🛠️ Technologies Used
+
+- **React** — with Hooks and state management
+- **Bootstrap** — for fast and responsive design
+- **Node.js** & **Express** — for backend API
+- **PostgreSQL** — for database storage
+
+---
+
+### General view:
+
+[<img src="documentation/LogIn_register.png" width="400"/>](LogIn-register-view)
+
+[<img src="documentation/updateUserInfo.png" width="300"/>](update-user-info)
+
+[<img src="documentation/MainPageView.png" width="500"/>](Main-page-view)
+
+[<img src="documentation/CardPostTravel.png" width="400"/>](card-post-detail)
+
+[<img src="documentation/BlogFormPost.png" width="400"/>](create-post)
+
+[<img src="documentation/Comments.png" width="300"/>](comments-detail)
+
+[<img src="documentation/DisplayMesages.png" width="200"/>](alerts-detail)
+
+---
+
+### 📄 [Detailed Information of the Project](Detail_Info.md)

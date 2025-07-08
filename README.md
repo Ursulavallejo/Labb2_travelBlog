@@ -1,6 +1,6 @@
 #### November 2024
 
-#### The development team behind Travel BLOG: Gözde Akun, Pedram Hejazi and Ursula Vallejo.
+#### The development team behind Travel BLOG: Gözde Akgün, Pedram Hejazi and Ursula Vallejo.
 
 ### 📋 Project Summary
 
